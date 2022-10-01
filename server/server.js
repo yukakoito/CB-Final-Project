@@ -6,6 +6,7 @@ const helmet = require('helmet');
 
 const { getUser, addUser, updateUser} = require('./handlers/userHandlers.js');
 const { getRecipes, getSingleRecipe} = require('./handlers/recipeHandlers.js');
+const { getIngredients } = require('./handlers/ingredientHandlers');
 
 const PORT = 8000;
 
@@ -21,6 +22,8 @@ express()
   .post('/api/add-user', addUser)
   .patch('/api/update-user', updateUser)
 
+  .get('/api/get-ingredients', getIngredients)
+  
   .get('/api/get-recipes', getRecipes)
   .get('/api/get-recipe/:recipeId', getSingleRecipe)
 
