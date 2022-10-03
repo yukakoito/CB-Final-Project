@@ -11,6 +11,7 @@ const Footer = () => {
 export default Footer;
 
 const Wrapper = styled.div`
+  padding: var(--wrapper-padding);
   height: 10vh;
   width: 100vw;
   background-color: #008080;

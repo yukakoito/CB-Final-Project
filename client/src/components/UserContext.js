@@ -1,40 +1,47 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import DataProvider, { DataContext } from "./DataContext";
-import Pantry from "./profile/Pantry";
+import { useAuth0 } from "@auth0/auth0-react";
+import usePersistedState from "./usePersistedState";
 
 export const UserContext = createContext(null);
 
 export const UserProvider = ({children}) => {
-  const [userId, setUserId] = useState('b40913b5-2d9a-444b-863d-f968cdbc1aef');
-  const [user, setUser] = useState(null);
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const [userId, setUserId] = usePersistedState(null, 'user-id');
   const [pantry, setPantry] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
 
-  // console.log({userId})
+  console.log({userId})
+  console.log('USER', user)
 
-  // This function is to get current user data
-  const getUserData = async () => {
-
+  // Retrieve user data or create a new user upon sign in with Auth0
+  const setupUser = async () => {
     try {
-      const res = await fetch(`/api/get-user/${userId}`);
+      const res = await fetch('/api/setup-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({firstName: user.given_name, lastName: user.family_name, email: user.email}),
+      })
       const data = await res.json();
-      const userData = data.data;
-      setPantry(userData.pantry);
-      setShoppingList(userData.shoppingList);
-      setSavedRecipes(userData.savedRecipes);
-      console.log("USER DATA", userData)
-      const userInfo = Object.fromEntries(Object.entries(userData)
-                        .filter(([key, value]) => key !== 'pantry' && key !== 'shoppingList' && key !== 'savedRecipes'));
-      setUser(userInfo);
-      } catch (err) {
-        setIsError(true);
-      }
-  }
+      console.log('USERCONTEXT', data)
+      if(data.status === 200) {
+        setUserId(data.data._id)
+        setPantry(data.data.pantry);
+        setShoppingList(data.data.shoppingList);
+        setSavedRecipes(data.data.savedRecipes);
+      } 
+    } catch (e) {
+      setIsError(true)
+    } 
+  }  
 
-  // Add or remove an item from Pantry
+  // Update pantry, shopping list and saved recipes
   const updateUser = async (obj) => {
     console.log('UPDATE USER',{...obj, _id: userId})
 
@@ -63,13 +70,16 @@ export const UserProvider = ({children}) => {
   }
 
   useEffect(() => {
-    userId && getUserData();
+    !isAuthenticated && setUserId(null);
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    user && setupUser();
     setIsError(false);
-  }, [ ,userId])
+  }, [user])
 
   return (
-    <UserContext.Provider value={{userId, 
-                                  user,
+    <UserContext.Provider value={{userId,
                                   pantry, 
                                   setPantry,
                                   shoppingList, 

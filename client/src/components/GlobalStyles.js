@@ -6,6 +6,7 @@ export default createGlobalStyle`
     --max-content-width: 1200px;
     --heading-font-family: 'Teko', sans-serif;
     --img-width: 120px;
+    --wrapper-padding: 0 10vw;
   }
 
   html, body, div, span, applet, object, iframe,
@@ -46,6 +47,7 @@ export default createGlobalStyle`
   }
 
   li {
+    list-style: none;
     width: 200px;
   }
 

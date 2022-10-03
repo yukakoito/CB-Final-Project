@@ -66,7 +66,7 @@ const Typeahead = ({listName, data}) => {
               }}
                 />
         {suggestions && suggestions.length === 0 &&
-        <button onClick={() => addNewItem()}><b>Add</b></button>
+        <button onClick={() => addNewItem()}><b>➕</b></button>
         }
       </InputArea>
       <Suggestions> 

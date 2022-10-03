@@ -1,14 +1,11 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
-import { useParams } from "react-router-dom";
-import Pantry from "./Pantry";
-import ItemList from "./ItemList";
+import { useContext } from "react";
 import { UserContext } from "../UserContext";
+import Pantry from "./Pantry";
 import ShoppingList from "./ShoppingList";
 import SavedRecipes from "./SavedRecipes";
 
 const Profile = () => {
-  const { userId } = useParams();
   const {pantry, shoppingList} = useContext(UserContext)
 
   return (
@@ -26,7 +23,10 @@ const Profile = () => {
 export default Profile;
 
 const Wrapper = styled.div`
+  padding: var(--wrapper-padding);
+  min-height: 80vh;
 `
 const Container = styled.div`
   display: inline-flex;
+  
 `

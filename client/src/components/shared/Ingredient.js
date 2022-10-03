@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MdAddCircleOutline, MdRemoveCircleOutline} from 'react-icons/md'
 
 const Ingredient = ({item, onClickFunc, selectedItemIndex, setSelectedItemIndex, index, listName, isListed}) => {
   return (
@@ -10,8 +11,12 @@ const Ingredient = ({item, onClickFunc, selectedItemIndex, setSelectedItemIndex,
                       >
         <span>{item.name}</span>
         {isListed ?
-          <span>➖</span> :
-          <span>➕</span>
+          <span>
+            <MdRemoveCircleOutline />
+          </span> :
+          <span>
+            <MdAddCircleOutline />
+          </span>
         }
       </IngredientName>
     </Wrapper>

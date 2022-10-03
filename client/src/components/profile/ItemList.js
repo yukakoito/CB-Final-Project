@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
-import { DataContext } from "../DataContext";
 import Typeahead from "../search/Typeahead";
 import Ingredient from "../shared/Ingredient";
 import { UserContext } from "../UserContext";
@@ -20,11 +19,24 @@ const ItemList = ({data, listName}) => {
     updateUser({shoppingList: item})
   }
 
+  const sortListItems = (arr) => {
+    return arr.sort((a, b) => {
+      switch(true) {
+        case a.category < b.category:
+          return -1;
+        case a.category > b.category:
+          return 1;
+        default: 
+          return 0;
+      }
+    })
+  }
+
   return (
     <Wrapper>
       <Typeahead data={data} listName={listName} />
       <Container>
-        { data.length > 0 && data.map((item, i) => 
+        { data.length > 0 && sortListItems(data).map((item, i) => 
         <>
           <Category display={i === 0 || 
                              data[i].category !== data[i-1].category ?
