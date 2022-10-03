@@ -2,22 +2,13 @@ const { createClient } = require('./createClient');
 // Use this to generate unique ids
 const { v4: uuidv4 } = require("uuid");
 
-const addUser= async (req, res) => {
+const setupUser= async (req, res) => {
   // Create a client
   const { client, db } = createClient('CBFinalProject');   
   // Collection used for this function
   const users = db.collection('users')
   
   const { email } = req.body;
-
-  // Validate the user data before adding to the database
-  if(Object.values(req.body)
-      .some(data => typeof data !== 'string' 
-                    || data.length === 0 
-                    || !email.includes('@'))
-    ) {
-    res.status(400).json({status: 400, message: 'Please provide all of the required information.'})
-  }
 
   // Data to add when creating a new user
   const newUserData = {
@@ -28,52 +19,22 @@ const addUser= async (req, res) => {
     savedRecipes: [],
   };
 
+  console.log('NEW USER DATA', newUserData)
+
   try {
     await client.connect;
-    // Verify if user is already exist in the database based on the email provided
-    const existingUser = await users.findOne({email});
-    console.log(existingUser)
-    // If user already exists respond with an error message
+    // If user already exists in the database based on the email provided, respond with the user data
+    // const existingUser = await users.findOne({email});
+    const existingUser = await users.findOne({email})
+    console.log('existingUser', existingUser)
     if(existingUser) {
-      res.status(400).json({status: 400, message: 'Please sign in to see your profile.'})
-    // If not, add a new user to the database and respond with an userId
+      res.status(200).json({status: 200, data: existingUser})
+    // If not, create a new user to the database and respond with a newly created user data
     } else {
       const newUser = await users.insertOne(newUserData);
-      res.status(200).json({status: 200, data: newUser._id, message: 'User added.'})
+      console.log('newUser', newUser)
+      newUser.insertedId && res.status(200).json({status: 200, data: newUserData})
     }
-
-  } catch (err) {
-    res.status(500).json({status: 500, message: err.message})
-  } finally {
-    client.close();
-    console.log('disconnected')
-  }
-}
-
-const getUser = async (req, res) => {
-  // Create a client
-  const { client, db } = createClient('CBFinalProject');   
-  // Collection used for this function
-  const users = db.collection('users')
-
-  const { userId } = req.params;
-  console.log(userId)
-
-  // Validate the userId before connecting to the database
-  if(!userId) {
-    res.status(400).json({status: 400, message: 'Please provide an user id.'})
-  }
-
-  try{
-    await client.connect();
-    const userData = await users.findOne({_id: userId});
-    userData? 
-    // If userData is found, respond with user information
-    res.status(200).json({status: 200, data: userData})
-    :
-    // If not, respond with an error message
-    res.status(404).json({status: 404, message: 'User not found'})
-
   } catch (err) {
     res.status(500).json({status: 500, message: err.message})
   } finally {
@@ -147,7 +108,7 @@ const updateUser = async (req, res) => {
 
     // Move an item from shoppingList to pantry
     if(moveToPantry) {
-      updateResult = await users.updateOne({_id}, {$pull:{shoppingList: moveToPantry}, $addToSet: {pantry: moveToPantry}})
+      updateResult = await users.updateOne({_id}, {$pull: {shoppingList: moveToPantry}, $addToSet: {pantry: moveToPantry}})
       console.log(updateResult)
       if(updateResult.modifiedCount === 1) {
         updatedUserData = await users.findOne({_id})
@@ -165,4 +126,4 @@ const updateUser = async (req, res) => {
   }
 }
 
-module.exports = { getUser, addUser, updateUser }
+module.exports = { setupUser, updateUser }

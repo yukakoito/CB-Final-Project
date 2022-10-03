@@ -1,5 +1,6 @@
 const { createClient } = require('./createClient');
 require('dotenv').config();
+const { v4: uuidv4 } = require("uuid");
 
   // This function to create a client
   const { client, db } = createClient('CBFinalProject');   
@@ -10,29 +11,73 @@ const getRecipes = async (req, res) => {
   const {query} = req.params;
 
   if(!query) {
-    return res.status(400).json({status: 400, message: 'Please select a tag'})
+    return res.status(400).json({status: 400, message: 'Please provide ingredient(s)'})
   }
 
-  const url = 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?tags=vegetarian%2Csalada&number=1&limitLicense=true';
-  // const url = `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?tags=${query}&number=1&limitLicense=true`;
+  const url = `https://api.edamam.com/api/recipes/v2?type=public&beta=false
+  &q=${query}
+  &app_id=${process.env.EDAMAM_app_id}
+  &app_key=${process.env.EDAMAM_app_key}
+  &imageSize=REGULAR
+  &random=true
+  &field=label&field=image&field=source&field=url&field=ingredientLines&field=ingredients&field=totalTime&field=cuisineType&field=mealType&field=dishType`
+
+  console.log(url);
+
+  // const options = {
+  //   method: 'GET',
+  //   headers: { Accept: "application/json" }
+  // }
 
   try {
-  const options = {
-    method: 'GET',
-    headers: {
-      // 'X-RapidAPI-Key': process.env.X-RapidAPI-Key,
-		  'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
-    }
-  }
-  const res = await fetch('', options)
-  const data = await res.json();
+
+  const result = await fetch(url);
+  const data = await result.json();
+
+  const recipesToSave = await data.hits.map(hit => hit['_id'] = uuidv4())
+  const allIngredients = [];
+  recipesToSave.map(recipe => {recipe.ingredients
+    .forEach(ingredient => {
+      !allIngredients.includes({name: ingredient.food, category: ingredient.foodCategory}) 
+      && allIngredients.push({name: ingredient.food, category: ingredient.foodCategory})
+    })
+  })
+
+  console.log('RECIPES', recipesToSave);
 
   // This function to create a client
   const { client, db } = createClient('CBFinalProject');   
-  // Collection to save the data received from API
-  const recipes = db.collection('recipes')
-  } catch (e) {
-    console.log(e);
+  // Collections to save the data received from API
+  const recipes = db.collection('recipes');
+  const edamamIngredients = db.collection('edamamIngredients');
+
+  await client.connect();
+  
+  // Save recipes 
+  const saveRecipeResult = await recipes.insertMany(recipesToSave);
+
+  console.log('saveRecipeResult', saveRecipeResult)
+
+  // Update ingredients collection
+  const updateIngredientsCollection = allIngredients.map(ingredient => {
+    return {'updateOne': 
+            {'filter': {name: ingredient.name}, 
+              'update': {
+                          $setOnInsert: {_id: uuidv4(), name: ingredient.name}, 
+                          $set: {category: ingredient.category}
+                        }, 
+             'upsert': true
+            }
+          }
+  })
+
+  const updateResult = await edamamIngredients.bulkwrite(updateIngredientsCollection);
+  console.log('updateResult', updateResult)
+
+  return res.status(200).json({status: 200, data: data})
+
+  } catch (err) {
+    res.status(500).json({status: 500, message: err.message})
   } finally {
     client.close();
     console.log('disconnected');
