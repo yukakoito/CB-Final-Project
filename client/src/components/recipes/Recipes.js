@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import RecipeSearch from "../RecipeSearch";
-import Typeahead from "../search/Typeahead";
+import RecipeSearch from "../recipeSearch/RecipeSearch";
 
 const Recipes = () => {
   return (

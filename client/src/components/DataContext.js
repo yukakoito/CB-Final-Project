@@ -7,6 +7,7 @@ const DataProvider = ({children}) => {
   const [ingredients, setIngredients] = useState(null);
   const [parameters, setParameters] = useState(null);
   const [dataError, setDataError] = useState(false);
+  const [ edamamParameters, setEdamamParameters] = useState(null);
 
   // Get ingredients and parameters used for recipe search
   const getData = () => {
@@ -16,6 +17,7 @@ const DataProvider = ({children}) => {
       console.log(data)
       setIngredients(data.data.ingredients)
       setParameters(data.data.parameters)
+      setEdamamParameters(data.data.edamamParameters)
     })
     .catch((err) => setDataError(true)) 
   }
@@ -28,6 +30,7 @@ const DataProvider = ({children}) => {
     <DataContext.Provider value={{ingredients, 
                                   setIngredients, 
                                   parameters,
+                                  edamamParameters,
                                   }}>
       {children}
     </DataContext.Provider>

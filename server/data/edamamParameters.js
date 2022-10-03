@@ -5,7 +5,7 @@ const edamamParameters ={
   dishType : ["main course", "side dish", "starter", "soup", "salad", "pasta", "seafood", "desserts" ],
 } 
 
-export default edamamParameters;
+module.exports = { edamamParameters };
 
 // https://api.edamam.com/api/recipes/v2?type=public&beta=false
 // &q=tempeh%2Ccurry%2Ccherry%20tomatoes

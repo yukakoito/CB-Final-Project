@@ -36,7 +36,7 @@ const ItemList = ({data, listName}) => {
     <Wrapper>
       <Typeahead data={data} listName={listName} />
       <Container>
-        { data.length > 0 && sortListItems(data).map((item, i) => 
+        { data.length > 0 && data.map((item, i) => 
         <>
           <Category display={i === 0 || 
                              data[i].category !== data[i-1].category ?
@@ -45,7 +45,7 @@ const ItemList = ({data, listName}) => {
                     key={`category-${item._id}`}>
             {item.category? item.category : 'Others'}
             </Category>
-          <Ingredient key={`${data}-${item._id}`}
+          <Ingredient key={`${listName}-${item._id}`}
                       item={item} 
                       onClickFunc={updateUser} 
                       index={i} 

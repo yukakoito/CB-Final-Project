@@ -51,6 +51,10 @@ export default createGlobalStyle`
     width: 200px;
   }
 
+  select, input {
+    width: 200px;
+  }
+
   blockquote, q {
     quotes: none;
   }

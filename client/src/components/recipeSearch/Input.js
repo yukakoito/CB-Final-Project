@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { DataContext } from "./DataContext";
+import { DataContext } from "../DataContext";
 import { useContext, useState } from "react";
-import Ingredient from "./shared/Ingredient";
 
-const RecipeSearch = () => {
+const Input = ({onClickFunc}) => {
   const { ingredients } = useContext(DataContext);
   const [ input, setInput ] = useState('');
   const [ hideList, setHideList ] = useState(false);
@@ -53,7 +52,14 @@ const RecipeSearch = () => {
                 }
               }}
                 />
-        <button onClick={''}><b>Search</b></button>
+        <button onClick={() => {onClickFunc(input);
+                                setInput('');
+                                }
+                        }
+                disabled={input? false : true}
+        >
+          Search
+        </button>
       </InputArea>
       <Suggestions> 
       { suggestions && input.length >= 2 && suggestions.length > 0 && !hideList && (suggestions.map((suggestion, i) =>
@@ -71,7 +77,7 @@ const RecipeSearch = () => {
   )
 }
 
-export default RecipeSearch;
+export default Input;
 
 const Wrapper = styled.div`
 `

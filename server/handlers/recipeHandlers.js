@@ -2,6 +2,8 @@ const { createClient } = require('./createClient');
 require('dotenv').config();
 const { v4: uuidv4 } = require("uuid");
 
+
+
   // This function to create a client
   const { client, db } = createClient('CBFinalProject');   
   // Collection to save the data received from API
@@ -23,11 +25,6 @@ const getRecipes = async (req, res) => {
   &field=label&field=image&field=source&field=url&field=ingredientLines&field=ingredients&field=totalTime&field=cuisineType&field=mealType&field=dishType`
 
   console.log(url);
-
-  // const options = {
-  //   method: 'GET',
-  //   headers: { Accept: "application/json" }
-  // }
 
   try {
 
@@ -58,23 +55,23 @@ const getRecipes = async (req, res) => {
 
   console.log('saveRecipeResult', saveRecipeResult)
 
-  // Update ingredients collection
-  const updateIngredientsCollection = allIngredients.map(ingredient => {
-    return {'updateOne': 
-            {'filter': {name: ingredient.name}, 
-              'update': {
-                          $setOnInsert: {_id: uuidv4(), name: ingredient.name}, 
-                          $set: {category: ingredient.category}
-                        }, 
-             'upsert': true
-            }
-          }
-  })
+  // // Update ingredients collection
+  // const updateIngredientsCollection = allIngredients.map(ingredient => {
+  //   return {'updateOne': 
+  //           {'filter': {name: ingredient.name}, 
+  //             'update': {
+  //                         $setOnInsert: {_id: uuidv4(), name: ingredient.name}, 
+  //                         $set: {category: ingredient.category}
+  //                       }, 
+  //            'upsert': true
+  //           }
+  //         }
+  // })
 
-  const updateResult = await edamamIngredients.bulkwrite(updateIngredientsCollection);
-  console.log('updateResult', updateResult)
+  // const updateResult = await edamamIngredients.bulkwrite(updateIngredientsCollection);
+  // console.log('updateResult', updateResult)
 
-  return res.status(200).json({status: 200, data: data})
+  res.status(200).json({status: 200, data: data})
 
   } catch (err) {
     res.status(500).json({status: 500, message: err.message})

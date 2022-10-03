@@ -14,8 +14,8 @@ export const UserProvider = ({children}) => {
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
 
-  console.log({userId})
-  console.log('USER', user)
+  // console.log({userId})
+  // console.log('USER', user)
 
   // Retrieve user data or create a new user upon sign in with Auth0
   const setupUser = async () => {
@@ -60,7 +60,10 @@ export const UserProvider = ({children}) => {
         data.pantry && setPantry(data.pantry);
         data.shoppingList && setShoppingList(data.shoppingList);
         data.savedRecipes && setSavedRecipes(data.savedRecipes);
-        data.data && setPantry(data.data.pantry) && setShoppingList(data.data.shoppingList);
+        if(data.data) {
+          setPantry(data.data.pantry)
+          setShoppingList(data.data.shoppingList)
+        };
       } else {
         setErrMsg(data.message)
       }
@@ -69,9 +72,9 @@ export const UserProvider = ({children}) => {
     } 
   }
 
-  useEffect(() => {
-    !isAuthenticated && setUserId(null);
-  }, [isAuthenticated])
+  // useEffect(() => {
+  //   !isAuthenticated && setUserId(null);
+  // }, [isAuthenticated])
 
   useEffect(() => {
     user && setupUser();
