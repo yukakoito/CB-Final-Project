@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Input from "./Input";
 import SearchOptions from "./SearchOptions";
+import { DataContext } from "../DataContext";
 
 const RecipeSearch = () => {
-  const [recipes, setRecipes] = useState(null);
+  const { setRecipes, setIngredients } = useContext(DataContext);
   const [ searchOptions, setSearchOptions ] = useState({})
 
   console.log('searchOptions', searchOptions)
@@ -30,11 +31,12 @@ const RecipeSearch = () => {
 
     try {
       const res = await fetch(`/api/get-recipes/${query}`)
-      const data = res.json();
+      const data = await res.json();
+      console.log(data)
       if(data.status === 200) { 
-        console.log('RECIPES', data.data)
-        setRecipes(data.data);
-        // update ingredients list etc
+        console.log('RECIPES', data.recipes)
+        setRecipes(data.recipes);
+        setIngredients(data.ingredients)
       }
     } catch (err) {
       console.log(err)

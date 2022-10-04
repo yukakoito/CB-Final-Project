@@ -6,8 +6,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Homepage from "./homepage/Homepage";
 import Profile from "./profile/Profile";
-import Recipes from "./recipes/Recipes";
-import Recipe from "./recipe/Recipe";
+import RecipePage from "./recipePage/RecipePage";
 import { UserContext } from "./UserContext";
 
 const App = () => {
@@ -21,8 +20,7 @@ const App = () => {
           <Route path='/' element={<Homepage />} />
           {/* <Route path='/profile' element={userId ? <Navigate replace to={'/'} /> : <Profile />} /> */}
           <Route path='/profile' element={<Profile />} />
-          <Route path='/recipes' element={<Recipes />} />
-          <Route path='/recipes/:recipe' element={<Recipe />} />
+          <Route path='/recipes' element={<RecipePage />} />
         </Routes>
       <Footer />
     </BrowserRouter>

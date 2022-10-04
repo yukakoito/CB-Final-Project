@@ -5,12 +5,12 @@ import { DataContext } from "../DataContext";
 
 const SearchOptions = ({handleSelect}) => {
 
-  const { edamamParameters } = useContext(DataContext);
+  const { parameters } = useContext(DataContext);
 
   return (
     <Wrapper>
       <p>Search options</p>
-      { edamamParameters && Object.entries(edamamParameters).map(([key, value]) => 
+      { parameters && Object.entries(parameters).map(([key, value]) => 
        <Dropdown key={key} name={key} array={value} handleSelect={handleSelect}/>
        )}
     </Wrapper>

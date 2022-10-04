@@ -17,7 +17,7 @@ export const UserProvider = ({children}) => {
   // console.log({userId})
   // console.log('USER', user)
 
-  // Retrieve user data or create a new user upon sign in with Auth0
+  // Retrieve user data or create a new user upon sign in/sign up with Auth0
   const setupUser = async () => {
     try {
       const res = await fetch('/api/setup-user', {

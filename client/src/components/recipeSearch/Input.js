@@ -69,7 +69,7 @@ const Input = ({onClickFunc}) => {
                     setSelectedItemIndex={setSelectedItemIndex}
                     index={i}
                     >
-          {suggestion.name}
+          {suggestion.name.toLowerCase()}
         </p>
       ))}
       </Suggestions>

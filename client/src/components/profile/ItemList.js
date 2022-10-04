@@ -42,20 +42,24 @@ const ItemList = ({data, listName}) => {
                              data[i].category !== data[i-1].category ?
                              null : 'none'
                             }
-                    key={`category-${item._id}`}>
-            {item.category? item.category : 'Others'}
+                    key={`${listName}-category-${item._id}`}>
+            {item.category? item.category.toUpperCase() : 'OTHERS'}
             </Category>
-          <Ingredient key={`${listName}-${item._id}`}
+          <Ingredient key={`${listName}-ingredient-${item._id}`}
                       item={item} 
                       onClickFunc={updateUser} 
                       index={i} 
                       listName={listName}
                       isListed={data.includes(item)? true : false}/>
           {listName === 'shoppingList' ?
-          <button onClick={(e) => moveToPantry(e, item)}>
+          <button onClick={(e) => moveToPantry(e, item)}
+                  key={`moveToPantry-${item._id}`}
+          >
             Add to Pantry
           </button> :
-          <button onClick={(e) => addToShoppingList(e, item)}>
+          <button onClick={(e) => addToShoppingList(e, item)}
+                  key={`addToShoppingList-${item._id}`}
+          >
             Add to Shopping List
           </button>
           }

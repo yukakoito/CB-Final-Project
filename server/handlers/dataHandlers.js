@@ -1,10 +1,9 @@
 const { createClient } = require('./createClient');
 require('dotenv').config();
 const parameters = require('../data/parameters')
-const edamamParameters = require('../data/edamamParameters')
 
 // Get all of the ingredients in the database and the parameters used for receipe search
-const getIngredients = async (req, res) => {
+const getData = async (req, res) => {
   // This function to create a client
   const { client, db } = createClient('CBFinalProject');   
   // Collection to save the data received from API
@@ -17,7 +16,6 @@ const getIngredients = async (req, res) => {
     res.status(200).json({status: 200, 
                           data: {ingredients: data, 
                                  parameters: parameters.parameters, 
-                                 edamamParameters: edamamParameters.edamamParameters
                                 }
                           })
     : 
@@ -32,4 +30,4 @@ const getIngredients = async (req, res) => {
   }
 }
 
-module.exports = { getIngredients }
+module.exports = { getData }

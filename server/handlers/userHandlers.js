@@ -19,20 +19,20 @@ const setupUser= async (req, res) => {
     savedRecipes: [],
   };
 
-  console.log('NEW USER DATA', newUserData)
+  // console.log('NEW USER DATA', newUserData)
 
   try {
     await client.connect;
     // If user already exists in the database based on the email provided, respond with the user data
     // const existingUser = await users.findOne({email});
     const existingUser = await users.findOne({email})
-    console.log('existingUser', existingUser)
+    // console.log('existingUser', existingUser)
     if(existingUser) {
       res.status(200).json({status: 200, data: existingUser})
     // If not, create a new user to the database and respond with a newly created user data
     } else {
       const newUser = await users.insertOne(newUserData);
-      console.log('newUser', newUser)
+      // console.log('newUser', newUser)
       newUser.insertedId && res.status(200).json({status: 200, data: newUserData})
     }
   } catch (err) {
@@ -68,10 +68,34 @@ const updateUser = async (req, res) => {
 
     let updatedUserData;
     let updateResult = {};
-    let sortedArray = [];
 
     // Update panty or shoppingList and respond with updated user data
     if (pantry || shoppingList) {
+      const key = Object.keys(req.body).find(key => key !== '_id')
+      const value = req.body[key] 
+      const itemToRemove = {[key]: value}
+      const itemToAdd = {[key]: {
+                                $each: [value],
+                                $sort: {category: -1}
+                              }}
+
+      updateResult = await users.updateOne({_id}, {$pull: itemToRemove});
+      console.log(updateResult)
+      if(updateResult.modifiedCount === 1) {
+        updatedUserData = await users.findOne({_id})
+        return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Item removed'})
+      } else {
+        updateResult = await users.updateOne({_id}, {$push: itemToAdd});
+        console.log(updateResult)
+        if(updateResult.modifiedCount === 1) {
+          updatedUserData = await users.findOne({_id})
+          return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Item added'})
+        }
+        return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
+    }}
+
+    // Update savedRecipes
+    if (savedRecipes) {
       const query = Object.fromEntries([Object.entries(req.body).find(([key, value]) => key !== '_id')]);
       const key = Object.keys(query).toString();
       console.log({key}, query)
@@ -79,29 +103,13 @@ const updateUser = async (req, res) => {
       console.log(updateResult)
       if(updateResult.modifiedCount === 1) {
         updatedUserData = await users.findOne({_id})
-        sortedArray = await updatedUserData[key].sort((a, b) => {
-          if(a.category < b.category) {
-            return -1;
-          } else if(a.category > b.category) {
-            return 1;
-          }
-          return 0;
-        })
-        return res.status(200).json({status: 200, [key]: sortedArray, message: 'Item removed'})
+        return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Recipe deleted'})
       } else {
         updateResult = await users.updateOne({_id}, {$push: query});
         console.log(updateResult)
         if(updateResult.modifiedCount === 1) {
           updatedUserData = await users.findOne({_id})
-          sortedArray = await updatedUserData[key].sort((a, b) => {
-            if(a.category < b.category) {
-              return -1;
-            } else if(a.category > b.category) {
-              return 1;
-            }
-            return 0;
-          })
-          return res.status(200).json({status: 200, [key]: sortedArray, message: 'Item added'})
+          return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Recipe saved'})
         }
         return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
     }}

@@ -53,6 +53,7 @@ export default createGlobalStyle`
 
   select, input {
     width: 200px;
+    margin-top: 5px;
   }
 
   blockquote, q {

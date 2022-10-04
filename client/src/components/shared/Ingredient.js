@@ -9,7 +9,7 @@ const Ingredient = ({item, onClickFunc, selectedItemIndex, setSelectedItemIndex,
                       // onMouseLeave={() => setSelectedItemIndex(-1)}
                       style={{background: index === selectedItemIndex? 'hsla(50deg, 100%, 80%, 0.5)' : 'transparent'}}
                       >
-        <span>{item.name}</span>
+        <span>{item.name.toLowerCase()}</span>
         {isListed ?
           <span>
             <MdRemoveCircleOutline />
