@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   padding: var(--wrapper-padding);
   height: 10vh;
   width: 100vw;
-  background-color: #008080;
+  background-color: var(--primary-background-color);
   position: absolute;
   /* bottom: 0; */
 `

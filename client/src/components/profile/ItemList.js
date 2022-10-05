@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import Typeahead from "../search/Typeahead";
+import { DataContext } from "../DataContext";
+import Typeahead from "./Typeahead";
 import Ingredient from "../shared/Ingredient";
 import { UserContext } from "../UserContext";
 
 const ItemList = ({data, listName}) => {
-  const {updateUser} = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
+  const { searchRecipes } = useContext(DataContext);
 
   const moveToPantry = (e, item) => {
     e.stopPropagation();
@@ -19,33 +21,19 @@ const ItemList = ({data, listName}) => {
     updateUser({shoppingList: item})
   }
 
-  const sortListItems = (arr) => {
-    return arr.sort((a, b) => {
-      switch(true) {
-        case a.category < b.category:
-          return -1;
-        case a.category > b.category:
-          return 1;
-        default: 
-          return 0;
-      }
-    })
-  }
-
   return (
     <Wrapper>
       <Typeahead data={data} listName={listName} />
-      <Container>
         { data.length > 0 && data.map((item, i) => 
-        <>
+        <div key={`${listName}-${item.name}`}>
           <Category display={i === 0 || 
                              data[i].category !== data[i-1].category ?
                              null : 'none'
                             }
-                    key={`${listName}-category-${item._id}`}>
+                    >
             {item.category? item.category.toUpperCase() : 'OTHERS'}
             </Category>
-          <Ingredient key={`${listName}-ingredient-${item._id}`}
+          <Ingredient 
                       item={item} 
                       onClickFunc={updateUser} 
                       index={i} 
@@ -53,19 +41,28 @@ const ItemList = ({data, listName}) => {
                       isListed={data.includes(item)? true : false}/>
           {listName === 'shoppingList' ?
           <button onClick={(e) => moveToPantry(e, item)}
-                  key={`moveToPantry-${item._id}`}
+                  
           >
-            Add to Pantry
-          </button> :
-          <button onClick={(e) => addToShoppingList(e, item)}
-                  key={`addToShoppingList-${item._id}`}
-          >
-            Add to Shopping List
-          </button>
+            ➕ Pantry
+          </button> 
+          :
+          <>
+            <button onClick={(e) => addToShoppingList(e, item)}
+                    
+            >
+              ➕ Shopping List
+            </button>
+            <button onClick={(e) => { e.stopPropagation();
+                                      searchRecipes(item.name)
+                                    }}
+                    
+            >
+              🔍 Recipes
+            </button>
+          </>
           }
-        </>
+        </div>
         )}
-      </Container>
     </Wrapper>
   )
 }
@@ -73,14 +70,14 @@ const ItemList = ({data, listName}) => {
 export default ItemList;
 
 const Wrapper = styled.div`
-  border: 1px solid lightgray;
-`
-
-const Container = styled.ul`
-  border: 1px solid blue;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
 `
 
 const Category = styled.p`
   display: ${p => p.display};
   font-weight: bold;
+  margin: 5px;
+  border-bottom: 2px solid lightgray;
 `

@@ -11,7 +11,7 @@ const getData = async (req, res) => {
 
   try {
     await client.connect();
-    const data = await ingredients.find().sort({'category': 1}).toArray();
+    const data = await ingredients.find().sort({category: 1, name: 1}).toArray();
     data.length > 0 ?
     res.status(200).json({status: 200, 
                           data: {ingredients: data, 

@@ -1,38 +1,24 @@
 import styled from "styled-components";
-import { MdAddCircleOutline, MdRemoveCircleOutline} from 'react-icons/md'
+import { RiDeleteBin2Line } from "react-icons/ri"
 
 const Ingredient = ({item, onClickFunc, selectedItemIndex, setSelectedItemIndex, index, listName, isListed}) => {
-  return (
-    <Wrapper>
-      <IngredientName onClick={ () => onClickFunc({[listName] : item})}
+  return item  && (
+      <IngredientName onClick={ () => onClickFunc({[listName] : {name: item.name, category: item.category}})}
                       // onMouseEnter={() => setSelectedItemIndex(index)}
                       // onMouseLeave={() => setSelectedItemIndex(-1)}
                       style={{background: index === selectedItemIndex? 'hsla(50deg, 100%, 80%, 0.5)' : 'transparent'}}
                       >
         <span>{item.name.toLowerCase()}</span>
-        {isListed ?
-          <span>
-            <MdRemoveCircleOutline />
-          </span> :
-          <span>
-            <MdAddCircleOutline />
-          </span>
-        }
+        {isListed && <RiDeleteBin2Line />}
       </IngredientName>
-    </Wrapper>
   )
 }
 
 export default Ingredient;
 
-const Wrapper = styled.div`
-
-`
-
 const IngredientName = styled.li`
+  width: 90%;
   display: inline-flex;
   justify-content: space-between;
-  span {
-    border-radius: 5px;
-  }
+  margin: 0 5px;
 `

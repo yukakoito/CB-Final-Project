@@ -74,16 +74,19 @@ const updateUser = async (req, res) => {
       const key = Object.keys(req.body).find(key => key !== '_id')
       const value = req.body[key] 
       const itemToRemove = {[key]: value}
+      // When adding an item to a list, sort the array by category and then name.
       const itemToAdd = {[key]: {
                                 $each: [value],
-                                $sort: {category: -1}
+                                $sort: {category: -1, name: 1}
                               }}
-
+      
+      // If the item already exists in the list, remove it.
       updateResult = await users.updateOne({_id}, {$pull: itemToRemove});
       console.log(updateResult)
       if(updateResult.modifiedCount === 1) {
         updatedUserData = await users.findOne({_id})
         return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Item removed'})
+      // If the item is not found, add it to the list.
       } else {
         updateResult = await users.updateOne({_id}, {$push: itemToAdd});
         console.log(updateResult)

@@ -5,8 +5,8 @@ export default createGlobalStyle`
     --primary-color: #1d3557;
     --max-content-width: 1200px;
     --heading-font-family: 'Teko', sans-serif;
-    --img-width: 120px;
-    --wrapper-padding: 0 10vw;
+    --wrapper-padding: 0 5vw;
+    --primary-background-color: #d88c9a;
   }
 
   html, body, div, span, applet, object, iframe,
@@ -67,11 +67,29 @@ export default createGlobalStyle`
   }
 
   h1 {
-    font-size: 32px;
+    font-size: 24px;
   }
 
   h2 {
-    font-size: 28px;
+    font-size: 22px;
   }
 
+  h3 {
+    margin: 5px 0;
+  }
+
+  button {
+    background-color: #f0eff4;
+    color: var(--primary-color);
+    border-radius: 5px;
+    border: 1px solid;
+    margin: 5px;
+  }
+
+  img {
+    height: 120px;
+    width: 120px;
+    border-radius: 10px;
+    margin-right: 5px;
+  }
 `;

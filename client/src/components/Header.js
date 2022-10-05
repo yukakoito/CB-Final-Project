@@ -22,9 +22,9 @@ export default Header;
 
 const Wrapper = styled.div`
   padding: var(--wrapper-padding);
+  background-color: var(--primary-background-color);
   width: 100vw;
   height: 10vh;
-  background-color: #008080;
   display: inline-flex;
   justify-content: space-between;
   align-items: center;

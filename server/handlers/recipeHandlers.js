@@ -31,8 +31,8 @@ const getRecipes = async (req, res) => {
   const allIngredients = [];
   recipesToSave.map(recipe => {recipe.ingredients
     .forEach(ingredient => {
-      !allIngredients.includes({name: ingredient.food.toLowerCase(), category: ingredient.foodCategory}) 
-      && allIngredients.push({name: ingredient.food.toLowerCase(), category: ingredient.foodCategory})
+      !allIngredients.includes({name: ingredient.food.toLowerCase(), category: ingredient.foodCategory.toLowerCase()}) 
+      && allIngredients.push({name: ingredient.food.toLowerCase(), category: ingredient.foodCategory.toLowerCase()})
     })
   })
 
@@ -56,8 +56,7 @@ const getRecipes = async (req, res) => {
     return {'updateOne': 
             {'filter': {name: ingredient.name}, 
               'update': {
-                          $setOnInsert: {_id: uuidv4(), category: ingredient.category}, 
-                          $set: {name: ingredient.name}
+                          $setOnInsert: {_id: uuidv4(), name: ingredient.name, category: ingredient.category}, 
                         }, 
              'upsert': true
             }

@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { DataContext } from "../DataContext";
 import { useContext, useState } from "react";
 
-const Input = ({onClickFunc}) => {
-  const { ingredients } = useContext(DataContext);
+const Input = () => {
+  const { ingredients, searchRecipes } = useContext(DataContext);
   const [ input, setInput ] = useState('');
   const [ hideList, setHideList ] = useState(false);
   const [ selectedItemIndex, setSelectedItemIndex ] = useState(-1);
@@ -52,7 +52,7 @@ const Input = ({onClickFunc}) => {
                 }
               }}
                 />
-        <button onClick={() => {onClickFunc(input);
+        <button onClick={() => {searchRecipes(input);
                                 setInput('');
                                 }
                         }
@@ -63,14 +63,14 @@ const Input = ({onClickFunc}) => {
       </InputArea>
       <Suggestions> 
       { suggestions && input.length >= 2 && suggestions.length > 0 && !hideList && (suggestions.map((suggestion, i) =>
-        <p key={`RecipeSearch-${suggestion._id}`} 
+        <li key={`recipeSearch-${suggestion._id}`} 
                     onClick={() => handleSelect(suggestion.name)}
                     selectedItemIndex={selectedItemIndex} 
                     setSelectedItemIndex={setSelectedItemIndex}
                     index={i}
                     >
           {suggestion.name.toLowerCase()}
-        </p>
+        </li>
       ))}
       </Suggestions>
     </Wrapper>
@@ -83,5 +83,5 @@ const Wrapper = styled.div`
 `
 const InputArea = styled.div`
 `
-const Suggestions = styled.li`
+const Suggestions = styled.ul`
 `

@@ -3,7 +3,7 @@ import Dropdown from "./Dropdown";
 import { useContext, useState } from "react";
 import { DataContext } from "../DataContext";
 
-const SearchOptions = ({handleSelect}) => {
+const SearchOptions = () => {
 
   const { parameters } = useContext(DataContext);
 
@@ -11,7 +11,7 @@ const SearchOptions = ({handleSelect}) => {
     <Wrapper>
       <p>Search options</p>
       { parameters && Object.entries(parameters).map(([key, value]) => 
-       <Dropdown key={key} name={key} array={value} handleSelect={handleSelect}/>
+       <Dropdown key={key} name={key} array={value} />
        )}
     </Wrapper>
   )

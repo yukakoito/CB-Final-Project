@@ -92,6 +92,7 @@ export const UserProvider = ({children}) => {
                                   isError, 
                                   setIsError,
                                   updateUser,
+                                  isAuthenticated,
                                 }}>
       {children}
     </UserContext.Provider>

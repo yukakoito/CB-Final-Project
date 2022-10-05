@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import Sidebar from "../Sidebar";
 
 const Homepage = () => {
   return (
     <Wrapper>
-      <h1>Homepage</h1>
+      <Sidebar />
     </Wrapper>
   )
 }
