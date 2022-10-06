@@ -11,6 +11,7 @@ export const UserProvider = ({children}) => {
   const [pantry, setPantry] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
   const [savedRecipes, setSavedRecipes] = useState([]);
+  const [meals, setMeals] = useState([]);
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
 
@@ -35,6 +36,7 @@ export const UserProvider = ({children}) => {
         setPantry(data.data.pantry);
         setShoppingList(data.data.shoppingList);
         setSavedRecipes(data.data.savedRecipes);
+        setMeals(data.data.meals);
       } 
     } catch (e) {
       setIsError(true)
@@ -60,6 +62,7 @@ export const UserProvider = ({children}) => {
         data.pantry && setPantry(data.pantry);
         data.shoppingList && setShoppingList(data.shoppingList);
         data.savedRecipes && setSavedRecipes(data.savedRecipes);
+        data.meals && setMeals(data.meals);
         if(data.data) {
           setPantry(data.data.pantry)
           setShoppingList(data.data.shoppingList)
@@ -89,6 +92,8 @@ export const UserProvider = ({children}) => {
                                   setShoppingList,
                                   savedRecipes, 
                                   setSavedRecipes,
+                                  meals, 
+                                  setMeals,
                                   isError, 
                                   setIsError,
                                   updateUser,

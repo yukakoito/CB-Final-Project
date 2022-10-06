@@ -8,14 +8,16 @@ const DataProvider = ({children}) => {
   const [parameters, setParameters] = useState(null);
   const [dataError, setDataError] = useState(false);
   const [recipes, setRecipes] = useState(null);
-  const [searchOptions, setSearchOptions] = useState({})
+  const [searchOptions, setSearchOptions] = useState({});
+  const [selection, setSelection] = useState('');
+  const [searchInput, setSearchInput] = useState('');
 
   // Get ingredients and parameters used for recipe search
   const getData = () => {
     fetch('/api/get-data')
     .then(res => res.json())
     .then(data => {
-      console.log(data)
+      console.log('DATA CONTEXT', data)
       setIngredients(data.data.ingredients)
       setParameters(data.data.parameters)
     })
@@ -25,26 +27,27 @@ const DataProvider = ({children}) => {
   useEffect(() => {
     !parameters && getData();
   }, [])
-  
-  // 
-  const handleSelect = (key, value) => {
-    setSearchOptions({...searchOptions, [key]: value.replaceAll(' ', '%20')})
-  }
 
   console.log('searchOptions', searchOptions)
 
-  // Search recipes by an ingredient
-  const searchRecipes = async (ingredient) => {
+  // Search recipes
+  const searchRecipes = async (data) => {
     // Reformat and combine the search options
     let options = '';
     Object.keys(searchOptions).map(key => {
       if(searchOptions[key] === '') return null;
       options += `&${key}=${searchOptions[key]}`
     })
-    console.log('OPTIONS' , options)
     
-    // Create a query string with an ingredient and search options
-    const query = ingredient.replaceAll(' ', '%20') + options
+    const ingredient = data? data.replaceAll(' ', '%20') : searchInput.replaceAll(' ', '%20')
+
+    console.log('OPTIONS' , options)
+    console.log('INGREDIENT', ingredient)
+
+    
+
+    // Create a query string with ingredients and search options
+    const query = ingredient + options
     console.log('QUERY', query)
 
     try {
@@ -58,8 +61,6 @@ const DataProvider = ({children}) => {
       }
     } catch (err) {
       console.log(err)
-    } finally {
-      setSearchOptions({});
     }
   }
 
@@ -69,8 +70,9 @@ const DataProvider = ({children}) => {
                                   parameters,
                                   recipes,
                                   setRecipes,
-                                  handleSelect,
                                   searchRecipes,
+                                  searchOptions, 
+                                  setSearchOptions,
                                   }}>
       {children}
     </DataContext.Provider>

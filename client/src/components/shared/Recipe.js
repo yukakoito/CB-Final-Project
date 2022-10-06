@@ -2,13 +2,18 @@ import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { UserContext } from "../UserContext";
 import { FaRegHeart, FaThList } from "react-icons/fa"
+import { MdOpenInNew } from "react-icons/md"
+import { GiMeal, GiNotebook } from "react-icons/gi"
+import backupImage from "./anh-nguyen-kcA-c3f_3FE-unsplash.jpeg"
+import Notes from "./Notes";
 
-const Recipe = ({recipe}) => {
+const Recipe = ({recipe, notes}) => {
   const { updateUser, pantry, shoppingList } = useContext(UserContext);
   const [ missingIngredients, setMissingIngredients ] = useState([]);
   const [ availableIngredients, setAvailableIngredients ] = useState([]);
-  const [ hideAllIngredients, setHideAllIngredients] = useState(true);
-  const [ hideIngredientsInPantry, setHideIngredientsInPantry] = useState(true);
+  const [ hideAllIngredients, setHideAllIngredients ] = useState(true);
+  const [ hideIngredientsInPantry, setHideIngredientsInPantry ] = useState(true);
+  const [ editNotes, setEditNotes ] = useState(false);
 
   const openInNewTab = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer')
@@ -21,13 +26,17 @@ const Recipe = ({recipe}) => {
     Object.values(recipe.ingredients).forEach(ingredient => {
       const availableIngredient = pantry.find(item => item.name.toLowerCase() === ingredient.food.toLowerCase())
       const isInShoppingList = shoppingList.find(item => item.name.toLowerCase() === ingredient.food.toLowerCase())? true: false;
-      const missingIngredient = {name: ingredient.food.toLowerCase(), category: ingredient.foodCategory, isInShoppingList: isInShoppingList}
+      const missingIngredient = { name: ingredient.food.toLowerCase(), 
+                                  category: ingredient.foodCategory?.toLowerCase(), 
+                                  isInShoppingList: isInShoppingList
+                                }
       if(availableIngredient && 
         !newAvailableIngredients.find(obj => 
           obj.name.toLowerCase() === availableIngredient.name.toLowerCase())
         ) {
           newAvailableIngredients.push(availableIngredient)
       } else if(!newMissingIngredients.find(obj => 
+          obj.name.toLowerCase() === 'water' || 
           obj.name.toLowerCase() === missingIngredient.name.toLowerCase())
           ) {
             newMissingIngredients.push(missingIngredient)
@@ -41,14 +50,24 @@ const Recipe = ({recipe}) => {
     recipe && compareIngredients();
   }, [recipe, pantry, shoppingList])
 
+
+  // Capitalise every first letter of each word of cuisineType
+  const formatCuisineType = (data) => {
+    const arrOfWords = data?.split(' ').map(word => 
+                        word.replace(word[0], word[0].toUpperCase())
+                      );
+    return arrOfWords?.join(' ');
+  }
+
+  
   return recipe && (
     <Wrapper>
       <RecipeHeader>
-        <img src={recipe.image} alt={recipe.label} />
+        {/* <img src={recipe.image} alt={recipe.label} onError={({currentTarget}) => {currentTarget.src = backupImage }} /> */}
         <div>
           <h2>{recipe.label}</h2>
           <p>{recipe.source}</p>
-          <span>{recipe.cuisineType}</span>
+          <span>{formatCuisineType(recipe.cuisineType[0])}</span>
         </div>
       </RecipeHeader>
       <IngredientWrapper>
@@ -99,11 +118,23 @@ const Recipe = ({recipe}) => {
       }
       </IngredientWrapper>
       <Buttons>
-        <button onClick={() => openInNewTab(recipe.url)}>View details</button>
+        <button onClick={() => openInNewTab(recipe.url)}>
+          {/* View details */}
+          <MdOpenInNew />
+        </button>
         <button onClick={() => updateUser({'savedRecipes': recipe})}>
           <FaRegHeart />
         </button>
+        <button onClick={() => updateUser({'meals': recipe})}>
+          <GiMeal />
+        </button>
+        {notes && 
+          <button onClick={() => setEditNotes(!editNotes)}>
+            <GiNotebook />
+          </button>
+        }
       </Buttons>
+      {editNotes && <Notes recipe={recipe}/>}
     </Wrapper>
   )
 }
@@ -112,6 +143,7 @@ export default Recipe;
 
 const Wrapper = styled.div`
   width: 350px;
+  min-height: 275px;
   border: 10px solid var(--primary-color);
   margin: 5px;
   padding: 5px;
@@ -128,4 +160,8 @@ const IngredientWrapper = styled.ul`
 `
 
 const Buttons = styled.section`
+  button {
+    /* border-radius: 50%;
+    padding: 5px; */
+  }
 `

@@ -2,11 +2,12 @@ import styled from "styled-components";
 import { DataContext } from "../DataContext";
 import { useContext, useState } from "react";
 
-const Input = () => {
-  const { ingredients, searchRecipes } = useContext(DataContext);
-  const [ input, setInput ] = useState('');
+const Input = ({placeholder, index}) => {
+  const { ingredients, searchFields, setSearchFields } = useContext(DataContext);
   const [ hideList, setHideList ] = useState(false);
   const [ selectedItemIndex, setSelectedItemIndex ] = useState(-1);
+
+  const input = Object.values(searchFields)[index];
 
   // Create a list of matched ingredients based on user input
   const suggestions = ingredients && input ? 
@@ -14,26 +15,24 @@ const Input = () => {
                         ingredient.name.toLowerCase().includes(input.toLowerCase()))
                       : null;
 
-  const handleSelect = (ingredient) => {
-    setInput(ingredient)
+  const handleSearchInput = (key, value) => {
+    setSearchFields({...searchFields, [key]: value})
     setHideList(true)
-    console.log('selected', ingredient)
   }
 
   return (
     <Wrapper>
        <InputArea>
         <input type='text'
-              placeholder="🔍 ingredient"
+              placeholder={placeholder}
               value={input}
-              onChange={e => {setInput(e.target.value)
-                              setHideList(false)
-                              }}
+              onChange={e => {setSearchFields({...searchFields, [index]: e.target.value})
+                              hideList(false)}}
               onKeyDown={ e => {
                 switch(e.key) {
                   case 'Enter':
                     if(selectedItemIndex > -1) {
-                      handleSelect(suggestions[selectedItemIndex])
+                      handleSearchInput(index, suggestions[selectedItemIndex])
                     }
                     return;
                   case "ArrowUp":
@@ -52,19 +51,11 @@ const Input = () => {
                 }
               }}
                 />
-        <button onClick={() => {searchRecipes(input);
-                                setInput('');
-                                }
-                        }
-                disabled={input? false : true}
-        >
-          Search
-        </button>
       </InputArea>
       <Suggestions> 
       { suggestions && input.length >= 2 && suggestions.length > 0 && !hideList && (suggestions.map((suggestion, i) =>
         <li key={`recipeSearch-${suggestion._id}`} 
-                    onClick={() => handleSelect(suggestion.name)}
+                    onClick={() => handleSearchInput(index, suggestion.name)}
                     selectedItemIndex={selectedItemIndex} 
                     setSelectedItemIndex={setSelectedItemIndex}
                     index={i}

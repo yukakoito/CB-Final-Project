@@ -17,6 +17,7 @@ const setupUser= async (req, res) => {
     pantry: [],
     shoppingList: [],
     savedRecipes: [],
+    meals: []
   };
 
   // console.log('NEW USER DATA', newUserData)
@@ -49,7 +50,7 @@ const updateUser = async (req, res) => {
   // Collection used for this function
   const users = db.collection('users')
 
-  const { _id, pantry, shoppingList, savedRecipes, moveToPantry } = req.body;
+  const { _id, pantry, shoppingList, savedRecipes, moveToPantry, meals, notes } = req.body;
   console.log('REQ.BODY', req.body)
 
   // Validate the userId before connecting to the database
@@ -97,8 +98,8 @@ const updateUser = async (req, res) => {
         return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
     }}
 
-    // Update savedRecipes
-    if (savedRecipes) {
+    // Update savedRecipes or myMeals
+    if (savedRecipes || meals) {
       const query = Object.fromEntries([Object.entries(req.body).find(([key, value]) => key !== '_id')]);
       const key = Object.keys(query).toString();
       console.log({key}, query)
@@ -120,13 +121,30 @@ const updateUser = async (req, res) => {
     // Move an item from shoppingList to pantry
     if(moveToPantry) {
       updateResult = await users.updateOne({_id}, {$pull: {shoppingList: moveToPantry}, $addToSet: {pantry: moveToPantry}})
+    
       console.log(updateResult)
       if(updateResult.modifiedCount === 1) {
+        // Sort items in pantry before sending the updated data to FE
+        await users.updateOne({_id}, {$push: {pantry: { $each: [], $sort: {category: -1, name: 1}}}})
         updatedUserData = await users.findOne({_id})
         return res.status(200).json({status: 200, data: updatedUserData, message: 'Item moved to Pantry'})
       } else {
         return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
       }
+    }
+
+    // Add notes to or update notes associated with an recipe in meals and/or savedRevipes
+    if(notes) {
+      console.log(notes.notes)
+      const updateNotes = await users.updateOne({_id}, 
+                                                {$set: {"meals.$[elem].notes": notes.notes, 
+                                                        "savedRecipes.$[elem].notes": notes.notes}
+                                                }, 
+                                                {arrayFilters: [{"elem.label": notes.label}]}
+                                              )
+      console.log(updateNotes)
+      updatedUserData = await users.findOne({_id})
+      return res.status(200).json({status: 200, data: updatedUserData, message: 'Notes updated'})
     }
 
   } catch (err) {

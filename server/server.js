@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 
 const { setupUser, updateUser } = require('./handlers/userHandlers.js');
-const { getRecipes, getSingleRecipe } = require('./handlers/recipeHandlers.js');
+const { getRecipes } = require('./handlers/recipeHandlers.js');
 const { getData } = require('./handlers/dataHandlers');
 
 const PORT = 8000;
@@ -24,6 +24,5 @@ express()
   .get('/api/get-data', getData)
   
   .get('/api/get-recipes/:query', getRecipes)
-  .get('/api/get-recipe/:recipeId', getSingleRecipe)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

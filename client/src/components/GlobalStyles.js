@@ -67,11 +67,11 @@ export default createGlobalStyle`
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   h3 {
