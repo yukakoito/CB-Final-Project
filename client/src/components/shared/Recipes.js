@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import Recipe from "./Recipe";
 
-const Recipes = ({recipes, notes}) => {
-  
+const Recipes = ({recipes, notes, isSavedRecipe}) => {
   return recipes && (
     <Wrapper>
       {recipes.map((recipe,i) => 
-        <Recipe key={`${recipe.label}-${i}`} recipe={recipe} notes={notes}/>
+        <Recipe key={`${recipe.label}-${i}`} recipe={recipe} notes={notes} isSavedRecipe={isSavedRecipe}/>
         )}
     </Wrapper>
   )

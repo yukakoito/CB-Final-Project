@@ -36,19 +36,19 @@ const Profile = () => {
         {recipes && 
           <RecipeWrapper>
             <h1>Meal Ideas</h1>
-            <Recipes recipes={recipes} notes={false}/>
+            <Recipes recipes={recipes} notes={false} isSavedRecipe={false} />
           </RecipeWrapper>
         }
         { !hideFavoriteRecipes && 
           <RecipeWrapper>
           <h1>My Favorite Recipes</h1>
-          <Recipes recipes={favoriteRecipes} notes={true}/>
+          <Recipes recipes={favoriteRecipes} notes={true} isSavedRecipe={true} />
           </RecipeWrapper>
         }
         { !hideMealPlans && 
         <RecipeWrapper>
           <h1>My Meal Plans</h1>
-          <Recipes recipes={mealPlans} notes={true}/>
+          <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} />
         </RecipeWrapper>
         }
     </Wrapper>

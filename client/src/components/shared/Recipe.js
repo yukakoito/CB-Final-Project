@@ -5,18 +5,20 @@ import { HiOutlineViewList } from "react-icons/hi"
 import { BsSuitHeartFill } from "react-icons/bs"
 import { MdOpenInNew } from "react-icons/md"
 import { GiMeal, GiNotebook } from "react-icons/gi"
-import backupImage from "./noImage.png"
+import backupImage from "../../assets/noImage.png"
 import Notes from "./Notes";
 import IconButton from "./IconButton";
 
-const Recipe = ({recipe, notes}) => {
-  const { updateUser, pantry, shoppingList, savedRecipes } = useContext(UserContext);
+const Recipe = ({recipe, notes, isSavedRecipe}) => {
+  const { updateUser, pantry, shoppingList, filterRecipes, userId } = useContext(UserContext);
   const [ missingIngredients, setMissingIngredients ] = useState([]);
   const [ availableIngredients, setAvailableIngredients ] = useState([]);
   const [ hideAllIngredients, setHideAllIngredients ] = useState(true);
   const [ hideIngredientsInPantry, setHideIngredientsInPantry ] = useState(true);
   const [ editNotes, setEditNotes ] = useState(false);
+  const [ isImgErr, setIsImgErr ] = useState(false);
 
+  // To view details of recipe. It opens a new tab and direct to the source
   const openInNewTab = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
@@ -52,7 +54,6 @@ const Recipe = ({recipe, notes}) => {
     recipe && compareIngredients();
   }, [recipe, pantry, shoppingList])
 
-
   // Capitalise every first letter of each word of cuisineType
   const formatCuisineType = (data) => {
     const arrOfWords = data?.split(' ').map(word => 
@@ -61,11 +62,29 @@ const Recipe = ({recipe, notes}) => {
     return arrOfWords?.join(' ');
   }
 
-  
+  // Fetch the API to get an updated image sourse when access to the saved image source is denied
+  const updateImageSource = () => {
+    const query = `userId=${userId}&recipeId=${recipe._id}`
+    console.log(query)
+    fetch(`/api/update-image-source/${query}`)
+    .then(res => res.json())
+    .then(data => {filterRecipes(data.savedRecipes)
+      console.log(data)
+    })
+    .finally(setIsImgErr(true))
+  }
+
   return recipe && (
     <Wrapper>
       <RecipeHeader>
-        <img src={recipe.image} alt={recipe.label} onError={({currentTarget}) => {currentTarget.src = backupImage}} />
+        <img src={recipe.image} 
+             alt={recipe.label} 
+             onError={({currentTarget}) => {isSavedRecipe && !isImgErr? 
+                                            updateImageSource() :
+                                            currentTarget.src = backupImage
+                                            }
+                    } 
+        />
         <div>
           <h2>{recipe.label}</h2>
           <p>{recipe.source}</p>
@@ -111,6 +130,7 @@ const Recipe = ({recipe, notes}) => {
                                             )
                           }
                   disabled={ingredient.isInShoppingList? true : false}
+                  style={ingredient.isInShoppingList? {'opacity': '0.3'}: null}
           >
             ➕ Shopping List
           </button>

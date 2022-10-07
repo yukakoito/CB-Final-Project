@@ -1,7 +1,6 @@
 const { createClient } = require('./createClient');
 require('dotenv').config();
 const { v4: uuidv4 } = require("uuid");
-const request = require('request-promise');
 
 const setupUser= async (req, res) => {
   // Create a client
@@ -24,43 +23,10 @@ const setupUser= async (req, res) => {
     await client.connect;
     const existingUser = await users.findOne({email})
 
-    // If user already exists in the database based on the email provided and has some savedRecipes,
-    // fetch the API to update the url of the image of saved recipes and then respond with the updated user data
+    // If user is found, respond with the user data
     if(existingUser) {
-      if(existingUser.savedRecipes.length === 0) {
-        return res.status(200).json({status: 200, data: existingUser});
-      } else {
+      res.status(200).json({status: 200, data: existingUser});
 
-////////// LINE 37-64 ARE COMMENTED OUT IN ORDER NOT TO HIT API'S "Throttling calls/min" LIMIT (10/MIN) //////////
-        // const recipeIds = existingUser.savedRecipes.map(obj => obj['_id'])
-        // const promises = [];
-        // recipeIds.forEach(recipeId => {
-        //   promises.push(
-        //     request(`https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&beta=false&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&field=uri&field=image`)
-        //       .then(res => JSON.parse(res))
-        //       .then(data => {return data})
-        //   )
-        // })
-        // let imgLinks = [];
-        // await Promise.all(promises)
-        //   .then(data => {
-        //     imgLinks = data.map(obj => obj = {...obj.recipe, _id: obj.recipe.uri.split('_')[1]})
-        //   })
-
-        // const updatedImgLinks = imgLinks.map(link => {
-        //   return { 'updateOne':
-        //           { 'filter': {_id: existingUser._id},
-        //             'update': {$set: {"savedRecipes.$[elem].image": link.image,}}, 
-        //             'arrayFilters': [{"elem._id": link._id}]
-        //           }
-        //   }
-        // })
-        // const updatedImgLinkResult = await users.bulkWrite(updatedImgLinks);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        const updatedUserData = await users.findOne({_id: existingUser._id})
-        res.status(200).json({status: 200, data: updatedUserData})
-      }
     // If not, create a new user to the database and respond with a newly created user data
     } else {
       const newUser = await users.insertOne(newUserData);
@@ -81,7 +47,7 @@ const updateUser = async (req, res) => {
   // Collection used for this function
   const users = db.collection('users')
 
-  const { _id, pantry, shoppingList, savedRecipes, moveToPantry, notes } = req.body;
+  const { _id, pantry, shoppingList, moveToPantry, savedRecipes, notes } = req.body;
 
   // Validate the userId before connecting to the database
   if(!_id) {
@@ -143,7 +109,7 @@ const updateUser = async (req, res) => {
       }
     }
 
-    // Update savedRecipes and respond with the updated savedRecipes if success
+    // Update savedRecipes and respond with the updated savedRecipes upon completion of the below update process.
     if (savedRecipes) {
       // Delete the recipe from savedRecipes when both isLiked and isPlanned are false 
       if(!savedRecipes.isLiked && !savedRecipes.isPlanned) {
@@ -181,7 +147,7 @@ const updateUser = async (req, res) => {
         }
     }
 
-    // Add notes to or update notes associated with a savedRevipes
+    // Add notes to or update notes associated with a savedRevipes and respond with the updated savedRecipes
     if(notes) {
       console.log(notes.notes)
       updateResult = await users.updateOne( {_id}, 

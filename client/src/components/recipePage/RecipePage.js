@@ -11,7 +11,7 @@ const RecipePage = () => {
     <Wrapper>
       <h1>Recipes</h1>
       <RecipeSearch />
-      <Recipes recipes={recipes}/>
+      <Recipes recipes={recipes} />
     </Wrapper>
   )
 }

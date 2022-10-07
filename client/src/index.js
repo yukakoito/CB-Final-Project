@@ -7,7 +7,7 @@ import DataProvider from './components/DataContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Auth0Provider
       domain={process.env.REACT_APP_AUTH0_DOMAIN}
       clientId={process.env.REACT_APP_AUTH0_CLIENTID}
@@ -19,5 +19,5 @@ root.render(
         </DataProvider>
       </UserProvider>
     </Auth0Provider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );

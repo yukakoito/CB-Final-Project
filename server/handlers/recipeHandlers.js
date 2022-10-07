@@ -3,6 +3,7 @@ require('dotenv').config();
 const { v4: uuidv4 } = require("uuid");
 const request = require('request-promise');
 
+// This function provides recipes based on provided criteria
 const getRecipes = async (req, res) => {
   // This function to create a client
   const { client, db } = createClient('CBFinalProject');   
@@ -82,4 +83,45 @@ const getRecipes = async (req, res) => {
   }
 }
 
-module.exports = { getRecipes };
+// This function is currently used to update the image source of saved recipes
+const updateImageSource = async (req, res) => {
+  const { query } = req.params
+  if(!query) {
+    return res.status(400).json({status: 400, message: 'Please provide recipeId and/or userId'})
+  }
+
+  // This function to create a client
+  const { client, db } = createClient('CBFinalProject');   
+  // Collection to save the data received from API
+  const users = db.collection('users');
+
+  const recipeId = query.split('&').find(ele => ele.includes('recipeId'))?.replace('recipeId=', '')
+  const userId = query.split('&').find(ele => ele.includes('userId'))?.replace('userId=', '')
+  const url = `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&beta=false&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&field=uri&field=image`
+  console.log({recipeId})
+  console.log({userId})
+
+  try {
+    // Fetch the API to get an updated image source
+    // const response = await request(url);
+    // const data = await JSON.parse(response);
+    // console.log('data', data)
+
+    // const updateSavedRecipe = await users.updateOne({_id: userId}, 
+    //                                                 {$set: {"savedRecipes.$[elem].image": data.recipe.image}}, 
+    //                                                 {arrayFilters: [{"elem._id": recipeId}]}
+    //                                               )
+    // console.log('updateSavedRecipe', updateSavedRecipe)
+    const updatedUserData = await users.findOne({_id: userId})
+    res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes})
+
+  } catch (err) {
+    console.log('ERROR', err)
+    res.status(500).json({status: 500, message: err})
+  } finally {
+    client.close();
+    console.log('disconnected');
+  }
+}
+
+module.exports = { getRecipes, updateImageSource };

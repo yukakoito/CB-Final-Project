@@ -9,10 +9,7 @@ export const UserProvider = ({children}) => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [userId, setUserId] = usePersistedState(null, 'user-id');
   const [pantry, setPantry] = useState([]);
-  const [shoppingList, setShoppingList] = useState([]);
-  // const [savedRecipes, setSavedRecipes] = useState([]);
-  // const [meals, setMeals] = useState([]);
-  
+  const [shoppingList, setShoppingList] = useState([]);  
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [mealPlans, setMealPlans] = useState([]);
 
@@ -20,7 +17,7 @@ export const UserProvider = ({children}) => {
   const [errMsg, setErrMsg] = useState(null);
 
   // console.log({userId})
-  console.log('USER', user)
+  // console.log('USER', user)
   // console.log('FAVORITES', favoriteRecipes)
   // console.log('MEALS', mealPlans)
 
@@ -35,6 +32,7 @@ export const UserProvider = ({children}) => {
     setFavoriteRecipes(favorites);
     setMealPlans(meals);
   }
+
 
   // Retrieve user data or create a new user upon sign in/sign up with Auth0
   const setupUser = async () => {
@@ -111,7 +109,10 @@ export const UserProvider = ({children}) => {
                                   updateUser,
                                   isAuthenticated,
                                   favoriteRecipes,
+                                  setFavoriteRecipes,
                                   mealPlans,
+                                  setMealPlans,
+                                  filterRecipes,
                                 }}>
       {children}
     </UserContext.Provider>
