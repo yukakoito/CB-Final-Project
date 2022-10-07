@@ -9,10 +9,10 @@ import { useState } from "react";
 import { FaThList } from "react-icons/fa"
 
 const Profile = () => {
-  const { pantry, shoppingList, meals, savedRecipes } = useContext(UserContext)
+  const { pantry, shoppingList, mealPlans, favoriteRecipes } = useContext(UserContext)
   const { recipes } = useContext(DataContext);
-  const [hideSavedRecipes, setHideSavedRecipes] = useState(true);
-  const [hideMeals, setHideMeals] = useState(true);
+  const [hideFavoriteRecipes, setHideFavoriteRecipes] = useState(true);
+  const [hideMealPlans, setHideMealPlans] = useState(true);
 
   return (
     <Wrapper>
@@ -22,13 +22,13 @@ const Profile = () => {
           <ShoppingList data={shoppingList} />
           <div>
             <h1>My Meal Plans</h1>
-            <button onClick={() => setHideMeals(!hideMeals)}>
+            <button onClick={() => setHideMealPlans(!hideMealPlans)}>
               <FaThList />
             </button>
           </div>
           <div>
             <h1>My Favorite Recipes</h1>
-            <button onClick={() => setHideSavedRecipes(!hideSavedRecipes)}>
+            <button onClick={() => setHideFavoriteRecipes(!hideFavoriteRecipes)}>
               <FaThList />
             </button>
           </div>
@@ -39,16 +39,16 @@ const Profile = () => {
             <Recipes recipes={recipes} notes={false}/>
           </RecipeWrapper>
         }
-        { !hideSavedRecipes && 
+        { !hideFavoriteRecipes && 
           <RecipeWrapper>
           <h1>My Favorite Recipes</h1>
-          <Recipes recipes={savedRecipes} notes={true}/>
+          <Recipes recipes={favoriteRecipes} notes={true}/>
           </RecipeWrapper>
         }
-        { !hideMeals && 
+        { !hideMealPlans && 
         <RecipeWrapper>
           <h1>My Meal Plans</h1>
-          <Recipes recipes={meals} notes={true}/>
+          <Recipes recipes={mealPlans} notes={true}/>
         </RecipeWrapper>
         }
     </Wrapper>

@@ -1,14 +1,16 @@
 import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { UserContext } from "../UserContext";
-import { FaRegHeart, FaThList } from "react-icons/fa"
+import { HiOutlineViewList } from "react-icons/hi"
+import { BsSuitHeartFill } from "react-icons/bs"
 import { MdOpenInNew } from "react-icons/md"
 import { GiMeal, GiNotebook } from "react-icons/gi"
-import backupImage from "./anh-nguyen-kcA-c3f_3FE-unsplash.jpeg"
+import backupImage from "./noImage.png"
 import Notes from "./Notes";
+import IconButton from "./IconButton";
 
 const Recipe = ({recipe, notes}) => {
-  const { updateUser, pantry, shoppingList } = useContext(UserContext);
+  const { updateUser, pantry, shoppingList, savedRecipes } = useContext(UserContext);
   const [ missingIngredients, setMissingIngredients ] = useState([]);
   const [ availableIngredients, setAvailableIngredients ] = useState([]);
   const [ hideAllIngredients, setHideAllIngredients ] = useState(true);
@@ -63,7 +65,7 @@ const Recipe = ({recipe, notes}) => {
   return recipe && (
     <Wrapper>
       <RecipeHeader>
-        {/* <img src={recipe.image} alt={recipe.label} onError={({currentTarget}) => {currentTarget.src = backupImage }} /> */}
+        <img src={recipe.image} alt={recipe.label} onError={({currentTarget}) => {currentTarget.src = backupImage}} />
         <div>
           <h2>{recipe.label}</h2>
           <p>{recipe.source}</p>
@@ -71,22 +73,23 @@ const Recipe = ({recipe, notes}) => {
         </div>
       </RecipeHeader>
       <IngredientWrapper>
-      <h3>
-        All Ingredients ({recipe.ingredientLines.length})
-        <button onClick={() => setHideAllIngredients(!hideAllIngredients)}>
-          <FaThList />
-        </button>
-      </h3>
+      <div>
+      <h3>All Ingredients ({recipe.ingredientLines.length})</h3>
+        <IconButton onClickFunc={setHideAllIngredients} data={!hideAllIngredients} >
+          <HiOutlineViewList size={30}/>
+        </IconButton>
+      </div>
       {!hideAllIngredients && recipe.ingredientLines && recipe.ingredientLines.map((ingredient, i) =>
       <li key={`${recipe.label}-allIngredient-${i}-${ingredient}`} >{ingredient}</li>
       )}
       </IngredientWrapper>
-      <IngredientWrapper>      
-        <h3>You have {availableIngredients.length} ingredient(s)
-          <button onClick={() => setHideIngredientsInPantry(!hideIngredientsInPantry)}>
-            <FaThList />
-          </button>
-        </h3>
+      <IngredientWrapper>
+        <div>
+          <h3>You have {availableIngredients.length} ingredient(s)</h3>
+          <IconButton onClickFunc={setHideIngredientsInPantry} data={!hideIngredientsInPantry} >
+            <HiOutlineViewList size={30}/>
+          </IconButton>
+        </div>
         {!hideIngredientsInPantry && (
           <>
         {availableIngredients.map((ingredient) =>
@@ -118,20 +121,30 @@ const Recipe = ({recipe, notes}) => {
       }
       </IngredientWrapper>
       <Buttons>
-        <button onClick={() => openInNewTab(recipe.url)}>
-          {/* View details */}
-          <MdOpenInNew />
-        </button>
-        <button onClick={() => updateUser({'savedRecipes': recipe})}>
-          <FaRegHeart />
-        </button>
-        <button onClick={() => updateUser({'meals': recipe})}>
-          <GiMeal />
-        </button>
+        <IconButton onClickFunc={openInNewTab} 
+                    data={recipe.url}
+        >
+          <MdOpenInNew size={30}/>
+        </IconButton>
+        <IconButton onClickFunc={updateUser} 
+                    data={{'savedRecipes': {...recipe, isLiked: recipe.isLiked? false : true}}} 
+                    color={recipe.isLiked? '#e63946': null}
+        >
+          <BsSuitHeartFill size={30}/>
+        </IconButton>
+        <IconButton onClickFunc={updateUser} 
+                    data={{'savedRecipes': {...recipe, isPlanned: recipe.isPlanned? false : true}}} 
+                    color={recipe.isPlanned? '#e63946': null}
+        >
+          <GiMeal size={30}/>
+        </IconButton>
         {notes && 
-          <button onClick={() => setEditNotes(!editNotes)}>
-            <GiNotebook />
-          </button>
+          <IconButton onClickFunc={setEditNotes} 
+                      data={!editNotes} 
+                      color={recipe.notes? '#e63946': null}
+          >
+            <GiNotebook size={30}/>
+          </IconButton>
         }
       </Buttons>
       {editNotes && <Notes recipe={recipe}/>}
@@ -157,11 +170,13 @@ const RecipeHeader = styled.section`
 
 const IngredientWrapper = styled.ul`
   width: 100%;
+
+  div {
+    display: inline-flex;
+    align-items: center;
+  }
 `
 
 const Buttons = styled.section`
-  button {
-    /* border-radius: 50%;
-    padding: 5px; */
-  }
+  display: inline-flex;
 `

@@ -28,7 +28,7 @@ const DataProvider = ({children}) => {
     !parameters && getData();
   }, [])
 
-  console.log('searchOptions', searchOptions)
+  // console.log('searchOptions', searchOptions)
 
   // Search recipes
   const searchRecipes = async (data) => {

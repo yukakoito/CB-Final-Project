@@ -6,7 +6,8 @@ const request = require('request-promise');
 const getRecipes = async (req, res) => {
   // This function to create a client
   const { client, db } = createClient('CBFinalProject');   
-  // Collection to save the data received from API
+  // Collections to save the data received from API
+  const recipes = db.collection('recipes');
   const ingredients = db.collection('ingredients');
 
   const {query} = req.params;
@@ -15,7 +16,7 @@ const getRecipes = async (req, res) => {
     return res.status(400).json({status: 400, message: 'Please provide ingredient(s)'})
   }
 
-  const url = `https://api.edamam.com/api/recipes/v2?type=public&beta=false&q=${query}&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&random=true&field=uri&field=label&field=image&field=source&field=url&field=ingredientLines&field=ingredients&field=cuisineType&field=mealType&field=dishType`
+  const url = `https://api.edamam.com/api/recipes/v2?type=public&beta=false&q=${query}&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&random=true&field=label&field=image&field=source&field=url&field=ingredientLines&field=ingredients&field=cuisineType&field=mealType&field=dishType`
 
   console.log(url);
 
@@ -28,14 +29,8 @@ const getRecipes = async (req, res) => {
     return res.status(404).json({status: 404, message: 'No recipes matching the provided criteria.'})
   }
 
-  // Retrieve the recipe Id from uri and save it with additional data 
-  // to manage savedRevipes, mealPlans and update the url of the food image
-  const recipeResults = [];
-  await data.hits.map(obj => {
-    const recipeId = obj.recipe.uri.split('_')[1]
-    obj = {...obj.recipe, _id: recipeId, isLiked: false, isPlanned: false, notes: ''}
-    recipeResults.push(obj)
-  })
+  const recipeResults = await data.hits.map(obj => obj = {...obj.recipe})
+
 
   console.log('RECIPE RESULTS', recipeResults)
   
@@ -52,6 +47,21 @@ const getRecipes = async (req, res) => {
   console.log('ALL INGREDIENTS', allIngredients);
 
   await client.connect();
+  
+  // Save recipes in the database just in case...
+  const saveRecipes = recipeResults.map(recipe => {
+    return {'updateOne': 
+    {'filter': {label: recipe.label}, 
+      'update': {
+                  $setOnInsert: {...recipe, _id: uuidv4()}, 
+                }, 
+     'upsert': true
+    }
+  }
+  })
+  const saveRecipeResult = await recipes.bulkWrite(saveRecipes);
+
+  console.log('saveRecipeResult', saveRecipeResult)
 
   // Update ingredients collection
   const updateIngredientsCollection = allIngredients.map(ingredient => {
@@ -80,6 +90,10 @@ const getRecipes = async (req, res) => {
     client.close();
     console.log('disconnected');
   }
+}
+
+const getRandamRecipes = async (req, res) => {
+  
 }
 
 module.exports = { getRecipes };

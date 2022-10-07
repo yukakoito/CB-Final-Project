@@ -10,13 +10,31 @@ export const UserProvider = ({children}) => {
   const [userId, setUserId] = usePersistedState(null, 'user-id');
   const [pantry, setPantry] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
-  const [savedRecipes, setSavedRecipes] = useState([]);
-  const [meals, setMeals] = useState([]);
+  // const [savedRecipes, setSavedRecipes] = useState([]);
+  // const [meals, setMeals] = useState([]);
+  
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [mealPlans, setMealPlans] = useState([]);
+
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
 
   // console.log({userId})
-  // console.log('USER', user)
+  console.log('USER', user)
+  // console.log('FAVORITES', favoriteRecipes)
+  // console.log('MEALS', mealPlans)
+
+  // Filter recipes to save in the favoriteRecipes and mealPlans states
+  const filterRecipes = (data) => {
+    const favorites = [];
+    const meals = [];
+    data.filter(ele => {
+      ele.isLiked && favorites.push(ele)
+      ele.isPlanned && meals.push(ele)
+    })
+    setFavoriteRecipes(favorites);
+    setMealPlans(meals);
+  }
 
   // Retrieve user data or create a new user upon sign in/sign up with Auth0
   const setupUser = async () => {
@@ -35,15 +53,14 @@ export const UserProvider = ({children}) => {
         setUserId(data.data._id)
         setPantry(data.data.pantry);
         setShoppingList(data.data.shoppingList);
-        setSavedRecipes(data.data.savedRecipes);
-        setMeals(data.data.meals);
+        filterRecipes(data.data.savedRecipes);
       } 
     } catch (e) {
       setIsError(true)
     } 
   }  
 
-  // Update pantry, shopping list and saved recipes
+  // Update pantry, shoppingList and savedRecipes
   const updateUser = async (obj) => {
     console.log('UPDATE USER',{...obj, _id: userId})
 
@@ -61,8 +78,7 @@ export const UserProvider = ({children}) => {
       if(data.status === 200) {
         data.pantry && setPantry(data.pantry);
         data.shoppingList && setShoppingList(data.shoppingList);
-        data.savedRecipes && setSavedRecipes(data.savedRecipes);
-        data.meals && setMeals(data.meals);
+        data.savedRecipes && filterRecipes(data.savedRecipes);
         if(data.data) {
           setPantry(data.data.pantry)
           setShoppingList(data.data.shoppingList)
@@ -90,14 +106,12 @@ export const UserProvider = ({children}) => {
                                   setPantry,
                                   shoppingList, 
                                   setShoppingList,
-                                  savedRecipes, 
-                                  setSavedRecipes,
-                                  meals, 
-                                  setMeals,
                                   isError, 
                                   setIsError,
                                   updateUser,
                                   isAuthenticated,
+                                  favoriteRecipes,
+                                  mealPlans,
                                 }}>
       {children}
     </UserContext.Provider>

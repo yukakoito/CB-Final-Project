@@ -7,9 +7,10 @@ const Notes = ({recipe}) => {
   const [input, setInput] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
+  // Edit notes. When 
   const editNotes = () => {
     if(!input) return setIsEditing(true);
-    updateUser({notes: {label: recipe.label, notes: input}});
+    updateUser({notes: {_id: recipe._id, notes: input}});
     setIsEditing(false);
     setInput('');
   }
@@ -26,14 +27,14 @@ const Notes = ({recipe}) => {
       }
       <Buttons>
         {!recipe.notes && !isEditing ?
-        <button onClick={() => updateUser({notes: {label: recipe.label, notes: input}}) }>
+        <button onClick={() => updateUser({notes: {_id: recipe._id, notes: input}}) }>
           Add
         </button> :
         <button onClick={() => editNotes()}>
           Edit
         </button>
         }
-        <button onClick={() => {updateUser({notes: {label: recipe.label, notes: ''}});
+        <button onClick={() => {updateUser({notes: {_id: recipe._id, notes: ''}});
                                 setInput(''); 
                                }
                         }

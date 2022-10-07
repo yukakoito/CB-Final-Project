@@ -1,6 +1,7 @@
 const { createClient } = require('./createClient');
-// Use this to generate unique ids
+require('dotenv').config();
 const { v4: uuidv4 } = require("uuid");
+const request = require('request-promise');
 
 const setupUser= async (req, res) => {
   // Create a client
@@ -17,19 +18,49 @@ const setupUser= async (req, res) => {
     pantry: [],
     shoppingList: [],
     savedRecipes: [],
-    meals: []
   };
-
-  // console.log('NEW USER DATA', newUserData)
 
   try {
     await client.connect;
-    // If user already exists in the database based on the email provided, respond with the user data
-    // const existingUser = await users.findOne({email});
     const existingUser = await users.findOne({email})
-    // console.log('existingUser', existingUser)
+
+    // If user already exists in the database based on the email provided and has some savedRecipes,
+    // fetch the API to update the url of the image of saved recipes and then respond with the updated user data
     if(existingUser) {
-      res.status(200).json({status: 200, data: existingUser})
+      if(existingUser.savedRecipes.length === 0) {
+        return res.status(200).json({status: 200, data: existingUser});
+      } else {
+
+////////// LINE 37-64 ARE COMMENTED OUT IN ORDER NOT TO HIT API'S "Throttling calls/min" LIMIT (10/MIN) //////////
+        // const recipeIds = existingUser.savedRecipes.map(obj => obj['_id'])
+        // const promises = [];
+        // recipeIds.forEach(recipeId => {
+        //   promises.push(
+        //     request(`https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&beta=false&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&field=uri&field=image`)
+        //       .then(res => JSON.parse(res))
+        //       .then(data => {return data})
+        //   )
+        // })
+        // let imgLinks = [];
+        // await Promise.all(promises)
+        //   .then(data => {
+        //     imgLinks = data.map(obj => obj = {...obj.recipe, _id: obj.recipe.uri.split('_')[1]})
+        //   })
+
+        // const updatedImgLinks = imgLinks.map(link => {
+        //   return { 'updateOne':
+        //           { 'filter': {_id: existingUser._id},
+        //             'update': {$set: {"savedRecipes.$[elem].image": link.image,}}, 
+        //             'arrayFilters': [{"elem._id": link._id}]
+        //           }
+        //   }
+        // })
+        // const updatedImgLinkResult = await users.bulkWrite(updatedImgLinks);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        const updatedUserData = await users.findOne({_id: existingUser._id})
+        res.status(200).json({status: 200, data: updatedUserData})
+      }
     // If not, create a new user to the database and respond with a newly created user data
     } else {
       const newUser = await users.insertOne(newUserData);
@@ -50,8 +81,7 @@ const updateUser = async (req, res) => {
   // Collection used for this function
   const users = db.collection('users')
 
-  const { _id, pantry, shoppingList, savedRecipes, moveToPantry, meals, notes } = req.body;
-  console.log('REQ.BODY', req.body)
+  const { _id, pantry, shoppingList, savedRecipes, moveToPantry, notes } = req.body;
 
   // Validate the userId before connecting to the database
   if(!_id) {
@@ -98,26 +128,6 @@ const updateUser = async (req, res) => {
         return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
     }}
 
-    // Update savedRecipes or myMeals
-    if (savedRecipes || meals) {
-      const query = Object.fromEntries([Object.entries(req.body).find(([key, value]) => key !== '_id')]);
-      const key = Object.keys(query).toString();
-      console.log({key}, query)
-      updateResult = await users.updateOne({_id}, {$pull: query});
-      console.log(updateResult)
-      if(updateResult.modifiedCount === 1) {
-        updatedUserData = await users.findOne({_id})
-        return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Recipe deleted'})
-      } else {
-        updateResult = await users.updateOne({_id}, {$push: query});
-        console.log(updateResult)
-        if(updateResult.modifiedCount === 1) {
-          updatedUserData = await users.findOne({_id})
-          return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Recipe saved'})
-        }
-        return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
-    }}
-
     // Move an item from shoppingList to pantry
     if(moveToPantry) {
       updateResult = await users.updateOne({_id}, {$pull: {shoppingList: moveToPantry}, $addToSet: {pantry: moveToPantry}})
@@ -133,22 +143,62 @@ const updateUser = async (req, res) => {
       }
     }
 
-    // Add notes to or update notes associated with an recipe in meals and/or savedRevipes
+    // Update savedRecipes and respond with the updated savedRecipes if success
+    if (savedRecipes) {
+      // Delete the recipe from savedRecipes when both isLiked and isPlanned are false 
+      if(!savedRecipes.isLiked && !savedRecipes.isPlanned) {
+        updateResult = await users.updateOne({_id}, {$pull: {'savedRecipes': {_id: savedRecipes._id}} })
+        console.log(updateResult)
+        if(updateResult.modifiedCount === 1) {
+          updatedUserData = await users.findOne({_id})
+          return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Recipe deleted'})
+          } 
+        return res.status(501).json({status: 501, message: 'An unknown error has occured.'})
+      } else {
+        // If the recipe is in savedRecipes, update the required field
+        updateResult = await users.updateOne( {_id}, 
+          {$set: {
+                  "savedRecipes.$[elem].isLiked": savedRecipes.isLiked,
+                  "savedRecipes.$[elem].isPlanned": savedRecipes.isPlanned,
+                  }
+          }, 
+          {arrayFilters: [{"elem._id": savedRecipes._id}]}
+        )
+        console.log(updateResult)
+        if(updateResult.modifiedCount === 1) {
+          updatedUserData = await users.findOne({_id});
+          return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Recipe updated'});
+          } else {
+          // Add the recipe if it's not in savedRecipes 
+          updateResult = await users.updateOne({_id}, {$addToSet: {savedRecipes}})
+          console.log(updateResult)
+          if(updateResult.modifiedCount === 1) {
+            updatedUserData = await users.findOne({_id});
+            return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Recipe updated'});
+            } 
+            return res.status(501).json({status: 501, message: 'An unknown error has occured.'});
+          }
+        }
+    }
+
+    // Add notes to or update notes associated with a savedRevipes
     if(notes) {
       console.log(notes.notes)
-      const updateNotes = await users.updateOne({_id}, 
-                                                {$set: {"meals.$[elem].notes": notes.notes, 
-                                                        "savedRecipes.$[elem].notes": notes.notes}
-                                                }, 
-                                                {arrayFilters: [{"elem.label": notes.label}]}
-                                              )
-      console.log(updateNotes)
+      updateResult = await users.updateOne( {_id}, 
+                                            {$set: {"savedRecipes.$[elem].notes": notes.notes}}, 
+                                            {arrayFilters: [{"elem._id": notes._id}]}
+                                          )
+      console.log(updateResult)
+      if(updateResult.modifiedCount === 1) {
       updatedUserData = await users.findOne({_id})
-      return res.status(200).json({status: 200, data: updatedUserData, message: 'Notes updated'})
+      return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Notes updated'})
+      } 
+      return res.status(501).json({status: 501, message: 'An unknown error has occured.'});
     }
 
   } catch (err) {
     res.status(500).json({status: 500, message: err.message})
+    console.log(err)
   } finally {
     client.close();
     console.log('disconnected')
