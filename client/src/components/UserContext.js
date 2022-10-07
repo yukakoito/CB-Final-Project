@@ -16,11 +16,6 @@ export const UserProvider = ({children}) => {
   const [isError, setIsError] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
 
-  // console.log({userId})
-  // console.log('USER', user)
-  // console.log('FAVORITES', favoriteRecipes)
-  // console.log('MEALS', mealPlans)
-
   // Filter recipes to save in the favoriteRecipes and mealPlans states
   const filterRecipes = (data) => {
     const favorites = [];
@@ -32,7 +27,6 @@ export const UserProvider = ({children}) => {
     setFavoriteRecipes(favorites);
     setMealPlans(meals);
   }
-
 
   // Retrieve user data or create a new user upon sign in/sign up with Auth0
   const setupUser = async () => {

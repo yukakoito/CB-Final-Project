@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { UserContext } from "../UserContext";
 import { HiOutlineViewList } from "react-icons/hi"
@@ -10,20 +10,21 @@ import Notes from "./Notes";
 import IconButton from "./IconButton";
 
 const Recipe = ({recipe, notes, isSavedRecipe}) => {
-  const { updateUser, pantry, shoppingList, filterRecipes, userId } = useContext(UserContext);
+  const { updateUser, pantry, shoppingList, userId } = useContext(UserContext);
   const [ missingIngredients, setMissingIngredients ] = useState([]);
   const [ availableIngredients, setAvailableIngredients ] = useState([]);
   const [ hideAllIngredients, setHideAllIngredients ] = useState(true);
   const [ hideIngredientsInPantry, setHideIngredientsInPantry ] = useState(true);
   const [ editNotes, setEditNotes ] = useState(false);
   const [ isImgErr, setIsImgErr ] = useState(false);
+  const imageRef = useRef();
 
-  // To view details of recipe. It opens a new tab and direct to the source
+  // View details of recipe. It opens a new tab and direct to the source
   const openInNewTab = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 
-  // To find ingredients user have at home
+  // Find ingredients that user have at home
   const compareIngredients = () => {
     const newMissingIngredients = [];
     const newAvailableIngredients = [];
@@ -54,6 +55,7 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
     recipe && compareIngredients();
   }, [recipe, pantry, shoppingList])
 
+
   // Capitalise every first letter of each word of cuisineType
   const formatCuisineType = (data) => {
     const arrOfWords = data?.split(' ').map(word => 
@@ -62,22 +64,33 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
     return arrOfWords?.join(' ');
   }
 
-  // Fetch the API to get an updated image sourse when access to the saved image source is denied
+  // Get an updated image sourse if access to the saved image source is denied
   const updateImageSource = () => {
     const query = `userId=${userId}&recipeId=${recipe._id}`
-    console.log(query)
+    console.log('FETCHING' ,query)
     fetch(`/api/update-image-source/${query}`)
     .then(res => res.json())
-    .then(data => {filterRecipes(data.savedRecipes)
-      console.log(data)
+    .then(data => {
+      // If an updated image source is receved, assign it to imageRef
+      if(data.status === 200) {
+         return imageRef.current.src = data.updatedImgSrc;
+      // If error, use the backupImage
+      } else {
+        return imageRef.current.src = backupImage;
+      }
     })
+    .catch(err => {console.log(err)
+                   imageRef.current.src = backupImage;
+                  }
+          )
     .finally(setIsImgErr(true))
   }
 
   return recipe && (
     <Wrapper>
       <RecipeHeader>
-        <img src={recipe.image} 
+        <img ref={imageRef}
+             src={recipe.image} 
              alt={recipe.label} 
              onError={({currentTarget}) => {isSavedRecipe && !isImgErr? 
                                             updateImageSource() :

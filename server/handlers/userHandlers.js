@@ -2,6 +2,7 @@ const { createClient } = require('./createClient');
 require('dotenv').config();
 const { v4: uuidv4 } = require("uuid");
 
+// This function is to obtain user data for both new users and existing users
 const setupUser= async (req, res) => {
   // Create a client
   const { client, db } = createClient('CBFinalProject');   
@@ -9,6 +10,11 @@ const setupUser= async (req, res) => {
   const users = db.collection('users')
   
   const { email } = req.body;
+
+  // If email doesn't contain "@", respond with an error message
+  if(!email.includes('@')) {
+    return res.status(400).json({status: 400, message: "Please provide user's email."})
+  }
 
   // Data to add when creating a new user
   const newUserData = {
@@ -41,6 +47,7 @@ const setupUser= async (req, res) => {
   }
 }
 
+// This function is to update all of the information stored in user's document
 const updateUser = async (req, res) => {
   // Create a client
   const { client, db } = createClient('CBFinalProject');   
@@ -51,14 +58,14 @@ const updateUser = async (req, res) => {
 
   // Validate the userId before connecting to the database
   if(!_id) {
-    res.status(400).json({status: 400, message: 'Please provide an user id.'})
+    return res.status(400).json({status: 400, message: 'Please provide an user id.'})
   }
 
   try {
     await client.connect();
     const userData = await users.findOne({_id});
   
-    // If useData isn't found, respond with an error message
+    // If userData isn't found, respond with an error message
     if(!userData) {
       return res.status(404).json({status: 404, message: 'User not found'})
     }
@@ -109,12 +116,11 @@ const updateUser = async (req, res) => {
       }
     }
 
-    // Update savedRecipes and respond with the updated savedRecipes upon completion of the below update process.
+    // Update savedRecipes and respond with the updated savedRecipes upon completion of the update process below.
     if (savedRecipes) {
       // Delete the recipe from savedRecipes when both isLiked and isPlanned are false 
       if(!savedRecipes.isLiked && !savedRecipes.isPlanned) {
         updateResult = await users.updateOne({_id}, {$pull: {'savedRecipes': {_id: savedRecipes._id}} })
-        console.log(updateResult)
         if(updateResult.modifiedCount === 1) {
           updatedUserData = await users.findOne({_id})
           return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Recipe deleted'})
@@ -130,14 +136,12 @@ const updateUser = async (req, res) => {
           }, 
           {arrayFilters: [{"elem._id": savedRecipes._id}]}
         )
-        console.log(updateResult)
         if(updateResult.modifiedCount === 1) {
           updatedUserData = await users.findOne({_id});
           return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Recipe updated'});
           } else {
           // Add the recipe if it's not in savedRecipes 
           updateResult = await users.updateOne({_id}, {$addToSet: {savedRecipes}})
-          console.log(updateResult)
           if(updateResult.modifiedCount === 1) {
             updatedUserData = await users.findOne({_id});
             return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Recipe updated'});
@@ -147,14 +151,12 @@ const updateUser = async (req, res) => {
         }
     }
 
-    // Add notes to or update notes associated with a savedRevipes and respond with the updated savedRecipes
+    // Update the notes field associated with a saved recipe and respond with the updated savedRecipes
     if(notes) {
-      console.log(notes.notes)
       updateResult = await users.updateOne( {_id}, 
                                             {$set: {"savedRecipes.$[elem].notes": notes.notes}}, 
                                             {arrayFilters: [{"elem._id": notes._id}]}
                                           )
-      console.log(updateResult)
       if(updateResult.modifiedCount === 1) {
       updatedUserData = await users.findOne({_id})
       return res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes, message: 'Notes updated'})

@@ -12,34 +12,34 @@ const getRecipes = async (req, res) => {
 
   const {query} = req.params;
 
+  // If there's no query string, respond with an error message
   if(!query) {
     return res.status(400).json({status: 400, message: 'Please provide ingredient(s)'})
   }
 
   const url = `https://api.edamam.com/api/recipes/v2?type=public&beta=false&q=${query}&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&random=true&field=uri&field=label&field=image&field=source&field=url&field=ingredientLines&field=ingredients&field=cuisineType&field=mealType&field=dishType`
 
-  console.log(url);
-
   try {
 
+  // Connect to the API to get un updated image source
   const response = await request(url);
   const data = await JSON.parse(response);
 
+  // If there's no result, respond with an error message
   if(data.hits.length === 0) {
     return res.status(404).json({status: 404, message: 'No recipes matching the provided criteria.'})
   }
 
   // Retrieve the recipe Id from uri and save it with additional data 
-  // to manage savedRevipes, mealPlans and update the url of the food image
+  // to manage users' savedRevipes and update the url of the food image 
   const recipeResults = [];
   await data.hits.map(obj => {
     const recipeId = obj.recipe.uri.split('_')[1]
     obj = {...obj.recipe, _id: recipeId, isLiked: false, isPlanned: false, notes: ''}
     recipeResults.push(obj)
   })
-
-  console.log('RECIPE RESULTS', recipeResults)
   
+  // Create an array of all the ingredients listed in the received from the API
   const allIngredients = [];
   recipeResults.forEach(recipe => {recipe.ingredients
     .forEach(ingredient => {
@@ -50,8 +50,7 @@ const getRecipes = async (req, res) => {
     })
   })
 
-  console.log('ALL INGREDIENTS', allIngredients);
-
+  // Connect to the database to store new ingredients found in the recipes 
   await client.connect();
 
   // Update ingredients collection
@@ -68,8 +67,8 @@ const getRecipes = async (req, res) => {
   })
 
   const updateResult = await ingredients.bulkWrite(updateIngredientsCollection);
-  console.log('updateResult', updateResult)
 
+  // Retrieve the updated list of ingredients from the database to send it to the FE
   const updatedIngredients = await ingredients.find().sort({'category': 1}).toArray();
 
   res.status(200).json({status: 200, recipes: recipeResults, ingredients: updatedIngredients})
@@ -83,9 +82,11 @@ const getRecipes = async (req, res) => {
   }
 }
 
-// This function is currently used to update the image source of saved recipes
+// This function is to update the image source of saved recipes
 const updateImageSource = async (req, res) => {
   const { query } = req.params
+
+  // If there's no query string, respond with an error message
   if(!query) {
     return res.status(400).json({status: 400, message: 'Please provide recipeId and/or userId'})
   }
@@ -98,23 +99,24 @@ const updateImageSource = async (req, res) => {
   const recipeId = query.split('&').find(ele => ele.includes('recipeId'))?.replace('recipeId=', '')
   const userId = query.split('&').find(ele => ele.includes('userId'))?.replace('userId=', '')
   const url = `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&beta=false&app_id=${process.env.EDAMAM_app_id}&app_key=${process.env.EDAMAM_app_key}&field=uri&field=image`
-  console.log({recipeId})
-  console.log({userId})
 
   try {
     // Fetch the API to get an updated image source
     // const response = await request(url);
-    // const data = await JSON.parse(response);
-    // console.log('data', data)
-
-    // const updateSavedRecipe = await users.updateOne({_id: userId}, 
-    //                                                 {$set: {"savedRecipes.$[elem].image": data.recipe.image}}, 
-    //                                                 {arrayFilters: [{"elem._id": recipeId}]}
-    //                                               )
-    // console.log('updateSavedRecipe', updateSavedRecipe)
-    const updatedUserData = await users.findOne({_id: userId})
-    res.status(200).json({status: 200, savedRecipes: updatedUserData.savedRecipes})
-
+    const data = await JSON.parse(response);
+    console.log('data', data)
+    // If an updated image source is received, 
+    // replace the current image source with the updated one in user's savedRecipes array and then respond with the updated image source 
+    if(data.recipe.image) {
+      const updateSavedRecipe = await users.updateOne({_id: userId}, 
+                                                      {$set: {"savedRecipes.$[elem].image": data.recipe.image}}, 
+                                                      {arrayFilters: [{"elem._id": recipeId}]}
+                                                    )
+      console.log('updateSavedRecipe', updateSavedRecipe)
+      return res.status(200).json({status: 200, updatedImgSrc: data.recipe.image});
+    } else {
+      return res.status(501).json({status: 501, message: 'An unknown error has occured.'});
+    }
   } catch (err) {
     console.log('ERROR', err)
     res.status(500).json({status: 500, message: err})
