@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// This state is used to store userId and a recipe to save when user isn't logged in
 const usePersistedState = (initialValue, storageKey) => {
 
     const getStoredValue = () => {

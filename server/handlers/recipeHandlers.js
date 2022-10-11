@@ -74,7 +74,6 @@ const getRecipes = async (req, res) => {
   res.status(200).json({status: 200, recipes: recipeResults, ingredients: updatedIngredients})
 
   } catch (err) {
-    console.log('ERROR', err)
     res.status(500).json({status: 500, message: err})
   } finally {
     client.close();
@@ -104,7 +103,7 @@ const updateImageSource = async (req, res) => {
     // Fetch the API to get an updated image source
     // const response = await request(url);
     const data = await JSON.parse(response);
-    console.log('data', data)
+
     // If an updated image source is received, 
     // replace the current image source with the updated one in user's savedRecipes array and then respond with the updated image source 
     if(data.recipe.image) {
@@ -112,13 +111,12 @@ const updateImageSource = async (req, res) => {
                                                       {$set: {"savedRecipes.$[elem].image": data.recipe.image}}, 
                                                       {arrayFilters: [{"elem._id": recipeId}]}
                                                     )
-      console.log('updateSavedRecipe', updateSavedRecipe)
+      
       return res.status(200).json({status: 200, updatedImgSrc: data.recipe.image});
     } else {
-      return res.status(501).json({status: 501, message: 'An unknown error has occured.'});
+      return res.status(404).json({status: 404, message: 'Could not find an image with the specified recipeId.'});
     }
   } catch (err) {
-    console.log('ERROR', err)
     res.status(500).json({status: 500, message: err})
   } finally {
     client.close();

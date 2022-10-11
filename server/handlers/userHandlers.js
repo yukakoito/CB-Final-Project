@@ -9,36 +9,46 @@ const setupUser= async (req, res) => {
   // Collection used for this function
   const users = db.collection('users')
   
-  const { email } = req.body;
+  const { email, recipe } = req.body;
 
   // If email doesn't contain "@", respond with an error message
   if(!email.includes('@')) {
     return res.status(400).json({status: 400, message: "Please provide user's email."})
   }
 
+  // Reformat the data received from FE to add to new user's document
+  const data = Object.fromEntries(Object.entries(req.body).filter(([key, value]) => key !== 'recipe'))
   // Data to add when creating a new user
   const newUserData = {
-    ...req.body,
+    ...data,
     _id: uuidv4(),
     pantry: [],
     shoppingList: [],
-    savedRecipes: [],
+    savedRecipes: recipe? [recipe] : [],
   };
 
   try {
     await client.connect;
+
     const existingUser = await users.findOne({email})
 
-    // If user is found, respond with the user data
-    if(existingUser) {
-      res.status(200).json({status: 200, data: existingUser});
+    // If user is found and no recipe is provided, respond with the user data
+    if(existingUser && !recipe) {
+      return res.status(200).json({status: 200, data: existingUser});
 
+    // If user is found and there's a recipe to save, add the recipe to user's savedRecipes 
+    // and then respond with the updated user data
+    } else if(existingUser && recipe) {
+        await users.updateOne({_id: existingUser._id}, {$addToSet: {savedRecipes: recipe}})
+        const updatedUserData = await users.findOne({_id: existingUser._id});
+        updatedUserData && res.status(200).json({status: 200, data: updatedUserData});
+        
     // If not, create a new user to the database and respond with a newly created user data
     } else {
       const newUser = await users.insertOne(newUserData);
-      // console.log('newUser', newUser)
       newUser.insertedId && res.status(200).json({status: 200, data: newUserData})
     }
+
   } catch (err) {
     res.status(500).json({status: 500, message: err.message})
   } finally {
@@ -86,14 +96,14 @@ const updateUser = async (req, res) => {
       
       // If the item already exists in the list, remove it.
       updateResult = await users.updateOne({_id}, {$pull: itemToRemove});
-      console.log(updateResult)
+      
       if(updateResult.modifiedCount === 1) {
         updatedUserData = await users.findOne({_id})
         return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Item removed'})
       // If the item is not found, add it to the list.
       } else {
         updateResult = await users.updateOne({_id}, {$push: itemToAdd});
-        console.log(updateResult)
+        
         if(updateResult.modifiedCount === 1) {
           updatedUserData = await users.findOne({_id})
           return res.status(200).json({status: 200, [key]: updatedUserData[key], message: 'Item added'})
@@ -105,7 +115,6 @@ const updateUser = async (req, res) => {
     if(moveToPantry) {
       updateResult = await users.updateOne({_id}, {$pull: {shoppingList: moveToPantry}, $addToSet: {pantry: moveToPantry}})
     
-      console.log(updateResult)
       if(updateResult.modifiedCount === 1) {
         // Sort items in pantry before sending the updated data to FE
         await users.updateOne({_id}, {$push: {pantry: { $each: [], $sort: {category: -1, name: 1}}}})
@@ -166,7 +175,6 @@ const updateUser = async (req, res) => {
 
   } catch (err) {
     res.status(500).json({status: 500, message: err.message})
-    console.log(err)
   } finally {
     client.close();
     console.log('disconnected')

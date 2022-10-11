@@ -1,9 +1,9 @@
 import styled from "styled-components"
 
+// Footer has no content but to add color to the page
 const Footer = () => {
   return (
     <Wrapper>
-    <h1>Footer</h1>
     </Wrapper>
   )
 }
@@ -11,10 +11,12 @@ const Footer = () => {
 export default Footer;
 
 const Wrapper = styled.div`
-  padding: var(--wrapper-padding);
   height: 10vh;
   width: 100vw;
   background-color: var(--primary-background-color);
-  position: absolute;
-  /* bottom: 0; */
+  padding: 20px 5vw;
+
+@media screen and (min-width: 1200px){
+  padding: 20px 20vw;
+}
 `

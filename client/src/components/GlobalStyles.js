@@ -4,9 +4,8 @@ export default createGlobalStyle`
   :root {
     --primary-color: #1d3557;
     --max-content-width: 1200px;
-    --heading-font-family: 'Teko', sans-serif;
-    --wrapper-padding: 0 5vw;
-    --primary-background-color: #d88c9a;
+    --heading-font-family: 'Poppins', sans-serif;
+    --primary-background-color: rgba(242, 132, 130, 1);
   }
 
   html, body, div, span, applet, object, iframe,
@@ -42,18 +41,15 @@ export default createGlobalStyle`
     font-family: var(--heading-font-family);
   }
 
-  ol, ul {
+  ol, ul, li {
     list-style: none;
+    padding: 3px;
   }
 
   li {
-    list-style: none;
-    width: 200px;
-  }
-
-  select, input {
-    width: 200px;
-    margin-top: 5px;
+    &:hover {
+      background-color: #edf2f4;
+    }
   }
 
   blockquote, q {
@@ -71,19 +67,22 @@ export default createGlobalStyle`
   }
 
   h2 {
-    font-size: 20px;
-  }
-
-  h3 {
-    margin: 5px 0;
+    font-size: 18px;
   }
 
   button {
-    background-color: #f0eff4;
     color: var(--primary-color);
     border-radius: 5px;
-    border: 1px solid;
-    margin: 5px;
+    border: none;
+    margin: 0 5px;
+    outline: 1px solid var(--primary-color);
+    background: transparent;
+    font-family: var(--heading-font-family);
+
+    &:hover {  
+      outline: 3px solid var(--primary-color);
+      background-color: #edf2f4;
+    }
   }
 
   img {
@@ -91,5 +90,18 @@ export default createGlobalStyle`
     width: 120px;
     border-radius: 10px;
     margin-right: 5px;
+  }
+
+  input, select {
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 15px;
+    outline: 1px solid var(--primary-color);
+    border: none;
+    font-family: var(--heading-font-family);
+
+    &:focus {
+      outline: 2px solid var(--primary-color);
+    }
   }
 `;

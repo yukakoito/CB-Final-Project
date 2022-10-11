@@ -8,9 +8,10 @@ import { GiMeal, GiNotebook } from "react-icons/gi"
 import backupImage from "../../assets/noImage.png"
 import Notes from "./Notes";
 import IconButton from "./IconButton";
+import Modal from "./Modal";
 
 const Recipe = ({recipe, notes, isSavedRecipe}) => {
-  const { updateUser, pantry, shoppingList, userId } = useContext(UserContext);
+  const { updateUser, pantry, shoppingList, userId, setRecipeToAdd } = useContext(UserContext);
   const [ missingIngredients, setMissingIngredients ] = useState([]);
   const [ availableIngredients, setAvailableIngredients ] = useState([]);
   const [ hideAllIngredients, setHideAllIngredients ] = useState(true);
@@ -18,6 +19,9 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
   const [ editNotes, setEditNotes ] = useState(false);
   const [ isImgErr, setIsImgErr ] = useState(false);
   const imageRef = useRef();
+  const [ addRecipe, setAddRecipe] = useState(false);
+
+  const iconSize = 30;
 
   // View details of recipe. It opens a new tab and direct to the source
   const openInNewTab = (url) => {
@@ -55,7 +59,6 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
     recipe && compareIngredients();
   }, [recipe, pantry, shoppingList])
 
-
   // Capitalise every first letter of each word of cuisineType
   const formatCuisineType = (data) => {
     const arrOfWords = data?.split(' ').map(word => 
@@ -67,7 +70,6 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
   // Get an updated image sourse if access to the saved image source is denied
   const updateImageSource = () => {
     const query = `userId=${userId}&recipeId=${recipe._id}`
-    console.log('FETCHING' ,query)
     fetch(`/api/update-image-source/${query}`)
     .then(res => res.json())
     .then(data => {
@@ -79,15 +81,25 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
         return imageRef.current.src = backupImage;
       }
     })
-    .catch(err => {console.log(err)
-                   imageRef.current.src = backupImage;
-                  }
-          )
+    .catch((err) => imageRef.current.src = backupImage)
     .finally(setIsImgErr(true))
+  }
+
+  // Save a recipe when user click on favorites or meals before logging in
+  const saveRecipe = (data) => {
+    setAddRecipe(true)
+    setRecipeToAdd(data)
+  }
+
+  // To closeModal and delete the recipe saved in local storage
+  const closeModal = () => {
+    setAddRecipe(false)
+    setRecipeToAdd(null)
   }
 
   return recipe && (
     <Wrapper>
+      <Modal closeModal={closeModal} open={addRecipe}/>
       <RecipeHeader>
         <img ref={imageRef}
              src={recipe.image} 
@@ -101,25 +113,54 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
         <div>
           <h2>{recipe.label}</h2>
           <p>{recipe.source}</p>
-          <span>{formatCuisineType(recipe.cuisineType[0])}</span>
+          <p>{formatCuisineType(recipe.cuisineType[0])}</p>
         </div>
       </RecipeHeader>
+      <Buttons>
+        <IconButton onClickFunc={openInNewTab} 
+                    data={recipe.url}
+        >
+          <MdOpenInNew size={iconSize}/>
+        </IconButton>
+        <IconButton onClickFunc={userId? updateUser : saveRecipe} 
+                    data={{'savedRecipes': {...recipe, isLiked: recipe.isLiked? false : true}}} 
+                    color={recipe.isLiked? '#e63946': null}
+        >
+          <BsSuitHeartFill size={iconSize}/>
+        </IconButton>
+        <IconButton onClickFunc={userId? updateUser : saveRecipe} 
+                    data={{'savedRecipes': {...recipe, isPlanned: recipe.isPlanned? false : true}}} 
+                    color={recipe.isPlanned? '#e63946': null}
+        >
+          <GiMeal size={iconSize}/>
+        </IconButton>
+        {notes && 
+          <IconButton onClickFunc={setEditNotes} 
+                      data={!editNotes} 
+                      color={recipe.notes? '#e63946': null}
+          >
+            <GiNotebook size={iconSize}/>
+          </IconButton>
+        }
+      </Buttons>
+      {editNotes && <Notes recipe={recipe}/>}
       <IngredientWrapper>
       <div>
       <h3>All Ingredients ({recipe.ingredientLines.length})</h3>
         <IconButton onClickFunc={setHideAllIngredients} data={!hideAllIngredients} >
-          <HiOutlineViewList size={30}/>
+          <HiOutlineViewList size={iconSize}/>
         </IconButton>
       </div>
       {!hideAllIngredients && recipe.ingredientLines && recipe.ingredientLines.map((ingredient, i) =>
       <li key={`${recipe.label}-allIngredient-${i}-${ingredient}`} >{ingredient}</li>
       )}
       </IngredientWrapper>
+      {userId && 
       <IngredientWrapper>
         <div>
           <h3>You have {availableIngredients.length} ingredient(s)</h3>
           <IconButton onClickFunc={setHideIngredientsInPantry} data={!hideIngredientsInPantry} >
-            <HiOutlineViewList size={30}/>
+            <HiOutlineViewList size={iconSize}/>
           </IconButton>
         </div>
         {!hideIngredientsInPantry && (
@@ -128,9 +169,9 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
         <li key={`${recipe.label}-availableIngredients-${ingredient.name}`} >{ingredient.name}</li>
         )}
         <h3>Do you have any of the following ingredients?</h3>
-        {missingIngredients && missingIngredients.map((ingredient) =>
+        {missingIngredients && missingIngredients.map((ingredient, i) =>
         <section key={`${recipe.label}-missingIngredients-${ingredient.name}`}>
-          <li >{ingredient.name}</li>
+          <li>{ingredient.name}</li>
           <button onClick={() => updateUser({pantry: Object.fromEntries(Object.entries(ingredient)
                                                       .filter(([key, value]) => key !== 'isInShoppingList'))}
                                             )
@@ -153,34 +194,7 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
         )
       }
       </IngredientWrapper>
-      <Buttons>
-        <IconButton onClickFunc={openInNewTab} 
-                    data={recipe.url}
-        >
-          <MdOpenInNew size={30}/>
-        </IconButton>
-        <IconButton onClickFunc={updateUser} 
-                    data={{'savedRecipes': {...recipe, isLiked: recipe.isLiked? false : true}}} 
-                    color={recipe.isLiked? '#e63946': null}
-        >
-          <BsSuitHeartFill size={30}/>
-        </IconButton>
-        <IconButton onClickFunc={updateUser} 
-                    data={{'savedRecipes': {...recipe, isPlanned: recipe.isPlanned? false : true}}} 
-                    color={recipe.isPlanned? '#e63946': null}
-        >
-          <GiMeal size={30}/>
-        </IconButton>
-        {notes && 
-          <IconButton onClickFunc={setEditNotes} 
-                      data={!editNotes} 
-                      color={recipe.notes? '#e63946': null}
-          >
-            <GiNotebook size={30}/>
-          </IconButton>
-        }
-      </Buttons>
-      {editNotes && <Notes recipe={recipe}/>}
+      }
     </Wrapper>
   )
 }
@@ -188,17 +202,51 @@ const Recipe = ({recipe, notes, isSavedRecipe}) => {
 export default Recipe;
 
 const Wrapper = styled.div`
-  width: 350px;
-  min-height: 275px;
-  border: 10px solid var(--primary-color);
-  margin: 5px;
+  max-width: 375px;
+  min-height: 250px;
+  margin: 0 10px 10px 0;
   padding: 5px;
+  box-shadow: 1px 2px 3px 3px lightgray;
+
+  @media screen and (min-width: 900px){
+    width: 100%;
+    width: 275px;
+  }
 `
 const RecipeHeader = styled.section`
   display: inline-flex;
-  p {
-    color: gray;
+
+  div {
+    display: flex;
+    flex-flow: column;
+    padding: 0 5px;
+
   }
+
+  h2 {
+    margin-bottom: 5px;
+  }
+  
+  p {
+    word-wrap: break-word;
+    display: inline-block;
+    &:nth-of-type(1) {
+      color: gray;
+      font-size: smaller;
+      margin-bottom: 3px;
+    }
+  }
+
+  @media screen and (min-width: 900px) {
+    display: flex;
+    flex-flow: column;
+  }
+
+  @media screen and (max-width: 420px) {
+    display: flex;
+    flex-flow: column;
+  }
+
 `
 
 const IngredientWrapper = styled.ul`
@@ -212,4 +260,5 @@ const IngredientWrapper = styled.ul`
 
 const Buttons = styled.section`
   display: inline-flex;
+  justify-self: baseline;
 `

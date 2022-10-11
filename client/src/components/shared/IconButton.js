@@ -43,13 +43,6 @@ const Button = styled.button`
       right: 0;
       bottom: 0;
       border-radius: 15%;
-      opacity: 0;
-      background-color: #e63946;
       padding: 0;
-  }
-
-  &:focus:after, 
-  &:hover:after {
-      opacity: 0.2;
   }
 `

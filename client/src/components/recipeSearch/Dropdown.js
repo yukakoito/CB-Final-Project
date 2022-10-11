@@ -5,6 +5,7 @@ import { DataContext } from "../DataContext";
 const Dropdown = ({name, array}) => {
   const { searchOptions, setSearchOptions } = useContext(DataContext);
 
+  // Update search options upon selection
   const handleSearchOptions = (key, value) => {
     setSearchOptions({...searchOptions, [key]: value.replaceAll(' ', '%20')})
   }
@@ -19,9 +20,8 @@ const Dropdown = ({name, array}) => {
   }
 
   return (
-    <Wrapper>
-      <select name={name}
-              value={searchOptions[name] ? searchOptions[name] : formatLabel(name)}
+      <Selection name={name}
+              value={searchOptions[name] ? searchOptions[name].replaceAll('%20', ' ') : formatLabel(name)}
               onChange={e => {handleSearchOptions(e.target.name, e.target.value)
               }}
               >
@@ -30,12 +30,13 @@ const Dropdown = ({name, array}) => {
           <option key={ele} value={ele}>{ele}</option>
         )
         }
-      </select>
-    </Wrapper>
+      </Selection>
   )
 }
 
 export default Dropdown;
 
-const Wrapper = styled.div`
+const Selection = styled.select`
+  margin: 2px;
+  min-width: 175px;
 `

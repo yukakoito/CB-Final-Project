@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { UserContext } from "./UserContext";
 
 export const DataContext = createContext(null);
 
@@ -6,29 +7,36 @@ export const DataContext = createContext(null);
 const DataProvider = ({children}) => {
   const [ingredients, setIngredients] = useState(null);
   const [parameters, setParameters] = useState(null);
-  const [dataError, setDataError] = useState(false);
+  const [dataErr, setDataErr] = useState(false);
+  const [dataErrMsg, setDataErrMsg] = useState('');
   const [recipes, setRecipes] = useState(null);
   const [searchOptions, setSearchOptions] = useState({});
-  const [selection, setSelection] = useState('');
-  const [searchInput, setSearchInput] = useState('');
+  const [pageDisplay, setPageDisplay] = useState({search: false, 
+                                                  pantry: true, 
+                                                  shoppingList: false, 
+                                                  meals: false, 
+                                                  favorites: true,
+                                                  results: false,
+                                                  });
+  const [isRecipeLoading, setIsRecipeLoading] = useState(false);
+  const {setIsDataLoading} = useContext(UserContext);
 
   // Get ingredients and parameters used for recipe search
   const getData = () => {
+    setIsDataLoading(true);
     fetch('/api/get-data')
     .then(res => res.json())
     .then(data => {
-      console.log('DATA CONTEXT', data)
       setIngredients(data.data.ingredients)
       setParameters(data.data.parameters)
     })
-    .catch((err) => setDataError(true)) 
+    .catch((err) => setDataErr(true)) 
+    .finally(() => setIsDataLoading(false))
   }
 
   useEffect(() => {
     !parameters && getData();
-  }, [])
-
-  // console.log('searchOptions', searchOptions)
+  }, [parameters])
 
   // Search recipes
   const searchRecipes = async (data) => {
@@ -39,29 +47,31 @@ const DataProvider = ({children}) => {
       options += `&${key}=${searchOptions[key]}`
     })
     
-    const ingredient = data? data.replaceAll(' ', '%20') : searchInput.replaceAll(' ', '%20')
-
-    console.log('OPTIONS' , options)
-    console.log('INGREDIENT', ingredient)
-
-    
+    const ingredient = data? data.replaceAll(' ', '%20') :null;
 
     // Create a query string with ingredients and search options
     const query = ingredient + options
-    console.log('QUERY', query)
+
+    if(!query) return;
 
     try {
+      setDataErrMsg(null);
+      setIsRecipeLoading(true);
+      setPageDisplay({...pageDisplay, meals: false, favorites: false, results: true});
+      setRecipes(null);
       const res = await fetch(`/api/get-recipes/${query}`)
       const data = await res.json();
-      console.log(data)
+      setIsRecipeLoading(false);
       if(data.status === 200) { 
-        console.log('RECIPES', data.recipes)
         setRecipes(data.recipes);
-        setIngredients(data.ingredients)
+        setIngredients(data.ingredients);
+      } else {
+        setDataErrMsg(data.message);
       }
     } catch (err) {
-      console.log(err)
-    }
+      setIsRecipeLoading(false);
+      setDataErr(true);
+    } 
   }
 
   return (
@@ -73,6 +83,12 @@ const DataProvider = ({children}) => {
                                   searchRecipes,
                                   searchOptions, 
                                   setSearchOptions,
+                                  pageDisplay, 
+                                  setPageDisplay,
+                                  isRecipeLoading, 
+                                  setIsRecipeLoading,
+                                  dataErr,
+                                  dataErrMsg,
                                   }}>
       {children}
     </DataContext.Provider>

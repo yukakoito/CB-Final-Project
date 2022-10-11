@@ -7,7 +7,7 @@ const Notes = ({recipe}) => {
   const [input, setInput] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
-  // Edit notes. When 
+  // Edit notes
   const editNotes = () => {
     if(!input) return setIsEditing(true);
     updateUser({notes: {_id: recipe._id, notes: input}});
@@ -19,11 +19,14 @@ const Notes = ({recipe}) => {
     <Wrapper>
       {!recipe.notes || isEditing ?
         <Textarea onChange={(e) => setInput(e.target.value)}
-                  value={input ? input : recipe.notes}
-                  placeholder={'Add notes...'}
+                  value={input}
+                  placeholder={recipe.notes ? recipe.notes : 'Add notes...'}
                   rows='5'
         /> :
-        <p><b>Notes:</b> {recipe.notes}</p>
+        <>
+        <p><b>Notes:</b></p> 
+        <p> {recipe.notes}</p>
+        </>
       }
       <Buttons>
         {!recipe.notes && !isEditing ?
@@ -51,11 +54,16 @@ export default Notes;
 const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
+
+  p {
+      margin: 3px 5px;
+  }
 `
 const Textarea = styled.textarea`
   height: fit-content;
   resize: none;
   outline-color: gray;
+  margin: 5px;
 `
 const Buttons = styled.div`
   display: inline-flex;

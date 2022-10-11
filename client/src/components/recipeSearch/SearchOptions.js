@@ -18,4 +18,7 @@ const SearchOptions = () => {
 export default SearchOptions;
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
 `

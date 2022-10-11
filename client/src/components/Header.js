@@ -1,4 +1,3 @@
-import { useContext } from "react"
 import styled from "styled-components"
 import LoginButton from './authentication/login'
 import LogoutButton from './authentication/logout'
@@ -9,7 +8,7 @@ const Header = () => {
 
   return (
     <Wrapper>
-      <h1>Header</h1>
+      <h1>ZeroWasteCooking</h1>
       { !isAuthenticated ?
         <LoginButton /> :
         <LogoutButton /> 
@@ -21,12 +20,27 @@ const Header = () => {
 export default Header;
 
 const Wrapper = styled.div`
-  padding: var(--wrapper-padding);
   background-color: var(--primary-background-color);
   width: 100vw;
   height: 10vh;
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
+  padding: 20px 5vw;
 
+  h1 {
+    font-weight: bolder;
+    font-size: xx-large;
+  }
+
+  @media screen and (min-width: 1200px){
+    padding: 20px 20vw;
+  }
+
+  @media screen and (max-width: 420px){
+
+    h1 {
+    font-size: x-large;
+    }
+  }
 `

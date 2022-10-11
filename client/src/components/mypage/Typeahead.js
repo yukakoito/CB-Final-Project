@@ -19,7 +19,6 @@ const Typeahead = ({listName, data}) => {
 
   // This function is to add a selected item to user's pantry or shoppingList
   const handleSelect = (obj) => {
-    console.log('handleSelect', obj)
     // Call this function to update the user data
     updateUser(obj);
     // Clear input upon selection of an item
@@ -46,7 +45,11 @@ const Typeahead = ({listName, data}) => {
                 switch(e.key) {
                   case 'Enter':
                     if(selectedItemIndex > -1) {
-                      handleSelect(suggestions[selectedItemIndex])
+                      console.log(suggestions[selectedItemIndex])
+                      handleSelect({[listName] : {name: suggestions[selectedItemIndex].name, 
+                                                  category: suggestions[selectedItemIndex].category
+                                                  }
+                                  })
                     }
                     return;
                   case "ArrowUp":
@@ -65,16 +68,19 @@ const Typeahead = ({listName, data}) => {
                 }
               }}
                 />
-        {/* {suggestions && suggestions.length === 0 && */}
-        <button onClick={() => addNewItem()}><b>➕</b></button>
-        {/* } */}
+        <button onClick={() => addNewItem()}
+                disabled={input? false : true}
+        >
+          <b>+</b>
+        </button>
       </InputArea>
       { suggestions && input.length >= 2 && suggestions.length > 0 && !hideList && (suggestions.map((suggestion, i) =>
         <Ingredient key={`search-${suggestion._id}`} 
                     item={suggestion} 
                     onClickFunc={handleSelect}
-                    selectedItemIndex={selectedItemIndex} 
-                    setSelectedItemIndex={setSelectedItemIndex}
+                    onMouseEnter={() => setSelectedItemIndex(i)}
+                    onMouseLeave={() => setSelectedItemIndex(-1)}
+                    selectedItemIndex={selectedItemIndex}
                     index={i}
                     listName={listName} 
                     isListed={data.includes(suggestion)? true : false}
@@ -92,13 +98,25 @@ const Wrapper = styled.div`
 
 const InputArea = styled.div`
   display: inline-flex;
+
   input {
     width: 200px;
-    padding: 5px;
-    border-radius: 10px;
+
+    @media screen and (min-width: 420px){
+      width: 225px;
+    }
   }
 
   button {
-    font-size: 10px;
+    outline: none;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    padding: 0;
+    margin: 0 3px;
+
+    &:hover {
+      outline: 2px solid var(--primary-color);
+    }
   }
 `
