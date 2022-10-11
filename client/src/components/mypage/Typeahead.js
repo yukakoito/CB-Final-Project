@@ -45,7 +45,6 @@ const Typeahead = ({listName, data}) => {
                 switch(e.key) {
                   case 'Enter':
                     if(selectedItemIndex > -1) {
-                      console.log(suggestions[selectedItemIndex])
                       handleSelect({[listName] : {name: suggestions[selectedItemIndex].name, 
                                                   category: suggestions[selectedItemIndex].category
                                                   }

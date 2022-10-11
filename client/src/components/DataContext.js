@@ -67,6 +67,10 @@ const DataProvider = ({children}) => {
         setIngredients(data.ingredients);
       } else {
         setDataErrMsg(data.message);
+        setTimeout(() => {
+          setDataErrMsg(null);
+          setPageDisplay({...pageDisplay, results: false});
+        }, 5000)
       }
     } catch (err) {
       setIsRecipeLoading(false);

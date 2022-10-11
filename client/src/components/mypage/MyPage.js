@@ -19,13 +19,6 @@ const MyPage = () => {
       </ErrWrapper>
     )
   }
-
-  // Close recipe search error message after 10 seconds if no other search is in process
-  // setTimeout(() => {
-  //   if(dataErrMsg && !recipes && !isDataLoading) {
-  //     setPageDisplay({...pageDisplay, results: false})
-  //   }
-  // }, [10000])
   
   return (
     <Wrapper>
@@ -76,7 +69,7 @@ const MyPage = () => {
         }
         { pageDisplay.results && 
           <Container style={{'width': !pageDisplay.pantry && !pageDisplay.shoppingList ? '100%' : null}}>
-            <h1>20 Matching Results</h1>
+            <h1>{recipes ? recipes.length : 0} Matching Results</h1>
             { !isDataLoading ? 
               <>
                 <Recipes recipes={recipes} notes={false} isSavedRecipe={false} />
