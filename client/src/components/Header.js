@@ -46,6 +46,7 @@ const Wrapper = styled.div`
   h1 {
     font-weight: bolder;
     font-size: xx-large;
+    color: white;
   }
 
   @media screen and (min-width: 1200px){

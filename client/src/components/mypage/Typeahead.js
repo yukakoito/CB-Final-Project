@@ -97,6 +97,7 @@ const Wrapper = styled.div`
 
 const InputArea = styled.div`
   display: inline-flex;
+  justify-content: center;
 
   input {
     width: 200px;

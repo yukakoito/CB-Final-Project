@@ -22,18 +22,20 @@ const LogoutButton = () => {
 export default LogoutButton;
 
 const Button = styled.button`
-    padding: 5px 15px;
-    width: 100px;
-    margin: 5px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
+  padding: 5px;
+  width: 100px;
+  margin: 5px;
+  background-color: white;
+  outline: none;
+  color: var(--primary-color);
+  border: none;
+  font-weight: bold;
 
-    &:hover {
-      opacity: 0.8;
-      background-color: white;
-      outline: 3px solid var(--primary-color);
-      color: var(--primary-color);
-      font-weight: bold;
-    }
+  &:hover {
+    background-color: white;
+    outline: none;
+    box-shadow: 1px 2px 3px 3px var(--primary-color);
+    font-weight: bold;
+    scale: 1.1;
+  }
 `

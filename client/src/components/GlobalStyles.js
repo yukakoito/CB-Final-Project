@@ -46,12 +46,6 @@ export default createGlobalStyle`
     padding: 3px;
   }
 
-  li {
-    &:hover {
-      background-color: #edf2f4;
-    }
-  }
-
   blockquote, q {
     quotes: none;
   }
@@ -82,6 +76,7 @@ export default createGlobalStyle`
     &:hover {  
       outline: 3px solid var(--primary-color);
       background-color: #edf2f4;
+      transition: 200ms ease-in-out;
     }
   }
 

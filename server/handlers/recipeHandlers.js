@@ -101,7 +101,7 @@ const updateImageSource = async (req, res) => {
 
   try {
     // Fetch the API to get an updated image source
-    const response = await request(url);
+    // const response = await request(url);
     const data = await JSON.parse(response);
 
     // If an updated image source is received, 

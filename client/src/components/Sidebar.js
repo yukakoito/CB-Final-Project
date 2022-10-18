@@ -94,6 +94,11 @@ const Wrapper = styled.ul`
 
   li {
     display: inline-flex;
+    
+    &:hover {
+      background-color: #edf2f4;
+      transition: 200ms ease-in-out;
+    }
   }
 
   span {

@@ -10,7 +10,7 @@ import ErrorMsg from "../shared/ErrorMsg";
 
 const MyPage = () => {
   const { pantry, shoppingList, mealPlans, favoriteRecipes, isDataLoading, isErr, errMsg } = useContext(UserContext);
-  const { recipes, pageDisplay, setPageDisplay, dataErr, dataErrMsg } = useContext(DataContext);
+  const { recipes, pageDisplay, isRecipeLoading, dataErr, dataErrMsg } = useContext(DataContext);
 
   if(isErr || errMsg || dataErr) {
     return (
@@ -52,31 +52,23 @@ const MyPage = () => {
         { pageDisplay.meals && 
           <Container style={{'width': !pageDisplay.pantry && !pageDisplay.shoppingList ? '100%' : null}}>
             <h1>My Meals</h1>
-            { !isDataLoading ? 
-              <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} /> :
-              <LoadingCircle />
-            }
+            <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} /> :
           </Container>
         }
         { pageDisplay.favorites && 
           <Container style={{'width': !pageDisplay.pantry && !pageDisplay.shoppingList ? '100%' : null}}>
             <h1>My Favorites</h1>
-            { !isDataLoading ? 
-              <Recipes recipes={favoriteRecipes} notes={true} isSavedRecipe={true} /> :
-              <LoadingCircle />
-            }
+              <Recipes recipes={favoriteRecipes} notes={true} isSavedRecipe={true} />
           </Container>
         }
         { pageDisplay.results && 
           <Container style={{'width': !pageDisplay.pantry && !pageDisplay.shoppingList ? '100%' : null}}>
-            <h1>{recipes ? recipes.length : 0} Matching Results</h1>
-            { !isDataLoading ? 
-              <>
-                <Recipes recipes={recipes} notes={false} isSavedRecipe={false} />
-                { dataErrMsg && <ErrorMsg errMsg={dataErrMsg}/> }
-              </> :
-              <LoadingCircle /> 
+            { isRecipeLoading ? 
+              <h1>Searching Recipes...</h1> :
+              <h1>{recipes ? recipes.length : 0} Matching Results</h1>
             }
+            <Recipes recipes={recipes} notes={false} isSavedRecipe={false} />
+            { dataErrMsg && <ErrorMsg errMsg={dataErrMsg}/> }
           </Container>
         }
       </RecipeWrapper>

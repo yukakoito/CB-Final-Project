@@ -19,7 +19,7 @@ const RecipeSearch = () => {
   return (
     <Wrapper>
       <div>
-        <p>Search by ingredients or health type</p>
+        {/* <p>Search by ingredients or health type</p> */}
         <input placeholder="Ingredients"
               type='text'
               value={input}
