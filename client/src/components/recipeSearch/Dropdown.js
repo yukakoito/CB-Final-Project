@@ -38,5 +38,5 @@ export default Dropdown;
 
 const Selection = styled.select`
   margin: 2px;
-  min-width: 175px;
+  min-width: 150px;
 `

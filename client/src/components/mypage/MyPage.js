@@ -7,6 +7,7 @@ import RecipeSearch from "../recipeSearch/RecipeSearch";
 import ItemList from "./ItemList";
 import LoadingCircle from "../shared/LoadingCircle";
 import ErrorMsg from "../shared/ErrorMsg";
+import logo from "../../assets/logo.png"
 
 const MyPage = () => {
   const { pantry, shoppingList, mealPlans, favoriteRecipes, isDataLoading, isErr, errMsg } = useContext(UserContext);
@@ -21,7 +22,10 @@ const MyPage = () => {
   }
   
   return (
-    <Wrapper>
+    <Wrapper >
+      { Object.values(pageDisplay).every(ele => ele === false) &&
+        <BackgroundImg />
+      }
       <ListWrapper>
         { pageDisplay.search &&
           <SearchField >
@@ -52,7 +56,7 @@ const MyPage = () => {
         { pageDisplay.meals && 
           <Container style={{'width': !pageDisplay.pantry && !pageDisplay.shoppingList ? '100%' : null}}>
             <h1>My Meals</h1>
-            <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} /> :
+            <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} />
           </Container>
         }
         { pageDisplay.favorites && 
@@ -86,6 +90,7 @@ const ErrWrapper = styled.div`
 const Wrapper = styled.div`
   grid-column-start: 2;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-flow: column;
 
@@ -100,6 +105,16 @@ const Wrapper = styled.div`
   @media screen and (min-width: 900px){
     flex-flow: row;
   }
+`
+
+const BackgroundImg = styled.div`
+  height: 100%;
+  width: 100%;
+  opacity: 0.3;
+  background-image: url(${logo});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 `
 
 const ListWrapper = styled.section`

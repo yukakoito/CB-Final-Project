@@ -77,7 +77,7 @@ const Wrapper = styled.ul`
   grid-column-start: 1;
   display: flex;
   flex-flow: column nowrap;
-  width: 175px;
+  width: 185px;
   position: relative;
 
   @media screen and (max-width: 600px){
@@ -97,6 +97,7 @@ const Wrapper = styled.ul`
     
     &:hover {
       background-color: #edf2f4;
+      font-weight: bold;
       transition: 200ms ease-in-out;
     }
   }

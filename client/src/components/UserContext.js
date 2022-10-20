@@ -14,7 +14,7 @@ export const UserProvider = ({children}) => {
   const [mealPlans, setMealPlans] = useState([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [isErr, setIsErr] = useState(false);
-  const [errMsg, setErrMsg] = useState(null)
+  const [errMsg, setErrMsg] = useState(null);
 
   // Filter recipes to save in the favoriteRecipes and mealPlans states
   const filterRecipes = (data) => {

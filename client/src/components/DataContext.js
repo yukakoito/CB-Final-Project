@@ -70,7 +70,7 @@ const DataProvider = ({children}) => {
         setTimeout(() => {
           setDataErrMsg(null);
           setPageDisplay({...pageDisplay, results: false});
-        }, 5000)
+        }, 10000)
       }
     } catch (err) {
       setIsRecipeLoading(false);

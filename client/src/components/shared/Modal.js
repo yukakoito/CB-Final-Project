@@ -5,6 +5,7 @@ import { UserContext } from "../UserContext";
 import LoginButton from "../authentication/login";
 import IconButton from "./IconButton";
 import { MdClose } from "react-icons/md"
+import logo from "../../assets/logo.png"
 
 const Modal = ({open, closeModal}) => {
   const { userId } = useContext(UserContext);
@@ -17,6 +18,7 @@ const Modal = ({open, closeModal}) => {
           </IconButton>
         </CloseButton>
         <Wrapper>
+          <img src={logo} />
           <p>Please sign in to save this recipe.</p>
           <LoginButton />
         </Wrapper>
@@ -27,19 +29,24 @@ const Modal = ({open, closeModal}) => {
 export default Modal;
 
 const Wrapper = styled.div`
-  height: 150px;
-  padding: 0 15px;
+  height: 350px;
+  padding: 0 25px;
   display: flex;
   flex-flow: column;
   justify-content: center;
+  background-color: var(--primary-background-color);
+  align-items: center;
 
   p {
     margin: 15px 0;
     font-size: large;
+    color: white;
   }
 
-  button {
-    align-self: center;
+  img {
+    width: 95px;
+    height: 95px;
+    margin: 0 0 20px 0;
   }
 `
 const CloseButton = styled.div`

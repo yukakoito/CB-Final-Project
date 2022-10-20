@@ -19,7 +19,6 @@ const RecipeSearch = () => {
   return (
     <Wrapper>
       <div>
-        {/* <p>Search by ingredients or health type</p> */}
         <input placeholder="Ingredients"
               type='text'
               value={input}
@@ -75,6 +74,7 @@ const Wrapper = styled.div`
     min-width: 175px;
     width: 90%;
     margin: 2px 0;
+    padding: 0 10px;
   }
 
   button {
