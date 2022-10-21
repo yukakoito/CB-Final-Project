@@ -74,7 +74,6 @@ const Wrapper = styled.div`
     min-width: 175px;
     width: 90%;
     margin: 2px 0;
-    padding: 0 10px;
   }
 
   button {

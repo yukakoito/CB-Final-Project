@@ -93,6 +93,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-flow: column;
+  position: relative;
 
   h1 {
     margin-bottom: 10px;
@@ -108,13 +109,15 @@ const Wrapper = styled.div`
 `
 
 const BackgroundImg = styled.div`
+  width: 90%;
   height: 100%;
-  width: 100%;
   opacity: 0.3;
   background-image: url(${logo});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+  position: absolute;
+  z-index: -1;
 `
 
 const ListWrapper = styled.section`

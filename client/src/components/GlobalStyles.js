@@ -99,4 +99,8 @@ export default createGlobalStyle`
       outline: 2px solid var(--primary-color);
     }
   }
+
+  input {
+    padding: 3px 5px;
+  }
 `;

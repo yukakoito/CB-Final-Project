@@ -97,7 +97,8 @@ const Wrapper = styled.div`
 
 const InputArea = styled.div`
   display: inline-flex;
-  justify-content: center;
+  justify-items: center;
+  height: fit-content;
 
   input {
     width: 200px;
