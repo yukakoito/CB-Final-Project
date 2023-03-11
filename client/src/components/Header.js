@@ -1,8 +1,8 @@
-import styled from "styled-components"
-import LoginButton from './authentication/login'
-import LogoutButton from './authentication/logout'
+import styled from "styled-components";
+import LoginButton from "./authentication/login";
+import LogoutButton from "./authentication/logout";
 import { useAuth0 } from "@auth0/auth0-react";
-import logo from "../assets/logo.png"
+import logo from "../assets/logo.png";
 
 const Header = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -13,13 +13,10 @@ const Header = () => {
         <Logo src={logo} />
         <h1>Cooking</h1>
       </div>
-      { !isAuthenticated ?
-        <LoginButton /> :
-        <LogoutButton /> 
-      }
+      {!isAuthenticated ? <LoginButton /> : <LogoutButton />}
     </Wrapper>
-  )
-}
+  );
+};
 
 export default Header;
 
@@ -27,7 +24,7 @@ const Logo = styled.img`
   width: 65px;
   height: 65px;
   margin-right: 10px;
-`
+`;
 
 const Wrapper = styled.div`
   background-color: var(--primary-background-color);
@@ -49,14 +46,13 @@ const Wrapper = styled.div`
     color: white;
   }
 
-  @media screen and (min-width: 1200px){
+  @media screen and (min-width: 1200px) {
     padding: 20px 20vw;
   }
 
-  @media screen and (max-width: 420px){
-
+  @media screen and (max-width: 420px) {
     h1 {
-    font-size: x-large;
+      font-size: x-large;
     }
   }
-`
+`;

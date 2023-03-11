@@ -11,22 +11,30 @@ import Sidebar from "./Sidebar";
 
 const App = () => {
   const { userId } = useContext(UserContext);
-  
+
   return (
-      <BrowserRouter>
-        <GlobalStyles />
-        <Header />
-        <Wrapper>
-          <Sidebar />
-            <Routes>
-              <Route path='/' element={userId ? <Navigate replace to={'/mypage'} /> : <Homepage />} />
-              <Route path='/mypage' element={userId ? <MyPage /> : <Navigate replace to={'/'} />} />
-            </Routes>
-        </Wrapper>
-        <Footer />
-      </BrowserRouter>
+    <BrowserRouter>
+      <GlobalStyles />
+      <Header />
+      <Wrapper>
+        <Sidebar />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              userId ? <Navigate replace to={"/mypage"} /> : <Homepage />
+            }
+          />
+          <Route
+            path="/mypage"
+            element={userId ? <MyPage /> : <Navigate replace to={"/"} />}
+          />
+        </Routes>
+      </Wrapper>
+      <Footer />
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
 
@@ -38,11 +46,11 @@ const Wrapper = styled.div`
   grid-template-columns: 175px;
   grid-template-rows: auto;
 
-  @media screen and (max-width: 600px){
+  @media screen and (max-width: 600px) {
     grid-template-columns: 50px;
   }
 
-  @media screen and (min-width: 1200px){
+  @media screen and (min-width: 1200px) {
     padding: 20px 20vw;
   }
-`
+`;

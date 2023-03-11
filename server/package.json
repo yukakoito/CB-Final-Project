@@ -16,5 +16,8 @@
     "nodemon": "^2.0.20",
     "request-promise": "^4.2.6",
     "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.4"
   }
 }

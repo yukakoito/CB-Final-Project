@@ -26,4 +26,4 @@ const Button = styled.button`
     font-weight: bold;
     scale: 1.1;
   }
-`
+`;

@@ -4,15 +4,16 @@ import { useContext } from "react";
 import { UserContext } from "../UserContext";
 import LoginButton from "../authentication/login";
 import IconButton from "./IconButton";
-import { MdClose } from "react-icons/md"
-import logo from "../../assets/logo.png"
+import { MdClose } from "react-icons/md";
+import logo from "../../assets/logo.png";
 
-const Modal = ({open, closeModal}) => {
+const Modal = ({ open, closeModal }) => {
   const { userId } = useContext(UserContext);
 
-  return !userId && (
-    <Dialog open={open} >
-       <CloseButton>
+  return (
+    !userId && (
+      <Dialog open={open}>
+        <CloseButton>
           <IconButton onClickFunc={closeModal}>
             <MdClose />
           </IconButton>
@@ -22,9 +23,10 @@ const Modal = ({open, closeModal}) => {
           <p>Please sign in to save this recipe.</p>
           <LoginButton />
         </Wrapper>
-    </Dialog>
-  )
-}
+      </Dialog>
+    )
+  );
+};
 
 export default Modal;
 
@@ -48,9 +50,9 @@ const Wrapper = styled.div`
     height: 95px;
     margin: 0 0 20px 0;
   }
-`
+`;
 const CloseButton = styled.div`
   position: absolute;
   top: 5px;
   right: 0px;
-`
+`;

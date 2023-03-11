@@ -8,11 +8,12 @@ const LogoutButton = () => {
   const { setUserId, setRecipeToAdd } = useContext(UserContext);
 
   return (
-    <Button onClick={() => {logout({ returnTo: window.location.origin });
-                            setUserId(null);
-                            setRecipeToAdd(null);
-                            }
-                    }
+    <Button
+      onClick={() => {
+        logout({ returnTo: window.location.origin });
+        setUserId(null);
+        setRecipeToAdd(null);
+      }}
     >
       Sign out
     </Button>
@@ -38,4 +39,4 @@ const Button = styled.button`
     font-weight: bold;
     scale: 1.1;
   }
-`
+`;

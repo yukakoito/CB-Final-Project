@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Auth0Provider } from '@auth0/auth0-react';
-import App from './components/App';
-import UserProvider from './components/UserContext';
-import DataProvider from './components/DataContext';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Auth0Provider } from "@auth0/auth0-react";
+import App from "./components/App";
+import UserProvider from "./components/UserContext";
+import DataProvider from "./components/DataContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Auth0Provider
@@ -15,7 +15,7 @@ root.render(
     >
       <UserProvider>
         <DataProvider>
-        <App />
+          <App />
         </DataProvider>
       </UserProvider>
     </Auth0Provider>

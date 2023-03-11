@@ -2,52 +2,60 @@ import styled from "styled-components";
 import { useState, useContext } from "react";
 import { UserContext } from "../UserContext";
 
-const Notes = ({recipe}) => {
-  const {updateUser} = useContext(UserContext);
-  const [input, setInput] = useState('');
+const Notes = ({ recipe }) => {
+  const { updateUser } = useContext(UserContext);
+  const [input, setInput] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   // Edit notes
   const editNotes = () => {
-    if(!input) return setIsEditing(true);
-    updateUser({notes: {_id: recipe._id, notes: input}});
+    if (!input) return setIsEditing(true);
+    updateUser({ notes: { _id: recipe._id, notes: input } });
     setIsEditing(false);
-    setInput('');
-  }
+    setInput("");
+  };
 
   return (
     <Wrapper>
-      {!recipe.notes || isEditing ?
-        <Textarea onChange={(e) => setInput(e.target.value)}
-                  value={input}
-                  placeholder={recipe.notes ? recipe.notes : 'Add notes...'}
-                  rows='5'
-        /> :
+      {!recipe.notes || isEditing ? (
+        <Textarea
+          onChange={(e) => setInput(e.target.value)}
+          value={input}
+          placeholder={recipe.notes ? recipe.notes : "Add notes..."}
+          rows="5"
+        />
+      ) : (
         <>
-        <p><b>Notes:</b></p> 
-        <p> {recipe.notes}</p>
+          <p>
+            <b>Notes:</b>
+          </p>
+          <p> {recipe.notes}</p>
         </>
-      }
+      )}
       <Buttons>
-        {!recipe.notes && !isEditing ?
-        <button onClick={() => updateUser({notes: {_id: recipe._id, notes: input}}) }>
-          Add
-        </button> :
-        <button onClick={() => editNotes()}>
-          Edit
-        </button>
-        }
-        <button onClick={() => {updateUser({notes: {_id: recipe._id, notes: ''}});
-                                setInput(''); 
-                               }
-                        }
+        {!recipe.notes && !isEditing ? (
+          <button
+            onClick={() =>
+              updateUser({ notes: { _id: recipe._id, notes: input } })
+            }
+          >
+            Add
+          </button>
+        ) : (
+          <button onClick={() => editNotes()}>Edit</button>
+        )}
+        <button
+          onClick={() => {
+            updateUser({ notes: { _id: recipe._id, notes: "" } });
+            setInput("");
+          }}
         >
           Delete
         </button>
       </Buttons>
     </Wrapper>
-  )
-}
+  );
+};
 
 export default Notes;
 
@@ -56,16 +64,16 @@ const Wrapper = styled.div`
   flex-flow: column;
 
   p {
-      margin: 3px 5px;
+    margin: 3px 5px;
   }
-`
+`;
 const Textarea = styled.textarea`
   height: fit-content;
   resize: none;
   outline-color: gray;
   margin: 5px;
-`
+`;
 const Buttons = styled.div`
   display: inline-flex;
   justify-content: flex-end;
-`
+`;

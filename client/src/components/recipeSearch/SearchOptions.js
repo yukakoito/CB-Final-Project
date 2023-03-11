@@ -8,12 +8,13 @@ const SearchOptions = () => {
 
   return (
     <Wrapper>
-      { parameters && Object.entries(parameters).map(([key, value]) => 
-       <Dropdown key={key} name={key} array={value} />
-       )}
+      {parameters &&
+        Object.entries(parameters).map(([key, value]) => (
+          <Dropdown key={key} name={key} array={value} />
+        ))}
     </Wrapper>
-  )
-}
+  );
+};
 
 export default SearchOptions;
 
@@ -21,4 +22,4 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-`
+`;

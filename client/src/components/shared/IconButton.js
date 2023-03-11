@@ -1,29 +1,31 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-const IconButton = ({children, color, onClickFunc, data}) => {
+const IconButton = ({ children, color, onClickFunc, data }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  
   return (
-      <Button onClick={(e) => {
-                                e.stopPropagation();
-                                onClickFunc(data)
-                      }}
-              onKeyDown={(e) => {e.key === "Enter" && e.stopPropagation()}}
-              color={color}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-      >
-        {children}
-      </Button>
-  )
-}
+    <Button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClickFunc(data);
+      }}
+      onKeyDown={(e) => {
+        e.key === "Enter" && e.stopPropagation();
+      }}
+      color={color}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {children}
+    </Button>
+  );
+};
 
 export default IconButton;
 
 const Button = styled.button`
-  color: ${p => p.color};
+  color: ${(p) => p.color};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,13 +38,13 @@ const Button = styled.button`
   transition: all 0.5ms ease-in-out;
 
   &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 15%;
-      padding: 0;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 15%;
+    padding: 0;
   }
-`
+`;
