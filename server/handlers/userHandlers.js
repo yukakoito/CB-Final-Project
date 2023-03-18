@@ -1,6 +1,4 @@
-// const { createClient } = require('./createClient');
 const db = require("./createClient");
-require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
 
 // This function is to obtain user data for both new users and existing users

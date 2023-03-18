@@ -1,5 +1,4 @@
 const db = require("./createClient");
-require("dotenv").config();
 const parameters = require("../data/parameters");
 
 // Get all of the ingredients in the database and the parameters used for receipe search
