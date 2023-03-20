@@ -3,7 +3,7 @@ import { createGlobalStyle } from "styled-components";
 export default createGlobalStyle`
   :root {
     --primary-color: #1d3557;
-    --max-content-width: 1200px;
+    --max-content-width: 1280px;
     --heading-font-family: 'Poppins', sans-serif;
     --primary-background-color: rgba(242, 132, 130, 1);
   }

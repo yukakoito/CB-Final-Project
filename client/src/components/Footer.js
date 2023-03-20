@@ -8,12 +8,7 @@ const Footer = () => {
 export default Footer;
 
 const Wrapper = styled.div`
-  height: 10vh;
+  height: 85px;
   width: 100vw;
   background-color: var(--primary-background-color);
-  padding: 20px 5vw;
-
-  @media screen and (min-width: 1200px) {
-    padding: 20px 20vw;
-  }
 `;

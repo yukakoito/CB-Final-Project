@@ -39,18 +39,16 @@ const App = () => {
 export default App;
 
 const Wrapper = styled.div`
-  width: 95vw;
-  min-height: 80vh;
-  padding: 20px 5vw;
+  max-width: var(--max-content-width);
+  width: 100%;
+  min-height: calc(100vh - 170px);
+  margin: 0 auto;
+  padding: 25px;
   display: grid;
   grid-template-columns: 175px;
   grid-template-rows: auto;
 
   @media screen and (max-width: 600px) {
     grid-template-columns: 50px;
-  }
-
-  @media screen and (min-width: 1200px) {
-    padding: 20px 20vw;
   }
 `;
