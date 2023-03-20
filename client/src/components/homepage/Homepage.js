@@ -11,6 +11,14 @@ const Homepage = () => {
   const { recipes, dataErr, dataErrMsg } = useContext(DataContext);
   const { isDataLoading } = useContext(UserContext);
 
+  if (dataErr || dataErrMsg) {
+    return (
+      <ErrorWrapper>
+        <ErrorMsg errMsg={dataErrMsg} />
+      </ErrorWrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <SearchField>
@@ -18,26 +26,28 @@ const Homepage = () => {
         <p>Sign in to save recipes and plan your meals.</p>
         <div>{!isDataLoading ? <RecipeSearch /> : <LoadingCircle />}</div>
       </SearchField>
-      {dataErr || dataErrMsg ? (
-        <ErrorMsg errMsg={dataErrMsg} />
-      ) : (
-        <Recipes recipes={recipes} style={{ justifyContent: "center" }} />
-      )}
+      <Recipes recipes={recipes} style={{ justifyContent: "center" }} />
     </Wrapper>
   );
 };
 
 export default Homepage;
 
+const ErrorWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  grid-column-start: 2;
+  margin: 0 auto;
+  border: 1px solid blue;
+  padding-top: 10%;
+`;
+
 const Wrapper = styled.div`
   grid-column-start: 2;
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
-
-  @media screen and (min-width: 600px) {
-    margin-left: 25px;
-  }
+  border: 1px solid blue;
 `;
 const SearchField = styled.section`
   display: flex;
@@ -45,7 +55,8 @@ const SearchField = styled.section`
   justify-content: center;
   text-align: center;
   align-items: center;
-  margin-bottom: 20px;
+  border: 1px solid green;
+  padding-top: 10px;
 
   p {
     margin: 10px 0;

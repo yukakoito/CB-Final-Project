@@ -9,6 +9,6 @@ export default Footer;
 
 const Wrapper = styled.div`
   height: 85px;
-  width: 100vw;
+  width: 100%;
   background-color: var(--primary-background-color);
 `;

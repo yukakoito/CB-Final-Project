@@ -43,10 +43,11 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: calc(100vh - 170px);
   margin: 0 auto;
-  padding: 25px;
   display: grid;
   grid-template-columns: 175px;
   grid-template-rows: auto;
+  padding: 0 20px;
+  gap: 10px;
 
   @media screen and (max-width: 600px) {
     grid-template-columns: 50px;

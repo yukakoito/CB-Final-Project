@@ -105,6 +105,8 @@ const Wrapper = styled.ul`
   flex-flow: column nowrap;
   width: 185px;
   position: relative;
+  border: 1px solid blue;
+  padding-top: 10px;
 
   @media screen and (max-width: 600px) {
     width: 35px;
