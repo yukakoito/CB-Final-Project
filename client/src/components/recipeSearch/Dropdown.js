@@ -1,5 +1,4 @@
-import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { DataContext } from "../DataContext";
 
 const Dropdown = ({ name, array }) => {
@@ -22,7 +21,7 @@ const Dropdown = ({ name, array }) => {
   };
 
   return (
-    <Selection
+    <select
       name={name}
       value={
         searchOptions[name]
@@ -40,13 +39,8 @@ const Dropdown = ({ name, array }) => {
             {ele}
           </option>
         ))}
-    </Selection>
+    </select>
   );
 };
 
 export default Dropdown;
-
-const Selection = styled.select`
-  margin: 2px;
-  min-width: 150px;
-`;

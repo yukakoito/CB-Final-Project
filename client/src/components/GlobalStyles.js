@@ -20,7 +20,7 @@ export default createGlobalStyle`
   article, aside, canvas, details, embed,
   figure, figcaption, footer, header, hgroup,
   menu, nav, output, ruby, section, summary,
-  time, mark, audio, video {
+  time, mark, audio, video{
     margin: 0;
     padding: 0;
     border: 0;
@@ -75,8 +75,7 @@ export default createGlobalStyle`
 
     &:hover {  
       outline: 3px solid var(--primary-color);
-      background-color: #edf2f4;
-      transition: 200ms ease-in-out;
+      cursor: pointer;
     }
   }
 
@@ -88,19 +87,20 @@ export default createGlobalStyle`
   }
 
   input, select {
-    height: 20px;
-    padding: 0 5px;
-    border-radius: 15px;
+    width:48%;
+    min-width: 175px;
+    padding: 3px 5px;
+    border-radius: 5px;
     outline: 1px solid var(--primary-color);
     border: none;
     font-family: var(--heading-font-family);
+    box-sizing: border-box;
+    margin: 5px 5px 0 5px;
+    flex: auto;
+    gap: auto;
 
     &:focus {
       outline: 2px solid var(--primary-color);
     }
-  }
-
-  input {
-    padding: 3px 5px;
   }
 `;
