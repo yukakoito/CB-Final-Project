@@ -38,6 +38,8 @@ const Wrapper = styled.div`
   height: fit-content;
   display: flex;
   flex-flow: row wrap;
+  justify-items: flex-start;
+  gap: 10px;
 
   border: 1px solid green;
 
