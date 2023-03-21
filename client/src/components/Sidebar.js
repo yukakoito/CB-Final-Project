@@ -100,10 +100,9 @@ const Sidebar = () => {
 export default Sidebar;
 
 const Wrapper = styled.ul`
-  grid-column-start: 1;
   display: flex;
   flex-flow: column nowrap;
-  width: 185px;
+  width: 225px;
   position: relative;
   border: 1px solid blue;
   padding-top: 10px;
