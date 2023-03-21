@@ -35,9 +35,11 @@ export default Recipes;
 
 const Wrapper = styled.div`
   width: 100%;
+  height: fit-content;
   display: flex;
   flex-flow: row wrap;
-  height: fit-content;
+
+  border: 1px solid green;
 
   @media screen and (max-width: 600px) {
     display: flex;
