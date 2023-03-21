@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-const IconButton = ({ children, color, onClickFunc, data }) => {
+const IconButton = ({ children, color, onClickFunc, data, title }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -14,6 +14,7 @@ const IconButton = ({ children, color, onClickFunc, data }) => {
         e.key === "Enter" && e.stopPropagation();
       }}
       color={color}
+      title={title}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

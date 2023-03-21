@@ -26,7 +26,11 @@ const ActionBar = ({ notes, recipe, setAddRecipe }) => {
   return (
     <Wrapper>
       <div>
-        <IconButton onClickFunc={openInNewTab} data={recipe.url}>
+        <IconButton
+          onClickFunc={openInNewTab}
+          data={recipe.url}
+          title={`${recipe.url}`}
+        >
           <MdOpenInNew size={iconSize} />
         </IconButton>
         <IconButton
@@ -38,6 +42,9 @@ const ActionBar = ({ notes, recipe, setAddRecipe }) => {
             },
           }}
           color={recipe.isLiked ? "#e63946" : null}
+          title={
+            recipe.isLiked ? "Remove from My Favorites" : "Add to My Favorites"
+          }
         >
           <BsSuitHeartFill size={iconSize} />
         </IconButton>
@@ -50,6 +57,7 @@ const ActionBar = ({ notes, recipe, setAddRecipe }) => {
             },
           }}
           color={recipe.isPlanned ? "#e63946" : null}
+          title={recipe.isPlanned ? "Remove from My Meals" : "Add to My Meals"}
         >
           <GiMeal size={iconSize} />
         </IconButton>
@@ -58,6 +66,7 @@ const ActionBar = ({ notes, recipe, setAddRecipe }) => {
             onClickFunc={setEditNotes}
             data={!editNotes}
             color={recipe.notes ? "#e63946" : null}
+            title={recipe.notes ? "Edit Notes" : "Add Notes"}
           >
             <GiNotebook size={iconSize} />
           </IconButton>
