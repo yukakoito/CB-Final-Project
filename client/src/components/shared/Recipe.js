@@ -247,6 +247,7 @@ const RecipeBody = styled.section`
     p {
       word-wrap: break-word;
       display: inline-block;
+      overflow-wrap: anywhere;
       &:nth-of-type(1) {
         color: gray;
         font-size: smaller;
