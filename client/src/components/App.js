@@ -43,13 +43,8 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: calc(100vh - 170px);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 175px;
-  grid-template-rows: auto;
-  padding: 0 20px;
+  padding: 10px 20px;
   gap: 10px;
-
-  @media screen and (max-width: 600px) {
-    grid-template-columns: 50px;
-  }
+  display: flex;
+  flex-flow: row nowrap;
 `;

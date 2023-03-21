@@ -131,13 +131,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
   position: relative;
+  border: 1px solid blue;
 
   h1 {
     margin-bottom: 10px;
-  }
-
-  @media screen and (min-width: 600px) {
-    margin-left: 25px;
   }
 
   @media screen and (min-width: 900px) {

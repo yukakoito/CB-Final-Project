@@ -47,7 +47,6 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
-  border: 1px solid blue;
 `;
 const SearchField = styled.section`
   display: flex;
@@ -55,7 +54,6 @@ const SearchField = styled.section`
   justify-content: center;
   text-align: center;
   align-items: center;
-  border: 1px solid green;
   padding-top: 10px;
 
   p {
