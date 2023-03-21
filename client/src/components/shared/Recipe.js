@@ -2,13 +2,10 @@ import { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { UserContext } from "../UserContext";
 import { HiOutlineViewList } from "react-icons/hi";
-import { BsSuitHeartFill } from "react-icons/bs";
-import { MdOpenInNew } from "react-icons/md";
-import { GiMeal, GiNotebook } from "react-icons/gi";
 import backupImage from "../../assets/noImage.png";
-import Notes from "./Notes";
 import IconButton from "./IconButton";
 import Modal from "./Modal";
+import ActionBar from "./ActionBar";
 
 const Recipe = ({ recipe, notes, isSavedRecipe }) => {
   const { updateUser, pantry, shoppingList, userId, setRecipeToAdd } =
@@ -17,17 +14,11 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
   const [availableIngredients, setAvailableIngredients] = useState([]);
   const [hideAllIngredients, setHideAllIngredients] = useState(true);
   const [hideIngredientsInPantry, setHideIngredientsInPantry] = useState(true);
-  const [editNotes, setEditNotes] = useState(false);
   const [isImgErr, setIsImgErr] = useState(false);
   const imageRef = useRef();
   const [addRecipe, setAddRecipe] = useState(false);
 
   const iconSize = 30;
-
-  // View details of recipe. It opens a new tab and direct to the source
-  const openInNewTab = (url) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
 
   // Find ingredients that user have at home
   const compareIngredients = () => {
@@ -99,12 +90,6 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
       .finally(setIsImgErr(true));
   };
 
-  // Save a recipe when user click on favorites or meals before logging in
-  const saveRecipe = (data) => {
-    setAddRecipe(true);
-    setRecipeToAdd(data);
-  };
-
   // To closeModal and delete the recipe saved in local storage
   const closeModal = () => {
     setAddRecipe(false);
@@ -132,45 +117,7 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
             <p>{formatCuisineType(recipe.cuisineType[0])}</p>
           </div>
         </RecipeHeader>
-        <Buttons>
-          <IconButton onClickFunc={openInNewTab} data={recipe.url}>
-            <MdOpenInNew size={iconSize} />
-          </IconButton>
-          <IconButton
-            onClickFunc={userId ? updateUser : saveRecipe}
-            data={{
-              savedRecipes: {
-                ...recipe,
-                isLiked: recipe.isLiked ? false : true,
-              },
-            }}
-            color={recipe.isLiked ? "#e63946" : null}
-          >
-            <BsSuitHeartFill size={iconSize} />
-          </IconButton>
-          <IconButton
-            onClickFunc={userId ? updateUser : saveRecipe}
-            data={{
-              savedRecipes: {
-                ...recipe,
-                isPlanned: recipe.isPlanned ? false : true,
-              },
-            }}
-            color={recipe.isPlanned ? "#e63946" : null}
-          >
-            <GiMeal size={iconSize} />
-          </IconButton>
-          {notes && (
-            <IconButton
-              onClickFunc={setEditNotes}
-              data={!editNotes}
-              color={recipe.notes ? "#e63946" : null}
-            >
-              <GiNotebook size={iconSize} />
-            </IconButton>
-          )}
-        </Buttons>
-        {editNotes && <Notes recipe={recipe} />}
+        <ActionBar notes={notes} recipe={recipe} setAddRecipe={setAddRecipe} />
         <IngredientWrapper>
           <div>
             <h3>All Ingredients ({recipe.ingredientLines.length})</h3>
@@ -314,9 +261,4 @@ const IngredientWrapper = styled.ul`
     display: inline-flex;
     align-items: center;
   }
-`;
-
-const Buttons = styled.section`
-  display: inline-flex;
-  justify-self: baseline;
 `;
