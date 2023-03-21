@@ -100,7 +100,7 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
     recipe && (
       <Wrapper>
         <Modal closeModal={closeModal} open={addRecipe} />
-        <RecipeHeader>
+        <RecipeBody>
           <img
             ref={imageRef}
             src={recipe.image}
@@ -111,96 +111,102 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
                 : (currentTarget.src = backupImage);
             }}
           />
-          <div>
+          <div className="recipe-details">
             <h2>{recipe.label}</h2>
             <p>{recipe.source}</p>
             <p>{formatCuisineType(recipe.cuisineType[0])}</p>
           </div>
-        </RecipeHeader>
-        <ActionBar notes={notes} recipe={recipe} setAddRecipe={setAddRecipe} />
-        <IngredientWrapper>
-          <div>
-            <h3>All Ingredients ({recipe.ingredientLines.length})</h3>
-            <IconButton
-              onClickFunc={setHideAllIngredients}
-              data={!hideAllIngredients}
-            >
-              <HiOutlineViewList size={iconSize} />
-            </IconButton>
-          </div>
-          {!hideAllIngredients &&
-            recipe.ingredientLines &&
-            recipe.ingredientLines.map((ingredient, i) => (
-              <li key={`${recipe.label}-allIngredient-${i}-${ingredient}`}>
-                {ingredient}
-              </li>
-            ))}
-        </IngredientWrapper>
-        {userId && (
+        </RecipeBody>
+        <RecipeFooter>
+          <ActionBar
+            notes={notes}
+            recipe={recipe}
+            setAddRecipe={setAddRecipe}
+          />
           <IngredientWrapper>
             <div>
-              <h3>You have {availableIngredients.length} ingredient(s)</h3>
+              <h3>All Ingredients ({recipe.ingredientLines.length})</h3>
               <IconButton
-                onClickFunc={setHideIngredientsInPantry}
-                data={!hideIngredientsInPantry}
+                onClickFunc={setHideAllIngredients}
+                data={!hideAllIngredients}
               >
                 <HiOutlineViewList size={iconSize} />
               </IconButton>
             </div>
-            {!hideIngredientsInPantry && (
-              <>
-                {availableIngredients.map((ingredient) => (
-                  <li
-                    key={`${recipe.label}-availableIngredients-${ingredient.name}`}
-                  >
-                    {ingredient.name}
-                  </li>
-                ))}
-                <h3>Do you have any of the following ingredients?</h3>
-                {missingIngredients &&
-                  missingIngredients.map((ingredient, i) => (
-                    <section
-                      key={`${recipe.label}-missingIngredients-${ingredient.name}`}
-                    >
-                      <li>{ingredient.name}</li>
-                      <button
-                        onClick={() =>
-                          updateUser({
-                            pantry: Object.fromEntries(
-                              Object.entries(ingredient).filter(
-                                ([key, value]) => key !== "isInShoppingList"
-                              )
-                            ),
-                          })
-                        }
-                      >
-                        ➕ Pantry
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateUser({
-                            shoppingList: Object.fromEntries(
-                              Object.entries(ingredient).filter(
-                                ([key, value]) => key !== "isInShoppingList"
-                              )
-                            ),
-                          })
-                        }
-                        disabled={ingredient.isInShoppingList ? true : false}
-                        style={
-                          ingredient.isInShoppingList
-                            ? { opacity: "0.3" }
-                            : null
-                        }
-                      >
-                        ➕ Shopping List
-                      </button>
-                    </section>
-                  ))}
-              </>
-            )}
+            {!hideAllIngredients &&
+              recipe.ingredientLines &&
+              recipe.ingredientLines.map((ingredient, i) => (
+                <li key={`${recipe.label}-allIngredient-${i}-${ingredient}`}>
+                  {ingredient}
+                </li>
+              ))}
           </IngredientWrapper>
-        )}
+          {userId && (
+            <IngredientWrapper>
+              <div>
+                <h3>You have {availableIngredients.length} ingredient(s)</h3>
+                <IconButton
+                  onClickFunc={setHideIngredientsInPantry}
+                  data={!hideIngredientsInPantry}
+                >
+                  <HiOutlineViewList size={iconSize} />
+                </IconButton>
+              </div>
+              {!hideIngredientsInPantry && (
+                <>
+                  {availableIngredients.map((ingredient) => (
+                    <li
+                      key={`${recipe.label}-availableIngredients-${ingredient.name}`}
+                    >
+                      {ingredient.name}
+                    </li>
+                  ))}
+                  <h3>Do you have any of the following ingredients?</h3>
+                  {missingIngredients &&
+                    missingIngredients.map((ingredient, i) => (
+                      <section
+                        key={`${recipe.label}-missingIngredients-${ingredient.name}`}
+                      >
+                        <li>{ingredient.name}</li>
+                        <button
+                          onClick={() =>
+                            updateUser({
+                              pantry: Object.fromEntries(
+                                Object.entries(ingredient).filter(
+                                  ([key, value]) => key !== "isInShoppingList"
+                                )
+                              ),
+                            })
+                          }
+                        >
+                          ➕ Pantry
+                        </button>
+                        <button
+                          onClick={() =>
+                            updateUser({
+                              shoppingList: Object.fromEntries(
+                                Object.entries(ingredient).filter(
+                                  ([key, value]) => key !== "isInShoppingList"
+                                )
+                              ),
+                            })
+                          }
+                          disabled={ingredient.isInShoppingList ? true : false}
+                          style={
+                            ingredient.isInShoppingList
+                              ? { opacity: "0.3" }
+                              : null
+                          }
+                        >
+                          ➕ Shopping List
+                        </button>
+                      </section>
+                    ))}
+                </>
+              )}
+            </IngredientWrapper>
+          )}
+        </RecipeFooter>
       </Wrapper>
     )
   );
@@ -209,49 +215,56 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
 export default Recipe;
 
 const Wrapper = styled.div`
-  max-width: 375px;
-  min-height: 250px;
-  margin: 0 10px 10px 0;
+  width: 100%;
+  min-width: 275px;
+  min-height: 200px;
   padding: 5px;
   box-shadow: 1px 2px 3px 3px lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
-  @media screen and (min-width: 900px) {
-    width: 100%;
-    width: 275px;
+  @media screen and (min-width: 700px) {
+    flex: 1 1 45%;
+  }
+
+  @media screen and (min-width: 1200px) {
+    flex: 1 1 30%;
   }
 `;
-const RecipeHeader = styled.section`
+const RecipeBody = styled.section`
   display: inline-flex;
 
-  div {
+  .recipe-details {
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
     padding: 0 5px;
-  }
 
-  h2 {
-    margin-bottom: 5px;
-  }
-
-  p {
-    word-wrap: break-word;
-    display: inline-block;
-    &:nth-of-type(1) {
-      color: gray;
-      font-size: smaller;
-      margin-bottom: 3px;
+    h2 {
+      margin: 5px 0;
     }
-  }
 
-  @media screen and (min-width: 900px) {
-    display: flex;
-    flex-flow: column;
+    p {
+      word-wrap: break-word;
+      display: inline-block;
+      &:nth-of-type(1) {
+        color: gray;
+        font-size: smaller;
+        margin-bottom: 3px;
+      }
+    }
   }
 
   @media screen and (max-width: 420px) {
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
   }
+`;
+
+const RecipeFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
 `;
 
 const IngredientWrapper = styled.ul`
