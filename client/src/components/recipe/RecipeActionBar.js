@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useContext, useState } from "react";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { BsSuitHeartFill } from "react-icons/bs";
 import { MdOpenInNew } from "react-icons/md";
 import { GiMeal, GiNotebook } from "react-icons/gi";
-import IconButton from "./IconButton";
+import IconButton from "../IconButton";
 import Notes from "./Notes";
 
-const ActionBar = ({ notes, recipe, setAddRecipe }) => {
+const RecipeActionBar = ({ notes, recipe, setAddRecipe }) => {
   const { updateUser, userId, setRecipeToAdd } = useContext(UserContext);
   const [editNotes, setEditNotes] = useState(false);
   const iconSize = 30;
@@ -77,7 +77,7 @@ const ActionBar = ({ notes, recipe, setAddRecipe }) => {
   );
 };
 
-export default ActionBar;
+export default RecipeActionBar;
 
 const Wrapper = styled.div`
   display: flex;

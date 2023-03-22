@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useContext } from "react";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const Notes = ({ recipe }) => {
   const { updateUser } = useContext(UserContext);

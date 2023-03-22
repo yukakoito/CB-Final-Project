@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { DataContext } from "../DataContext";
-import RecipeSearch from "../recipeSearch/RecipeSearch";
-import ErrorMsg from "../shared/ErrorMsg";
-import LoadingCircle from "../shared/LoadingCircle";
-import Recipes from "../shared/Recipes";
-import { UserContext } from "../UserContext";
+import { DataContext } from "../contexts/DataContext";
+import RecipeSearch from "../components/recipeSearch/RecipeSearch";
+import ErrorMsg from "../components/ErrorMsg";
+import LoadingCircle from "../components/LoadingCircle";
+import Recipes from "../components/Recipes";
+import { UserContext } from "../contexts/UserContext";
 
 const Homepage = () => {
   const { recipes, dataErr, dataErrMsg } = useContext(DataContext);

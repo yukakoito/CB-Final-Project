@@ -1,9 +1,9 @@
 import { Dialog } from "@mui/material";
 import styled from "styled-components";
 import { useContext } from "react";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import LoginButton from "../authentication/login";
-import IconButton from "./IconButton";
+import IconButton from "../IconButton";
 import { MdClose } from "react-icons/md";
 import logo from "../../assets/logo.png";
 

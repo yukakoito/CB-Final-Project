@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Typeahead from "./Typeahead";
-import Ingredient from "../shared/Ingredient";
-import ListActionBar from "../itemList/ListActionBar";
+import Ingredient from "../Ingredient";
+import ListActionBar from "./ListActionBar";
 
 const ItemList = ({ data, listName }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(-1);

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DataContext } from "../DataContext";
+import { DataContext } from "../../contexts/DataContext";
 
 const Dropdown = ({ name, array }) => {
   const { searchOptions, setSearchOptions } = useContext(DataContext);

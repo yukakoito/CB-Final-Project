@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { UserContext } from "../UserContext";
-import { DataContext } from "../DataContext";
-import IconButton from "../shared/IconButton";
+import { UserContext } from "../../contexts/UserContext";
+import { DataContext } from "../../contexts/DataContext";
+import IconButton from "../IconButton";
 import { GiShoppingBag } from "react-icons/gi";
 import { RiFridgeFill, RiDeleteBin2Fill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";

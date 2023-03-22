@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import { DataContext } from "../DataContext";
+import { DataContext } from "../../contexts/DataContext";
 import SearchOptions from "./SearchOptions";
 
 const RecipeSearch = () => {

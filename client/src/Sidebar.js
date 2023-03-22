@@ -4,10 +4,10 @@ import { BsSuitHeartFill, BsFillArrowUpSquareFill } from "react-icons/bs";
 import { RiFridgeFill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
 import { useContext } from "react";
-import { UserContext } from "./UserContext";
-import { DataContext } from "./DataContext";
-import RecipeSearch from "./recipeSearch/RecipeSearch";
-import IconButton from "./shared/IconButton";
+import { UserContext } from "./contexts/UserContext";
+import { DataContext } from "./contexts/DataContext";
+import RecipeSearch from "./components/recipeSearch/RecipeSearch";
+import IconButton from "./components/IconButton";
 
 const Sidebar = () => {
   const { userId } = useContext(UserContext);
