@@ -162,7 +162,7 @@ const RecipeWrapper = styled.section`
   margin: 0 5px;
 `;
 const Container = styled.div`
-  padding: 10px;
+  padding: 10px 0 10px 10px;
   margin-bottom: 15px;
   height: fit-content;
   border-radius: 15px;

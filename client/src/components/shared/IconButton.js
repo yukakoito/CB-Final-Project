@@ -36,7 +36,7 @@ const Button = styled.button`
   border: none;
   width: 30px;
   height: 30px;
-  transition: all 0.5ms ease-in-out;
+  border: 1px solid lightgray;
 
   &:after {
     content: "";

@@ -3,6 +3,7 @@ import { DataContext } from "../DataContext";
 import { useContext, useState } from "react";
 import { UserContext } from "../UserContext";
 import Ingredient from "../shared/Ingredient";
+import { HiPlusSm } from "react-icons/hi";
 
 const Typeahead = ({ listName, data }) => {
   const { ingredients } = useContext(DataContext);
@@ -82,7 +83,7 @@ const Typeahead = ({ listName, data }) => {
           }}
         />
         <button onClick={() => addNewItem()} disabled={input ? false : true}>
-          <b>+</b>
+          <HiPlusSm size={24} />
         </button>
       </InputArea>
       {suggestions &&
@@ -108,28 +109,29 @@ const Typeahead = ({ listName, data }) => {
 
 export default Typeahead;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 95%;
+`;
 
 const InputArea = styled.div`
-  display: inline-flex;
-  justify-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
   height: fit-content;
 
   input {
-    width: 200px;
-
-    @media screen and (min-width: 420px) {
-      width: 225px;
-    }
+    margin: 5px;
   }
 
   button {
     outline: none;
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     text-align: center;
     padding: 0;
-    margin: 0 3px;
+    margin: 0;
+
+    /* background-color: antiquewhite; */
 
     &:hover {
       outline: 2px solid var(--primary-color);
