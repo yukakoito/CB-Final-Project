@@ -43,7 +43,7 @@ export default createGlobalStyle`
 
   ol, ul, li {
     list-style: none;
-    padding: 3px;
+    padding: 5px;
   }
 
   blockquote, q {
@@ -74,7 +74,7 @@ export default createGlobalStyle`
     font-family: var(--heading-font-family);
 
     &:hover {  
-      outline: 3px solid var(--primary-color);
+      outline: 2px solid var(--primary-color);
       cursor: pointer;
     }
   }

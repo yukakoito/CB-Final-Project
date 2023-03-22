@@ -1,24 +1,13 @@
-import styled from "styled-components";
-import { RiDeleteBin2Line } from "react-icons/ri";
-
 const Ingredient = ({
   item,
-  onClickFunc,
   selectedItemIndex,
   onMouseEnter,
   index,
   onMouseLeave,
-  listName,
-  isListed,
 }) => {
   return (
     item && (
-      <IngredientName
-        onClick={(e) =>
-          onClickFunc({
-            [listName]: { name: item.name, category: item.category },
-          })
-        }
+      <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         style={{
@@ -26,16 +15,9 @@ const Ingredient = ({
         }}
       >
         <span>{item.name.toLowerCase()}</span>
-        {isListed && <RiDeleteBin2Line />}
-      </IngredientName>
+      </div>
     )
   );
 };
 
 export default Ingredient;
-
-const IngredientName = styled.li`
-  width: 90%;
-  display: inline-flex;
-  justify-content: space-between;
-`;
