@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Dropdown from "./Dropdown";
 import { useContext } from "react";
-import { DataContext } from "../DataContext";
+import { DataContext } from "../../contexts/DataContext";
 
 const SearchOptions = () => {
   const { parameters } = useContext(DataContext);

@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { HiOutlineViewList } from "react-icons/hi";
 import backupImage from "../../assets/noImage.png";
-import IconButton from "./IconButton";
+import IconButton from "../IconButton";
 import Modal from "./Modal";
-import ActionBar from "./ActionBar";
+import RecipeActionBar from "./RecipeActionBar";
 
 const Recipe = ({ recipe, notes, isSavedRecipe }) => {
   const { updateUser, pantry, shoppingList, userId, setRecipeToAdd } =
@@ -118,7 +118,7 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
           </div>
         </RecipeBody>
         <RecipeFooter>
-          <ActionBar
+          <RecipeActionBar
             notes={notes}
             recipe={recipe}
             setAddRecipe={setAddRecipe}

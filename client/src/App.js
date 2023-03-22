@@ -4,9 +4,9 @@ import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import Footer from "./Footer";
-import Homepage from "./homepage/Homepage";
-import MyPage from "./mypage/MyPage";
-import { UserContext } from "./UserContext";
+import Homepage from "./routes/Homepage";
+import MyPage from "./routes/MyPage";
+import { UserContext } from "./contexts/UserContext";
 import Sidebar from "./Sidebar";
 
 const App = () => {

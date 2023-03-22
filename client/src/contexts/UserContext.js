@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import usePersistedState from "./usePersistedState";
+import usePersistedState from "../components/usePersistedState";
 
 export const UserContext = createContext(null);
 

@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { DataContext } from "../DataContext";
-import { UserContext } from "../UserContext";
+import { DataContext } from "../contexts/DataContext";
+import { UserContext } from "../contexts/UserContext";
 import ErrorMsg from "./ErrorMsg";
 import LoadingCircle from "./LoadingCircle";
-import Recipe from "./Recipe";
+import Recipe from "./recipe/Recipe";
 
 const Recipes = ({ recipes, notes, isSavedRecipe, style }) => {
   const { isRecipeLoading } = useContext(DataContext);

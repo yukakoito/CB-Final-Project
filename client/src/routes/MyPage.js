@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { UserContext } from "../UserContext";
-import Recipes from "../shared/Recipes";
-import { DataContext } from "../DataContext";
-import RecipeSearch from "../recipeSearch/RecipeSearch";
-import ItemList from "./ItemList";
-import LoadingCircle from "../shared/LoadingCircle";
-import ErrorMsg from "../shared/ErrorMsg";
-import logo from "../../assets/logo.png";
+import { UserContext } from "../contexts/UserContext";
+import Recipes from "../components/Recipes";
+import { DataContext } from "../contexts/DataContext";
+import RecipeSearch from "../components/recipeSearch/RecipeSearch";
+import ItemList from "../components/itemList/ItemList";
+import LoadingCircle from "../components/LoadingCircle";
+import ErrorMsg from "../components/ErrorMsg";
+import logo from "../assets/logo.png";
 
 const MyPage = () => {
   const {

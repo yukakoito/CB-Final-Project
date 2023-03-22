@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useContext } from "react";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import styled from "styled-components";
 
 const LogoutButton = () => {

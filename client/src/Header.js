@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import LoginButton from "./authentication/login";
-import LogoutButton from "./authentication/logout";
+import LoginButton from "./components/authentication/login";
+import LogoutButton from "./components/authentication/logout";
 import { useAuth0 } from "@auth0/auth0-react";
-import logo from "../assets/logo.png";
+import logo from "./assets/logo.png";
 
 const Header = () => {
   const { isAuthenticated } = useAuth0();

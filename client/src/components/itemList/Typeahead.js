@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { DataContext } from "../DataContext";
+import { DataContext } from "../../contexts/DataContext";
 import { useContext, useState } from "react";
-import { UserContext } from "../UserContext";
-import Ingredient from "../shared/Ingredient";
+import { UserContext } from "../../contexts/UserContext";
+import Ingredient from "../Ingredient";
 import { HiPlusSm } from "react-icons/hi";
 
 const Typeahead = ({ listName, data }) => {
