@@ -102,7 +102,7 @@ export default Sidebar;
 const Wrapper = styled.ul`
   display: flex;
   flex-flow: column nowrap;
-  width: 225px;
+  width: 200px;
   position: relative;
   border: 1px solid blue;
   padding-top: 10px;
@@ -123,9 +123,8 @@ const Wrapper = styled.ul`
     display: inline-flex;
 
     &:hover {
-      background-color: #edf2f4;
       font-weight: bold;
-      transition: 200ms ease-in-out;
+      cursor: pointer;
     }
   }
 

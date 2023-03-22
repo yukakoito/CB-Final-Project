@@ -45,8 +45,13 @@ const ErrorWrapper = styled.div`
 const Wrapper = styled.div`
   grid-column-start: 2;
   width: 100%;
+  width: calc(100% - 200px - 10px);
   display: flex;
   flex-flow: column nowrap;
+
+  @media screen and (max-width: 600px) {
+    width: calc(100% - 35px - 10px);
+  }
 `;
 const SearchField = styled.section`
   display: flex;
