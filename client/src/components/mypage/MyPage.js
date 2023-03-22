@@ -126,7 +126,7 @@ const ErrWrapper = styled.div`
 `;
 const Wrapper = styled.div`
   grid-column-start: 2;
-  width: 100%;
+  width: calc(100% - 200px - 10px);
   height: 100%;
   display: flex;
   flex-flow: column;
@@ -135,6 +135,10 @@ const Wrapper = styled.div`
 
   h1 {
     margin-bottom: 10px;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: calc(100% - 35px - 10px);
   }
 
   @media screen and (min-width: 900px) {
