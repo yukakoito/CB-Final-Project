@@ -5,7 +5,6 @@ export const DataContext = createContext(null);
 
 // This Data context provides list of ingredients and all the parameters used for recipe search.
 const DataProvider = ({ children }) => {
-  const [ingredients, setIngredients] = useState(null);
   const [parameters, setParameters] = useState(null);
   const [dataErr, setDataErr] = useState(false);
   const [dataErrMsg, setDataErrMsg] = useState("");
@@ -28,8 +27,7 @@ const DataProvider = ({ children }) => {
     fetch("/api/get-data")
       .then((res) => res.json())
       .then((data) => {
-        setIngredients(data.data.ingredients);
-        setParameters(data.data.parameters);
+        setParameters(data.data);
       })
       .catch((err) => setDataErr(true))
       .finally(() => setIsDataLoading(false));
@@ -70,7 +68,6 @@ const DataProvider = ({ children }) => {
       setIsRecipeLoading(false);
       if (data.status === 200) {
         setRecipes(data.recipes);
-        setIngredients(data.ingredients);
       } else {
         setDataErrMsg(data.message);
         setTimeout(() => {
@@ -87,8 +84,6 @@ const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        ingredients,
-        setIngredients,
         parameters,
         recipes,
         setRecipes,

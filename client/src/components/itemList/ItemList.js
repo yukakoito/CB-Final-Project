@@ -1,42 +1,49 @@
-import { useState } from "react";
 import styled from "styled-components";
-import Typeahead from "./Typeahead";
-import Ingredient from "../Ingredient";
-import ListActionBar from "./ListActionBar";
+import { useState, useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { HiPlusSm } from "react-icons/hi";
+import IconButton from "../IconButton";
+import Item from "./Item";
 
 const ItemList = ({ data, listName }) => {
-  const [selectedItemIndex, setSelectedItemIndex] = useState(-1);
+  const [input, setInput] = useState("");
+  const { updateUser } = useContext(UserContext);
+
+  // This function is to add an ingredient to pantry or shoppingList
+  const addNewItem = () => {
+    updateUser({
+      [listName]: { name: input.trim().toLowerCase(), category: null },
+    });
+    // Clear input upon selection of an item
+    setInput("");
+  };
 
   return (
     data && (
       <Wrapper>
-        <Typeahead data={data} listName={listName} />
+        <InputArea>
+          <input
+            type="text"
+            placeholder="Add ingredient"
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
+          />
+          <IconButton onClickFunc={addNewItem} disabled={input ? false : true}>
+            <HiPlusSm size={24} />
+          </IconButton>
+        </InputArea>
         <ul>
           {data.length > 0 &&
-            data.map((item, i) => (
-              <div key={`${listName}-${item.name}`}>
-                <CategoryName
-                  display={
-                    i === 0 || data[i].category !== data[i - 1].category
-                      ? null
-                      : "none"
-                  }
-                >
-                  {item.category ? item.category.toUpperCase() : "OTHERS"}
-                </CategoryName>
-                <ListItem>
-                  <Ingredient
-                    item={item}
-                    index={i}
-                    listName={listName}
-                    isListed={data.includes(item) ? true : false}
-                    onMouseEnter={() => setSelectedItemIndex(i)}
-                    onMouseLeave={() => setSelectedItemIndex(-1)}
-                    selectedItemIndex={selectedItemIndex}
-                  />
-                  <ListActionBar listName={listName} item={item} />
-                </ListItem>
-              </div>
+            data.map((item, index) => (
+              <Item
+                key={`${listName}-${item.name}`}
+                data={data}
+                item={item}
+                index={index}
+                listName={listName}
+              />
             ))}
         </ul>
       </Wrapper>
@@ -53,22 +60,20 @@ const Wrapper = styled.div`
 
   ul {
     width: 100%;
-    padding: 0%;
+    padding: 0;
     overflow: scroll;
     margin-top: 10px;
   }
 `;
 
-const CategoryName = styled.h2`
-  display: ${(p) => p.display};
-  padding: 15px 0 5px 0;
-  border-bottom: 2px solid lightgray;
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+const InputArea = styled.div`
+  width: 95%;
+  display: inline-flex;
   align-items: center;
-  padding: 5px;
+  justify-content: space-between;
+  margin-bottom: 5px;
+
+  input {
+    margin: 0;
+  }
 `;
