@@ -1,22 +1,25 @@
 import styled from "styled-components";
-import { useState } from "react";
 
-const IconButton = ({ children, color, onClickFunc, data, title }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+const IconButton = ({
+  children,
+  color,
+  onClickFunc,
+  data,
+  title,
+  disabled,
+}) => {
   return (
     <Button
       onClick={(e) => {
         e.stopPropagation();
-        onClickFunc(data);
+        data ? onClickFunc(data) : onClickFunc();
       }}
       onKeyDown={(e) => {
         e.key === "Enter" && e.stopPropagation();
       }}
       color={color}
       title={title}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      disabled={disabled}
     >
       {children}
     </Button>
@@ -37,6 +40,7 @@ const Button = styled.button`
   width: 30px;
   height: 30px;
   border: 1px solid lightgray;
+  opacity: ${(p) => (p.disabled ? 0.5 : 1)};
 
   &:after {
     content: "";

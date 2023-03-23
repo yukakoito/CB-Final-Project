@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { DataContext } from "../../contexts/DataContext";
 import IconButton from "../IconButton";
@@ -8,8 +8,9 @@ import { RiFridgeFill, RiDeleteBin2Fill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
 
 const ListActionBar = ({ item, listName }) => {
-  const { updateUser } = useContext(UserContext);
+  const { updateUser, shoppingList } = useContext(UserContext);
   const { searchRecipes } = useContext(DataContext);
+  const [isInShoppingList, setIsInShoppingList] = useState(false);
   const iconSize = 30;
 
   const moveToPantry = (item) => {
@@ -19,6 +20,17 @@ const ListActionBar = ({ item, listName }) => {
   const addToShoppingList = (item) => {
     updateUser({ shoppingList: item });
   };
+
+  const checkIsInShoppingList = () => {
+    if (listName === "shoppingList") return;
+    setIsInShoppingList(
+      shoppingList.some((listItem) => listItem.name === item.name)
+    );
+  };
+
+  useEffect(() => {
+    item && checkIsInShoppingList();
+  }, [shoppingList]);
 
   return (
     <Wrapper>
@@ -43,7 +55,12 @@ const ListActionBar = ({ item, listName }) => {
         <IconButton
           onClickFunc={addToShoppingList}
           data={item}
-          title={"Add to Shopping List"}
+          title={
+            isInShoppingList
+              ? "Already in Shopping List"
+              : "Add to Shopping List"
+          }
+          disabled={isInShoppingList}
         >
           <GiShoppingBag size={iconSize} />
         </IconButton>

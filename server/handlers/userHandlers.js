@@ -1,5 +1,6 @@
 const db = require("./createClient");
 const { v4: uuidv4 } = require("uuid");
+const { updateFoodList } = require("../utils/userUtils");
 
 // This function is to obtain user data for both new users and existing users
 const setupUser = async (req, res) => {
@@ -85,43 +86,7 @@ const updateUser = async (req, res) => {
 
     // Update panty or shoppingList and respond with updated user data
     if (pantry || shoppingList) {
-      const key = Object.keys(req.body).find((key) => key !== "_id");
-      const value = req.body[key];
-      const itemToRemove = { [key]: value };
-      // When adding an item to a list, sort the array by category and then name.
-      const itemToAdd = {
-        [key]: {
-          $each: [value],
-          $sort: { category: -1, name: 1 },
-        },
-      };
-
-      // If the item already exists in the list, remove it.
-      updateResult = await users.updateOne({ _id }, { $pull: itemToRemove });
-
-      if (updateResult.modifiedCount === 1) {
-        updatedUserData = await users.findOne({ _id });
-        return res.status(200).json({
-          status: 200,
-          [key]: updatedUserData[key],
-          message: "Item removed",
-        });
-        // If the item is not found, add it to the list.
-      } else {
-        updateResult = await users.updateOne({ _id }, { $push: itemToAdd });
-
-        if (updateResult.modifiedCount === 1) {
-          updatedUserData = await users.findOne({ _id });
-          return res.status(200).json({
-            status: 200,
-            [key]: updatedUserData[key],
-            message: "Item added",
-          });
-        }
-        return res
-          .status(501)
-          .json({ status: 501, message: "An unknown error has occured." });
-      }
+      return updateFoodList(req, res);
     }
 
     // Move an item from shoppingList to pantry
