@@ -6,7 +6,7 @@ import { UserContext } from "../../contexts/UserContext";
 const RecipeIngredient = ({ ingredient, availableIngredients }) => {
   const [isInPantry, setIsInPantry] = useState(false);
   const [isInShoppingList, setIsInShoppingList] = useState(false);
-  const { pantry, shoppingList } = useContext(UserContext);
+  const { pantry, shoppingList, userId } = useContext(UserContext);
   const { text, food, foodCategory } = ingredient;
 
   const item = { name: food.toLowerCase(), category: foodCategory };
@@ -36,7 +36,7 @@ const RecipeIngredient = ({ ingredient, availableIngredients }) => {
   return (
     <Wrapper>
       <span>{text}</span>
-      {pantry && (
+      {userId && (
         <IngredientActionBar
           item={item}
           isInPantry={isInPantry}
