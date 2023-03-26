@@ -88,7 +88,6 @@ const Wrapper = styled.div`
   box-shadow: 1px 2px 3px 3px lightgray;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 
   @media screen and (min-width: 700px) {
     flex: 1 1 45%;
@@ -132,13 +131,4 @@ const RecipeFooter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-between;
-`;
-
-const IngredientWrapper = styled.ul`
-  width: 100%;
-
-  div {
-    display: inline-flex;
-    align-items: center;
-  }
 `;

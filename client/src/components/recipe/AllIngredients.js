@@ -35,9 +35,9 @@ const AllIngredients = ({ recipe }) => {
       <Header>
         <div>
           <h3>All Ingredients ({ingredients.length})</h3>
-          <IconButton onClickFunc={setIsOpen} data={!isOpen}>
-            <HiOutlineViewList size={30} />
-          </IconButton>
+          <button onClick={() => setIsOpen(!isOpen)}>
+            <HiOutlineViewList size={20} />
+          </button>
         </div>
         {pantry.length > 0 && <span>You have {itemCount} ingredient(s)</span>}
       </Header>
@@ -70,9 +70,16 @@ const Header = styled.div`
   }
 
   span {
-    font-size: smaller;
-    font-weight: lighter;
-    margin-top: 10px;
+    margin: 5px 0;
+  }
+
+  button {
+    border: none;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    padding-top: 5px;
+    margin-left: 0;
   }
 `;
 const IngredientContainer = styled.ul`
