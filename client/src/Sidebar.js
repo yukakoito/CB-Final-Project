@@ -1,41 +1,55 @@
 import styled from "styled-components";
 import { GiMeal, GiShoppingBag } from "react-icons/gi";
-import { BsSuitHeartFill, BsFillArrowUpSquareFill } from "react-icons/bs";
+import { BsSuitHeartFill } from "react-icons/bs";
 import { RiFridgeFill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
 import { useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
 import { DataContext } from "./contexts/DataContext";
-import RecipeSearch from "./components/recipeSearch/RecipeSearch";
-import IconButton from "./components/IconButton";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   const { userId } = useContext(UserContext);
   const { pageDisplay, setPageDisplay } = useContext(DataContext);
 
   const iconSize = 20;
+  const disabled = { pointerEvents: userId ? "" : "none" };
 
   return (
     <Wrapper>
       {userId && (
-        <>
-          <li
-            onClick={() =>
-              setPageDisplay({ ...pageDisplay, search: !pageDisplay.search })
-            }
-            disabled={userId ? false : true}
-          >
+        <NavLink to="/my-page">
+          <div>
             <FaSearch
               size={iconSize}
               color={userId && pageDisplay.search ? "#e63946" : null}
             />
             <span>New Recipes</span>
-          </li>
-          <div>{pageDisplay.search && <RecipeSearch />}</div>
-        </>
+          </div>
+        </NavLink>
       )}
-      <li
-        onClick={() =>
+      <NavLink to="/my-meal-plan" style={disabled}>
+        <div>
+          <GiMeal
+            size={iconSize}
+            color={userId && pageDisplay.meals ? "#e63946" : null}
+          />
+          <span>My Meal Plan</span>
+        </div>
+      </NavLink>
+      <NavLink to="/my-favorites" style={disabled}>
+        <div>
+          <BsSuitHeartFill
+            size={iconSize}
+            color={userId && pageDisplay.favorites ? "#e63946" : null}
+          />
+          <span>My Favorites</span>
+        </div>
+      </NavLink>
+
+      <List
+        style={disabled}
+        onCdivck={() =>
           setPageDisplay({ ...pageDisplay, pantry: !pageDisplay.pantry })
         }
       >
@@ -44,9 +58,10 @@ const Sidebar = () => {
           color={userId && pageDisplay.pantry ? "#e63946" : null}
         />
         <span>My Pantry</span>
-      </li>
+      </List>
 
-      <li
+      <List
+        style={disabled}
         onClick={() =>
           setPageDisplay({
             ...pageDisplay,
@@ -59,70 +74,19 @@ const Sidebar = () => {
           color={userId && pageDisplay.shoppingList ? "#e63946" : null}
         />
         <span>My Shopping List</span>
-      </li>
-
-      <li
-        onClick={() =>
-          setPageDisplay({ ...pageDisplay, meals: !pageDisplay.meals })
-        }
-        disabled={userId ? false : true}
-      >
-        <GiMeal
-          size={iconSize}
-          color={userId && pageDisplay.meals ? "#e63946" : null}
-        />
-        <span>My Meals</span>
-      </li>
-      <li
-        onClick={() =>
-          setPageDisplay({ ...pageDisplay, favorites: !pageDisplay.favorites })
-        }
-        disabled={userId ? false : true}
-      >
-        <BsSuitHeartFill
-          size={iconSize}
-          color={userId && pageDisplay.favorites ? "#e63946" : null}
-        />
-        <span>My Favorites</span>
-      </li>
-      <ScrollUp>
-        <IconButton
-          onClickFunc={window.scrollTo}
-          data={{ top: 0, left: 0, behavior: "smooth" }}
-        >
-          <BsFillArrowUpSquareFill size={iconSize} />
-        </IconButton>
-      </ScrollUp>
+      </List>
     </Wrapper>
   );
 };
 
 export default Sidebar;
 
-const Wrapper = styled.ul`
+const Wrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
   position: relative;
-
   width: 100%;
   height: 100%;
-
-  div {
-    width: 100%;
-    height: fit-content;
-    @media screen and (max-width: 600px) {
-      display: none;
-    }
-  }
-
-  li {
-    display: inline-flex;
-
-    &:hover {
-      font-weight: bold;
-      cursor: pointer;
-    }
-  }
 
   span {
     text-indent: 10px;
@@ -131,8 +95,40 @@ const Wrapper = styled.ul`
       display: none;
     }
   }
+
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+
+    div {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px;
+    }
+
+    &:hover {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    &.active {
+      color: #e63946;
+      text-decoration: underline;
+
+      span {
+        color: var(--primary-color);
+      }
+    }
+  }
 `;
-const ScrollUp = styled.div`
-  position: absolute;
-  bottom: 0;
+
+const List = styled.div`
+  display: inline-flex;
+  align-items: center;
+  padding: 5px;
+
+  &:hover {
+    font-weight: bold;
+    cursor: pointer;
+  }
 `;
