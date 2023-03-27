@@ -7,7 +7,7 @@ import { GiShoppingBag } from "react-icons/gi";
 import { RiFridgeFill, RiDeleteBin2Fill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
 
-const ListActionBar = ({ item, listName }) => {
+const FoodListActionBar = ({ item, listName }) => {
   const { updateUser, shoppingList } = useContext(UserContext);
   const { searchRecipes } = useContext(DataContext);
   const [isInShoppingList, setIsInShoppingList] = useState(false);
@@ -78,7 +78,7 @@ const ListActionBar = ({ item, listName }) => {
   );
 };
 
-export default ListActionBar;
+export default FoodListActionBar;
 
 const Wrapper = styled.div`
   display: flex;
