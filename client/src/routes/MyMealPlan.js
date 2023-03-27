@@ -3,17 +3,17 @@ import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import Recipes from "../components/Recipes";
 
-const MyMeals = () => {
+const MyMealPlan = () => {
   const { mealPlans } = useContext(UserContext);
   return (
     <Wrapper>
-      <h1>My Meal Ideas For This Week</h1>
+      <h1>My Meal Plan For This Week</h1>
       <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} />
     </Wrapper>
   );
 };
 
-export default MyMeals;
+export default MyMealPlan;
 
 const Wrapper = styled.div`
   display: flex;

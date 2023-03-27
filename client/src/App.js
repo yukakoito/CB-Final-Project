@@ -9,7 +9,7 @@ import MyPage from "./routes/MyPage";
 import { UserContext } from "./contexts/UserContext";
 import Sidebar from "./Sidebar";
 import MyFavorites from "./routes/MyFavorites";
-import MyMeals from "./routes/MyMeals";
+import MyMealPlan from "./routes/MyMealPlan";
 
 const App = () => {
   const { userId } = useContext(UserContext);
@@ -31,11 +31,17 @@ const App = () => {
               }
             />
             <Route
-              path="/mypage"
+              path="/my-page"
               element={userId ? <MyPage /> : <Navigate replace to={"/"} />}
             />
-            <Route path="myfavorites" element={<MyFavorites />} />
-            <Route path="mymeals" element={<MyMeals />} />
+            <Route
+              path="my-favorites"
+              element={userId ? <MyFavorites /> : <Navigate replace to={"/"} />}
+            />
+            <Route
+              path="my-meal-plan"
+              element={userId ? <MyMealPlan /> : <Navigate replace to={"/"} />}
+            />
           </Routes>
         </div>
       </Wrapper>

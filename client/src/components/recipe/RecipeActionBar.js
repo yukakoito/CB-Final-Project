@@ -57,7 +57,11 @@ const RecipeActionBar = ({ notes, recipe, setAddRecipe }) => {
             },
           }}
           color={recipe.isPlanned ? "#e63946" : null}
-          title={recipe.isPlanned ? "Remove from My Meals" : "Add to My Meals"}
+          title={
+            recipe.isPlanned
+              ? "Remove from My Meal Plan"
+              : "Add to My Meal Plan"
+          }
         >
           <GiMeal size={iconSize} />
         </IconButton>
