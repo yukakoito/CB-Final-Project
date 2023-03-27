@@ -8,6 +8,7 @@ import Homepage from "./routes/Homepage";
 import MyPage from "./routes/MyPage";
 import { UserContext } from "./contexts/UserContext";
 import Sidebar from "./Sidebar";
+import MyFavorites from "./routes/MyFavorites";
 
 const App = () => {
   const { userId } = useContext(UserContext);
@@ -32,6 +33,7 @@ const App = () => {
               path="/mypage"
               element={userId ? <MyPage /> : <Navigate replace to={"/"} />}
             />
+            <Route path="myfavorites" element={<MyFavorites />} />
           </Routes>
         </div>
       </Wrapper>
