@@ -17,19 +17,23 @@ const App = () => {
       <GlobalStyles />
       <Header />
       <Wrapper>
-        <Sidebar />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              userId ? <Navigate replace to={"/mypage"} /> : <Homepage />
-            }
-          />
-          <Route
-            path="/mypage"
-            element={userId ? <MyPage /> : <Navigate replace to={"/"} />}
-          />
-        </Routes>
+        <div className="sidebar">
+          <Sidebar />
+        </div>
+        <div className="main-container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                userId ? <Navigate replace to={"/mypage"} /> : <Homepage />
+              }
+            />
+            <Route
+              path="/mypage"
+              element={userId ? <MyPage /> : <Navigate replace to={"/"} />}
+            />
+          </Routes>
+        </div>
       </Wrapper>
       <Footer />
     </BrowserRouter>
@@ -47,4 +51,22 @@ const Wrapper = styled.div`
   gap: 10px;
   display: flex;
   flex-flow: row nowrap;
+
+  .sidebar {
+    width: 200px;
+    border: 1px solid blue;
+
+    @media screen and (max-width: 600px) {
+      width: 35px;
+    }
+  }
+
+  .main-container {
+    width: calc(100% - 200px - 10px);
+    border: 1px solid blue;
+
+    @media screen and (max-width: 600px) {
+      width: calc(100% - 35px - 10px);
+    }
+  }
 `;

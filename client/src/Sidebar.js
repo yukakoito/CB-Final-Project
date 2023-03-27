@@ -102,14 +102,10 @@ export default Sidebar;
 const Wrapper = styled.ul`
   display: flex;
   flex-flow: column nowrap;
-  width: 200px;
   position: relative;
-  border: 1px solid blue;
-  padding-top: 10px;
 
-  @media screen and (max-width: 600px) {
-    width: 35px;
-  }
+  width: 100%;
+  height: 100%;
 
   div {
     width: 100%;

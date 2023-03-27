@@ -23,11 +23,7 @@ const MyPage = () => {
     useContext(DataContext);
 
   if (isErr || errMsg || dataErr) {
-    return (
-      <ErrWrapper>
-        <ErrorMsg errMsg={errMsg} />
-      </ErrWrapper>
-    );
+    return <ErrorMsg errMsg={errMsg} />;
   }
 
   return (
@@ -119,26 +115,15 @@ const MyPage = () => {
 
 export default MyPage;
 
-const ErrWrapper = styled.div`
-  grid-column-start: 2;
-  width: 90%;
-  justify-self: center;
-`;
 const Wrapper = styled.div`
-  grid-column-start: 2;
-  width: calc(100% - 200px - 10px);
+  width: 100%;
   height: 100%;
   display: flex;
   flex-flow: column;
   position: relative;
-  border: 1px solid blue;
 
   h1 {
     margin-bottom: 10px;
-  }
-
-  @media screen and (max-width: 600px) {
-    width: calc(100% - 35px - 10px);
   }
 
   @media screen and (min-width: 900px) {
