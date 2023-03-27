@@ -12,11 +12,7 @@ const Homepage = () => {
   const { isDataLoading } = useContext(UserContext);
 
   if (dataErr || dataErrMsg) {
-    return (
-      <ErrorWrapper>
-        <ErrorMsg errMsg={dataErrMsg} />
-      </ErrorWrapper>
-    );
+    return <ErrorMsg errMsg={dataErrMsg} />;
   }
 
   return (
@@ -33,26 +29,13 @@ const Homepage = () => {
 
 export default Homepage;
 
-const ErrorWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  grid-column-start: 2;
-  margin: 0 auto;
-  border: 1px solid blue;
-  padding-top: 10%;
-`;
-
 const Wrapper = styled.div`
-  grid-column-start: 2;
+  height: 100%;
   width: 100%;
-  width: calc(100% - 200px - 10px);
   display: flex;
   flex-flow: column nowrap;
-
-  @media screen and (max-width: 600px) {
-    width: calc(100% - 35px - 10px);
-  }
 `;
+
 const SearchField = styled.section`
   display: flex;
   flex-flow: column wrap;

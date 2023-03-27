@@ -22,13 +22,14 @@ export default ErrorMsg;
 const Wrapper = styled.div`
   text-align: center;
   box-shadow: 1px 2px 3px 3px var(--primary-color);
-  padding: 25px;
+  padding: 35px;
   width: fit-content;
   align-self: center;
-  margin: auto;
+  margin: 5% auto 0;
 
   p {
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
   }
 `;
