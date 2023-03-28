@@ -56,7 +56,7 @@ export default FoodList;
 const Wrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
-  max-height: calc(100vh - 170px - 90px);
+  max-height: calc(100vh - 95px);
 
   ul {
     width: 100%;
@@ -71,7 +71,7 @@ const InputArea = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin: 0 auto 5px;
 
   input {
     margin: 0;
