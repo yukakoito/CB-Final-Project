@@ -10,14 +10,6 @@ const DataProvider = ({ children }) => {
   const [dataErrMsg, setDataErrMsg] = useState("");
   const [recipes, setRecipes] = useState(null);
   const [searchOptions, setSearchOptions] = useState({});
-  const [pageDisplay, setPageDisplay] = useState({
-    search: false,
-    pantry: true,
-    shoppingList: false,
-    meals: false,
-    favorites: true,
-    results: false,
-  });
   const [isRecipeLoading, setIsRecipeLoading] = useState(false);
   const { setIsDataLoading } = useContext(UserContext);
 
@@ -56,12 +48,6 @@ const DataProvider = ({ children }) => {
     try {
       setDataErrMsg(null);
       setIsRecipeLoading(true);
-      setPageDisplay({
-        ...pageDisplay,
-        meals: false,
-        favorites: false,
-        results: true,
-      });
       setRecipes(null);
       const res = await fetch(`/api/get-recipes/${query}`);
       const data = await res.json();
@@ -72,7 +58,6 @@ const DataProvider = ({ children }) => {
         setDataErrMsg(data.message);
         setTimeout(() => {
           setDataErrMsg(null);
-          setPageDisplay({ ...pageDisplay, results: false });
         }, 10000);
       }
     } catch (err) {
@@ -90,8 +75,6 @@ const DataProvider = ({ children }) => {
         searchRecipes,
         searchOptions,
         setSearchOptions,
-        pageDisplay,
-        setPageDisplay,
         isRecipeLoading,
         setIsRecipeLoading,
         dataErr,

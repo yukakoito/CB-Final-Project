@@ -27,7 +27,7 @@ const App = () => {
             <Route
               path="/"
               element={
-                userId ? <Navigate replace to={"/mypage"} /> : <Homepage />
+                userId ? <Navigate replace to={"/my-page"} /> : <Homepage />
               }
             />
             <Route
@@ -64,6 +64,7 @@ const Wrapper = styled.div`
 
   .sidebar {
     width: 200px;
+    padding-top: 10px;
     border: 1px solid blue;
 
     @media screen and (max-width: 600px) {
