@@ -3,9 +3,9 @@ import { useState, useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { HiPlusSm } from "react-icons/hi";
 import IconButton from "../IconButton";
-import Item from "./Item";
+import Food from "./Food";
 
-const ItemList = ({ data, listName }) => {
+const FoodList = ({ data, listName }) => {
   const [input, setInput] = useState("");
   const { updateUser } = useContext(UserContext);
 
@@ -37,7 +37,7 @@ const ItemList = ({ data, listName }) => {
         <ul>
           {data.length > 0 &&
             data.map((item, index) => (
-              <Item
+              <Food
                 key={`${listName}-${item.name}`}
                 data={data}
                 item={item}
@@ -51,7 +51,7 @@ const ItemList = ({ data, listName }) => {
   );
 };
 
-export default ItemList;
+export default FoodList;
 
 const Wrapper = styled.div`
   display: flex;

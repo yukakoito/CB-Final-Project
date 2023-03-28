@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import ListActionBar from "./ListActionBar";
+import FoodListActionBar from "./FoodListActionBar";
 
-const Item = ({ data, item, index, listName }) => {
+const Food = ({ data, item, index, listName }) => {
   return (
     <Wrapper>
       <CategoryName
@@ -15,13 +15,13 @@ const Item = ({ data, item, index, listName }) => {
       </CategoryName>
       <ListItem>
         <span>{item.name}</span>
-        <ListActionBar listName={listName} item={item} />
+        <FoodListActionBar listName={listName} item={item} />
       </ListItem>
     </Wrapper>
   );
 };
 
-export default Item;
+export default Food;
 
 const Wrapper = styled.li`
   padding: 0 5px;

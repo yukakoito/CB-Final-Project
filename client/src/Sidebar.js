@@ -5,12 +5,10 @@ import { RiFridgeFill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
 import { useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
-import { DataContext } from "./contexts/DataContext";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   const { userId } = useContext(UserContext);
-  const { pageDisplay, setPageDisplay } = useContext(DataContext);
 
   const iconSize = 20;
   const disabled = { pointerEvents: userId ? "" : "none" };
@@ -20,59 +18,31 @@ const Sidebar = () => {
       {userId && (
         <NavLink to="/my-page">
           <div>
-            <FaSearch
-              size={iconSize}
-              color={userId && pageDisplay.search ? "#e63946" : null}
-            />
+            <FaSearch size={iconSize} />
             <span>New Recipes</span>
           </div>
         </NavLink>
       )}
       <NavLink to="/my-meal-plan" style={disabled}>
         <div>
-          <GiMeal
-            size={iconSize}
-            color={userId && pageDisplay.meals ? "#e63946" : null}
-          />
+          <GiMeal size={iconSize} />
           <span>My Meal Plan</span>
         </div>
       </NavLink>
       <NavLink to="/my-favorites" style={disabled}>
         <div>
-          <BsSuitHeartFill
-            size={iconSize}
-            color={userId && pageDisplay.favorites ? "#e63946" : null}
-          />
+          <BsSuitHeartFill size={iconSize} />
           <span>My Favorites</span>
         </div>
       </NavLink>
 
-      <List
-        style={disabled}
-        onCdivck={() =>
-          setPageDisplay({ ...pageDisplay, pantry: !pageDisplay.pantry })
-        }
-      >
-        <RiFridgeFill
-          size={iconSize}
-          color={userId && pageDisplay.pantry ? "#e63946" : null}
-        />
+      <List style={disabled} onClick={() => ""}>
+        <RiFridgeFill size={iconSize} />
         <span>My Pantry</span>
       </List>
 
-      <List
-        style={disabled}
-        onClick={() =>
-          setPageDisplay({
-            ...pageDisplay,
-            shoppingList: !pageDisplay.shoppingList,
-          })
-        }
-      >
-        <GiShoppingBag
-          size={iconSize}
-          color={userId && pageDisplay.shoppingList ? "#e63946" : null}
-        />
+      <List style={disabled} onClick={() => ""}>
+        <GiShoppingBag size={iconSize} />
         <span>My Shopping List</span>
       </List>
     </Wrapper>

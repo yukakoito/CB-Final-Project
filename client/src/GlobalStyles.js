@@ -58,6 +58,8 @@ export default createGlobalStyle`
 
   h1 {
     font-size: 22px;
+    margin: 10px auto;
+    text-align: center;
   }
 
   h2 {
