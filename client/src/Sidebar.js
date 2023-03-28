@@ -6,12 +6,24 @@ import { FaSearch } from "react-icons/fa";
 import { useContext } from "react";
 import { UserContext } from "./contexts/UserContext";
 import { NavLink } from "react-router-dom";
+import FoodListModal from "./components/foodList/FoodListModal";
+import { useState } from "react";
 
 const Sidebar = () => {
-  const { userId } = useContext(UserContext);
+  const { userId, pantry, shoppingList } = useContext(UserContext);
+  const [isPantryOpen, setIsPantryOpen] = useState(false);
+  const [isShoppingListOpen, setIsShoppingListOpen] = useState(false);
 
   const iconSize = 20;
   const disabled = { pointerEvents: userId ? "" : "none" };
+
+  const handleClose = () => {
+    setIsPantryOpen(false);
+    setIsShoppingListOpen(false);
+  };
+
+  const displayPantry = () => setIsPantryOpen(true);
+  const displayShoppingList = () => setIsShoppingListOpen(true);
 
   return (
     <Wrapper>
@@ -36,15 +48,29 @@ const Sidebar = () => {
         </div>
       </NavLink>
 
-      <List style={disabled} onClick={() => ""}>
+      <List style={disabled} onClick={() => displayPantry()}>
         <RiFridgeFill size={iconSize} />
         <span>My Pantry</span>
       </List>
 
-      <List style={disabled} onClick={() => ""}>
+      <List style={disabled} onClick={() => displayShoppingList()}>
         <GiShoppingBag size={iconSize} />
         <span>My Shopping List</span>
       </List>
+      <FoodListModal
+        open={isPantryOpen}
+        handleClose={handleClose}
+        data={pantry}
+        listName="pantry"
+        text="My Pantry"
+      />
+      <FoodListModal
+        open={isShoppingListOpen}
+        handleClose={handleClose}
+        data={shoppingList}
+        listName="shoppingList"
+        text="My Shopping List"
+      />
     </Wrapper>
   );
 };
