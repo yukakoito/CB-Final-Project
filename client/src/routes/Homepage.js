@@ -28,7 +28,7 @@ const Homepage = () => {
         )}
         <div>{!isDataLoading ? <RecipeSearch /> : <LoadingCircle />}</div>
       </SearchField>
-      <Recipes recipes={recipes} style={{ justifyContent: "center" }} />
+      <Recipes recipes={recipes} />
     </Wrapper>
   );
 };

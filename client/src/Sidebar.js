@@ -109,7 +109,7 @@ const Wrapper = styled.div`
 
     &.active {
       color: #e63946;
-      text-decoration: underline;
+      text-decoration: underline 2px;
 
       span {
         color: var(--primary-color);

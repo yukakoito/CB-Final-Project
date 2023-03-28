@@ -92,10 +92,6 @@ const Wrapper = styled.div`
   @media screen and (min-width: 700px) {
     flex: 1 1 45%;
   }
-
-  @media screen and (min-width: 1200px) {
-    flex: 1 1 30%;
-  }
 `;
 const RecipeBody = styled.section`
   display: inline-flex;

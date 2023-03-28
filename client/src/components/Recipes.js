@@ -6,14 +6,14 @@ import ErrorMsg from "./ErrorMsg";
 import LoadingCircle from "./LoadingCircle";
 import Recipe from "./recipe/Recipe";
 
-const Recipes = ({ recipes, notes, isSavedRecipe, style }) => {
+const Recipes = ({ recipes, notes, isSavedRecipe }) => {
   const { isRecipeLoading } = useContext(DataContext);
   const { isErr, errMsg } = useContext(UserContext);
 
   if (isErr || errMsg) return <ErrorMsg errMsg={errMsg} />;
 
   return (
-    <Wrapper style={style}>
+    <Wrapper>
       {!isRecipeLoading ? (
         recipes &&
         recipes.map((recipe, i) => (
@@ -40,11 +40,5 @@ const Wrapper = styled.div`
   flex-flow: row wrap;
   justify-items: flex-start;
   gap: 10px;
-
-  border: 1px solid green;
-
-  @media screen and (max-width: 600px) {
-    display: flex;
-    flex-flow: column;
-  }
+  margin-bottom: 10px;
 `;

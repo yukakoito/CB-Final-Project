@@ -53,9 +53,8 @@ const Wrapper = styled.div`
   flex-flow: row nowrap;
 
   .sidebar {
-    width: 200px;
+    width: 185px;
     padding-top: 10px;
-    border: 1px solid blue;
 
     @media screen and (max-width: 600px) {
       width: 35px;
@@ -63,8 +62,7 @@ const Wrapper = styled.div`
   }
 
   .main-container {
-    width: calc(100% - 200px - 10px);
-    border: 1px solid blue;
+    width: calc(100% - 185px - 10px);
 
     @media screen and (max-width: 600px) {
       width: calc(100% - 35px - 10px);

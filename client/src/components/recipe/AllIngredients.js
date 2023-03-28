@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
-import IconButton from "../IconButton";
 import { HiOutlineViewList } from "react-icons/hi";
 import RecipeIngredient from "./RecipeIngredient";
 import { UserContext } from "../../contexts/UserContext";
@@ -79,7 +78,11 @@ const Header = styled.div`
     width: 30px;
     height: 30px;
     padding-top: 5px;
-    margin-left: 0;
+    margin-left: 2px;
+
+    &:hover {
+      outline: none;
+    }
   }
 `;
 const IngredientContainer = styled.ul`
