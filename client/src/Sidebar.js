@@ -28,7 +28,7 @@ const Sidebar = () => {
   return (
     <Wrapper>
       {userId && (
-        <NavLink to="/my-page">
+        <NavLink to="/" end>
           <div>
             <FaSearch size={iconSize} />
             <span>New Recipes</span>

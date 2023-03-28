@@ -5,7 +5,6 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import Footer from "./Footer";
 import Homepage from "./routes/Homepage";
-import MyPage from "./routes/MyPage";
 import { UserContext } from "./contexts/UserContext";
 import Sidebar from "./Sidebar";
 import MyFavorites from "./routes/MyFavorites";
@@ -24,22 +23,13 @@ const App = () => {
         </div>
         <div className="main-container">
           <Routes>
+            <Route path="/" element={<Homepage />} />
             <Route
-              path="/"
-              element={
-                userId ? <Navigate replace to={"/my-page"} /> : <Homepage />
-              }
-            />
-            <Route
-              path="/my-page"
-              element={userId ? <MyPage /> : <Navigate replace to={"/"} />}
-            />
-            <Route
-              path="my-favorites"
+              path="/my-favorites"
               element={userId ? <MyFavorites /> : <Navigate replace to={"/"} />}
             />
             <Route
-              path="my-meal-plan"
+              path="/my-meal-plan"
               element={userId ? <MyMealPlan /> : <Navigate replace to={"/"} />}
             />
           </Routes>

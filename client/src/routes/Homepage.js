@@ -9,7 +9,7 @@ import { UserContext } from "../contexts/UserContext";
 
 const Homepage = () => {
   const { recipes, dataErr, dataErrMsg } = useContext(DataContext);
-  const { isDataLoading } = useContext(UserContext);
+  const { isDataLoading, userId } = useContext(UserContext);
 
   if (dataErr || dataErrMsg) {
     return <ErrorMsg errMsg={dataErrMsg} />;
@@ -18,8 +18,14 @@ const Homepage = () => {
   return (
     <Wrapper>
       <SearchField>
-        <h1>Welcome to ZeroWasteCooking</h1>
-        <p>Sign in to save recipes and plan your meals.</p>
+        {userId ? (
+          <h1>Search New Recipes</h1>
+        ) : (
+          <>
+            <h1>Welcome to ZeroWasteCooking</h1>
+            <p>Sign in to save recipes and plan your meals.</p>
+          </>
+        )}
         <div>{!isDataLoading ? <RecipeSearch /> : <LoadingCircle />}</div>
       </SearchField>
       <Recipes recipes={recipes} style={{ justifyContent: "center" }} />
