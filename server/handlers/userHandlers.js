@@ -1,6 +1,11 @@
 const db = require("./createClient");
 const { v4: uuidv4 } = require("uuid");
-const { updateFoodList } = require("../utils/userUtils");
+const {
+  updateFoodList,
+  moveItemToPantry,
+  updateSavedRecipes,
+  updateNotes,
+} = require("../utils/userUtils");
 
 // This function is to obtain user data for both new users and existing users
 const setupUser = async (req, res) => {
@@ -81,9 +86,6 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ status: 404, message: "User not found" });
     }
 
-    let updatedUserData;
-    let updateResult = {};
-
     // Update panty or shoppingList and respond with updated user data
     if (pantry || shoppingList) {
       return updateFoodList(req, res);
@@ -91,110 +93,17 @@ const updateUser = async (req, res) => {
 
     // Move an item from shoppingList to pantry
     if (moveToPantry) {
-      updateResult = await users.updateOne(
-        { _id },
-        {
-          $pull: { shoppingList: moveToPantry },
-          $addToSet: { pantry: moveToPantry },
-        }
-      );
-
-      if (updateResult.modifiedCount === 1) {
-        // Sort items in pantry before sending the updated data to FE
-        await users.updateOne(
-          { _id },
-          { $push: { pantry: { $each: [], $sort: { category: -1, name: 1 } } } }
-        );
-        updatedUserData = await users.findOne({ _id });
-        return res.status(200).json({
-          status: 200,
-          data: updatedUserData,
-          message: "Item moved to Pantry",
-        });
-      } else {
-        return res
-          .status(501)
-          .json({ status: 501, message: "An unknown error has occured." });
-      }
+      return moveItemToPantry(req, res);
     }
 
     // Update savedRecipes and respond with the updated savedRecipes upon completion of the update process below.
     if (savedRecipes) {
-      // Delete the recipe from savedRecipes when both isLiked and isPlanned are false
-      if (!savedRecipes.isLiked && !savedRecipes.isPlanned) {
-        updateResult = await users.updateOne(
-          { _id },
-          { $pull: { savedRecipes: { _id: savedRecipes._id } } }
-        );
-        if (updateResult.modifiedCount === 1) {
-          updatedUserData = await users.findOne({ _id });
-          return res.status(200).json({
-            status: 200,
-            savedRecipes: updatedUserData.savedRecipes,
-            message: "Recipe deleted",
-          });
-        }
-        return res
-          .status(501)
-          .json({ status: 501, message: "An unknown error has occured." });
-      } else {
-        // If the recipe is in savedRecipes, update the required field
-        updateResult = await users.updateOne(
-          { _id },
-          {
-            $set: {
-              "savedRecipes.$[elem].isLiked": savedRecipes.isLiked,
-              "savedRecipes.$[elem].isPlanned": savedRecipes.isPlanned,
-            },
-          },
-          { arrayFilters: [{ "elem._id": savedRecipes._id }] }
-        );
-        if (updateResult.modifiedCount === 1) {
-          updatedUserData = await users.findOne({ _id });
-          return res.status(200).json({
-            status: 200,
-            savedRecipes: updatedUserData.savedRecipes,
-            message: "Recipe updated",
-          });
-        } else {
-          // Add the recipe if it's not in savedRecipes
-          updateResult = await users.updateOne(
-            { _id },
-            { $addToSet: { savedRecipes } }
-          );
-          if (updateResult.modifiedCount === 1) {
-            updatedUserData = await users.findOne({ _id });
-            return res.status(200).json({
-              status: 200,
-              savedRecipes: updatedUserData.savedRecipes,
-              message: "Recipe updated",
-            });
-          }
-          return res
-            .status(501)
-            .json({ status: 501, message: "An unknown error has occured." });
-        }
-      }
+      return updateSavedRecipes(req, res);
     }
 
     // Update the notes field associated with a saved recipe and respond with the updated savedRecipes
     if (notes) {
-      updateResult = await users.updateOne(
-        { _id },
-        { $set: { "savedRecipes.$[elem].notes": notes.notes } },
-        { arrayFilters: [{ "elem._id": notes._id }] }
-      );
-      if (updateResult.modifiedCount === 1) {
-        updatedUserData = await users.findOne({ _id });
-        return res.status(200).json({
-          status: 200,
-          savedRecipes: updatedUserData.savedRecipes,
-          message: "Notes updated",
-        });
-      }
-      return res
-        .status(501)
-        .json({ status: 501, message: "An unknown error has occured." });
+      return updateNotes(req, res);
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
