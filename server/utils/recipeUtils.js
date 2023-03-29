@@ -28,7 +28,7 @@ const getSavedRecipes = async (userId) => {
 
 const deduplicateRecipes = async (recipes, userId) => {
   const savedRecipes = await getSavedRecipes(userId);
-  if (!savedRecipes || savedRecipes.length === 0) return;
+  if (!savedRecipes || savedRecipes.length === 0) return recipes;
   return await recipes.filter((recipe) =>
     savedRecipes.every((savedRecipe) => savedRecipe._id !== recipe._id)
   );
