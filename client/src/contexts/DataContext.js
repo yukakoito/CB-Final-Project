@@ -11,7 +11,7 @@ const DataProvider = ({ children }) => {
   const [recipes, setRecipes] = useState(null);
   const [searchOptions, setSearchOptions] = useState({});
   const [isRecipeLoading, setIsRecipeLoading] = useState(false);
-  const { setIsDataLoading } = useContext(UserContext);
+  const { setIsDataLoading, userId } = useContext(UserContext);
 
   // Get ingredients and parameters used for recipe search
   const getData = () => {
@@ -41,7 +41,7 @@ const DataProvider = ({ children }) => {
     const ingredient = data ? data.replaceAll(" ", "%20") : null;
 
     // Create a query string with ingredients and search options
-    const query = ingredient + options;
+    const query = ingredient + options + [userId ? `&user=${userId}` : ""];
 
     if (!query) return;
 
