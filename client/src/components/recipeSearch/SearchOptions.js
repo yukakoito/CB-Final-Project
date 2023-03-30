@@ -22,5 +22,6 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 10px;
 `;

@@ -48,7 +48,6 @@ const SearchField = styled.section`
   justify-content: center;
   text-align: center;
   align-items: center;
-  padding-top: 10px;
 
   p {
     margin: 10px 0;

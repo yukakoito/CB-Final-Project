@@ -40,5 +40,5 @@ const Wrapper = styled.div`
   flex-flow: row wrap;
   justify-items: flex-start;
   gap: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0 10px;
 `;

@@ -36,7 +36,7 @@ export default createGlobalStyle`
   }
 
   body {
-    line-height: 1;
+    line-height: 1.3;
     color: var(--primary-color);
     font-family: var(--heading-font-family);
   }
@@ -64,16 +64,17 @@ export default createGlobalStyle`
 
   h2 {
     font-size: 18px;
+    line-height: 1.2;
   }
 
   button {
     color: var(--primary-color);
     border-radius: 5px;
     border: none;
-    margin: 0 5px;
     outline: 1px solid var(--primary-color);
     background: transparent;
     font-family: var(--heading-font-family);
+    font-size: 100%;
 
     &:hover {  
       outline: 2px solid var(--primary-color);
@@ -91,15 +92,14 @@ export default createGlobalStyle`
   input, select {
     width:48%;
     min-width: 175px;
-    padding: 3px 5px;
+    padding: 5px;
     border-radius: 5px;
     outline: 1px solid var(--primary-color);
     border: none;
     font-family: var(--heading-font-family);
     box-sizing: border-box;
-    margin: 5px 5px 0 5px;
     flex: auto;
-    gap: auto;
+    font-size: 100%;
 
     &:focus {
       outline: 2px solid var(--primary-color);

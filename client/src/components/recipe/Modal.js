@@ -19,7 +19,7 @@ const Modal = ({ open, closeModal }) => {
           </IconButton>
         </CloseButton>
         <Wrapper>
-          <img src={logo} />
+          <img src={logo} alt="logo" />
           <p>Please sign in to save this recipe.</p>
           <LoginButton />
         </Wrapper>
