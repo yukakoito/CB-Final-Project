@@ -6,12 +6,14 @@ import IconButton from "../IconButton";
 import { GiShoppingBag } from "react-icons/gi";
 import { RiFridgeFill, RiDeleteBin2Fill } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const FoodListActionBar = ({ item, listName }) => {
   const { updateUser, shoppingList } = useContext(UserContext);
   const { searchRecipes } = useContext(DataContext);
   const [isInShoppingList, setIsInShoppingList] = useState(false);
   const iconSize = 30;
+  const navigate = useNavigate();
 
   const moveToPantry = (item) => {
     updateUser({ moveToPantry: item });
@@ -28,6 +30,11 @@ const FoodListActionBar = ({ item, listName }) => {
     );
   };
 
+  const handleRecipeSearch = (data) => {
+    searchRecipes(data);
+    navigate("/");
+  };
+
   useEffect(() => {
     item && checkIsInShoppingList();
   }, [shoppingList]);
@@ -36,7 +43,7 @@ const FoodListActionBar = ({ item, listName }) => {
     <Wrapper>
       {listName === "pantry" && (
         <IconButton
-          onClickFunc={searchRecipes}
+          onClickFunc={handleRecipeSearch}
           data={item.name}
           title={"Search Recipes"}
         >
