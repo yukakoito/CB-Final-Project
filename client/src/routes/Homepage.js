@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { DataContext } from "../contexts/DataContext";
 import RecipeSearch from "../components/recipeSearch/RecipeSearch";
@@ -8,8 +8,23 @@ import Recipes from "../components/Recipes";
 import { UserContext } from "../contexts/UserContext";
 
 const Homepage = () => {
-  const { recipes, dataErr, dataErrMsg } = useContext(DataContext);
-  const { isDataLoading, userId } = useContext(UserContext);
+  const { recipes, dataErr, dataErrMsg, setRecipes } = useContext(DataContext);
+  const { isDataLoading, userId, updatedRecipe } = useContext(UserContext);
+
+  const updateRecipes = () => {
+    const newRecipes = recipes.reduce((acc, cur) => {
+      if (cur._id === updatedRecipe._id) {
+        cur = updatedRecipe;
+      }
+      acc.push(cur);
+      return acc;
+    }, []);
+    return setRecipes(newRecipes);
+  };
+
+  useEffect(() => {
+    updatedRecipe && updateRecipes();
+  }, [updatedRecipe]);
 
   if (dataErr || dataErrMsg) {
     return <ErrorMsg errMsg={dataErrMsg} />;

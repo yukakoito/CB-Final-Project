@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [isErr, setIsErr] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
+  const [updatedRecipe, setUpdatedRecipe] = useState(null);
 
   // Filter recipes to save in the favoriteRecipes and mealPlans states
   const filterRecipes = (data) => {
@@ -82,6 +83,10 @@ export const UserProvider = ({ children }) => {
         data.pantry && setPantry(data.pantry);
         data.shoppingList && setShoppingList(data.shoppingList);
         data.savedRecipes && filterRecipes(data.savedRecipes);
+        if (data.savedRecipes) {
+          filterRecipes(data.savedRecipes);
+          setUpdatedRecipe(Object.values(obj)[0]);
+        }
         if (data.data) {
           setPantry(data.data.pantry);
           setShoppingList(data.data.shoppingList);
@@ -119,6 +124,7 @@ export const UserProvider = ({ children }) => {
         setRecipeToAdd,
         isDataLoading,
         setIsDataLoading,
+        updatedRecipe,
       }}
     >
       {children}
