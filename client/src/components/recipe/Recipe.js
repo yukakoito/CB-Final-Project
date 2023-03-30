@@ -82,12 +82,13 @@ export default Recipe;
 
 const Wrapper = styled.div`
   width: 100%;
-  min-width: 275px;
+  min-width: 300px;
   min-height: 200px;
   padding: 5px;
   box-shadow: 1px 2px 3px 3px lightgray;
   display: flex;
   flex-direction: column;
+  border-radius: 5px;
 
   @media screen and (min-width: 700px) {
     flex: 1 1 45%;

@@ -41,6 +41,7 @@ const Button = styled.button`
   height: 30px;
   border: 1px solid lightgray;
   opacity: ${(p) => (p.disabled ? 0.5 : 1)};
+  margin: 0 5px;
 
   &:after {
     content: "";

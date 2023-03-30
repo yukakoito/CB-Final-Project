@@ -72,8 +72,16 @@ const Textarea = styled.textarea`
   resize: none;
   outline-color: gray;
   margin: 5px;
+  padding: 5px;
 `;
+
 const Buttons = styled.div`
   display: inline-flex;
   justify-content: flex-end;
+  gap: 10px;
+  margin-right: 5px;
+  button {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
 `;

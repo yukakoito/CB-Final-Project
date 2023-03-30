@@ -14,7 +14,7 @@ const Sidebar = () => {
   const [isPantryOpen, setIsPantryOpen] = useState(false);
   const [isShoppingListOpen, setIsShoppingListOpen] = useState(false);
 
-  const iconSize = 20;
+  const iconSize = 25;
   const disabled = { pointerEvents: userId ? "" : "none" };
 
   const handleClose = () => {
@@ -83,9 +83,10 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  gap: 5px;
 
   span {
-    text-indent: 10px;
+    margin-left: 10px;
 
     @media screen and (max-width: 600px) {
       display: none;

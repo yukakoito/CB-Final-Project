@@ -34,7 +34,7 @@ const RecipeSearch = () => {
         />
       </div>
       <SearchOptions />
-      <div className="buttons">
+      <div>
         <button
           onClick={() => {
             searchRecipes(input);
@@ -63,22 +63,22 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: space-between;
   margin: 10px 0 20px;
+  gap: 10px;
 
   div {
     display: flex;
     flex-flow: row wrap;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   button {
-    padding: 5px;
+    padding: 8px;
     background-color: var(--primary-color);
     outline: 1px solid var(--primary-color);
     color: white;
     border: none;
-    flex: auto;
-    max-width: 48%;
-    margin-top: 10px;
+    flex: 1 1 48%;
 
     &:hover {
       background-color: white;
