@@ -1,34 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { UserContext } from "./UserContext";
+import { createContext, useState, useContext } from "react";
 import usePersistedState from "../components/usePersistedState";
+import { UserContext } from "../contexts/UserContext";
 
 export const DataContext = createContext(null);
 
-// This Data context provides list of ingredients and all the parameters used for recipe search.
+// This Data context provides recipe search results
 const DataProvider = ({ children }) => {
-  const [parameters, setParameters] = useState(null);
   const [dataErr, setDataErr] = useState(false);
   const [dataErrMsg, setDataErrMsg] = useState("");
   const [recipes, setRecipes] = usePersistedState(null, "recipes");
   const [searchOptions, setSearchOptions] = useState({});
   const [isRecipeLoading, setIsRecipeLoading] = useState(false);
-  const { setIsDataLoading, userId } = useContext(UserContext);
-
-  // Get ingredients and parameters used for recipe search
-  const getData = () => {
-    setIsDataLoading(true);
-    fetch("/api/get-data")
-      .then((res) => res.json())
-      .then((data) => {
-        setParameters(data.data);
-      })
-      .catch((err) => setDataErr(true))
-      .finally(() => setIsDataLoading(false));
-  };
-
-  useEffect(() => {
-    !parameters && getData();
-  }, [parameters]);
+  const { userId } = useContext(UserContext);
 
   // Search recipes
   const searchRecipes = async (data) => {
@@ -70,7 +53,6 @@ const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        parameters,
         recipes,
         setRecipes,
         searchRecipes,
