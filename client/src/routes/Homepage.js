@@ -11,19 +11,18 @@ const Homepage = () => {
   const { recipes, dataErr, dataErrMsg, setRecipes } = useContext(DataContext);
   const { isDataLoading, userId, updatedRecipe } = useContext(UserContext);
 
-  const updateRecipes = () => {
-    const newRecipes = recipes.reduce((acc, cur) => {
-      if (cur._id === updatedRecipe._id) {
-        cur = updatedRecipe;
+  const updateRecipeStatus = () => {
+    const newRecipes = recipes.map((recipe) => {
+      if (recipe._id === updatedRecipe._id) {
+        recipe = updatedRecipe;
       }
-      acc.push(cur);
-      return acc;
+      return recipe;
     }, []);
     return setRecipes(newRecipes);
   };
 
   useEffect(() => {
-    updatedRecipe && updateRecipes();
+    updatedRecipe && updateRecipeStatus();
   }, [updatedRecipe]);
 
   if (dataErr || dataErrMsg) {

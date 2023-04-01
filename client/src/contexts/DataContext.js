@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
+import usePersistedState from "../components/usePersistedState";
 
 export const DataContext = createContext(null);
 
@@ -8,7 +9,7 @@ const DataProvider = ({ children }) => {
   const [parameters, setParameters] = useState(null);
   const [dataErr, setDataErr] = useState(false);
   const [dataErrMsg, setDataErrMsg] = useState("");
-  const [recipes, setRecipes] = useState(null);
+  const [recipes, setRecipes] = usePersistedState(null, "recipes");
   const [searchOptions, setSearchOptions] = useState({});
   const [isRecipeLoading, setIsRecipeLoading] = useState(false);
   const { setIsDataLoading, userId } = useContext(UserContext);
