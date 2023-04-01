@@ -1,17 +1,13 @@
 import styled from "styled-components";
 import Dropdown from "./Dropdown";
-import { useContext } from "react";
-import { DataContext } from "../../contexts/DataContext";
+import { searchOptionData } from "../../data/searchOptionData";
 
 const SearchOptions = () => {
-  const { parameters } = useContext(DataContext);
-
   return (
     <Wrapper>
-      {parameters &&
-        Object.entries(parameters).map(([key, value]) => (
-          <Dropdown key={key} name={key} array={value} />
-        ))}
+      {Object.entries(searchOptionData).map(([key, value]) => (
+        <Dropdown key={key} name={key} array={value} />
+      ))}
     </Wrapper>
   );
 };
