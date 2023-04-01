@@ -56,6 +56,7 @@ export const UserProvider = ({ children }) => {
         setPantry(data.data.pantry);
         setShoppingList(data.data.shoppingList);
         filterRecipes(data.data.savedRecipes);
+        setUpdatedRecipe(Object.values(recipeToAdd)[0]);
         setRecipeToAdd(null);
       } else {
         setErrMsg(data.message);

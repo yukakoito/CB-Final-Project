@@ -2,22 +2,20 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import styled from "styled-components";
+import { DataContext } from "../../contexts/DataContext";
 
 const LogoutButton = () => {
   const { logout } = useAuth0();
-  const { setUserId, setRecipeToAdd } = useContext(UserContext);
+  const { setUserId } = useContext(UserContext);
+  const { setRecipes } = useContext(DataContext);
 
-  return (
-    <Button
-      onClick={() => {
-        logout({ returnTo: window.location.origin });
-        setUserId(null);
-        setRecipeToAdd(null);
-      }}
-    >
-      Sign out
-    </Button>
-  );
+  const handleLogout = () => {
+    logout({ returnTo: window.location.origin });
+    setUserId(null);
+    setRecipes(null);
+  };
+
+  return <Button onClick={() => handleLogout()}>Sign out</Button>;
 };
 
 export default LogoutButton;
