@@ -5,7 +5,7 @@ import usePersistedState from "../components/usePersistedState";
 export const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const [userId, setUserId] = usePersistedState(null, "user-id");
   const [recipeToAdd, setRecipeToAdd] = usePersistedState(null, "recipeToAdd");
   const [pantry, setPantry] = useState([]);
@@ -124,7 +124,6 @@ export const UserProvider = ({ children }) => {
         setMealPlans,
         setRecipeToAdd,
         isDataLoading,
-        setIsDataLoading,
         updatedRecipe,
       }}
     >
