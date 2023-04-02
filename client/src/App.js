@@ -3,7 +3,6 @@ import { useContext } from "react";
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
-import Footer from "./Footer";
 import Homepage from "./routes/Homepage";
 import { UserContext } from "./contexts/UserContext";
 import Sidebar from "./Sidebar";
@@ -16,7 +15,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <GlobalStyles />
-      <Header />
+      <header>
+        <Header />
+      </header>
       <Wrapper>
         <div className="sidebar">
           <Sidebar />
@@ -35,14 +36,14 @@ const App = () => {
           </Routes>
         </div>
       </Wrapper>
-      <Footer />
+      <footer />
     </BrowserRouter>
   );
 };
 
 export default App;
 
-const Wrapper = styled.div`
+const Wrapper = styled.main`
   max-width: var(--max-content-width);
   width: 100%;
   min-height: calc(100vh - 170px);

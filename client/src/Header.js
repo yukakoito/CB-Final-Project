@@ -24,8 +24,14 @@ export default Header;
 
 const Wrapper = styled.div`
   background-color: var(--primary-background-color);
-  width: 100%;
+  width: calc(100vw - 10px);
   height: 85px;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
 
   .container {
     max-width: var(--max-content-width);

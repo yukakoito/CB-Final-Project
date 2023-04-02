@@ -77,13 +77,14 @@ const Sidebar = () => {
 
 export default Sidebar;
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   display: flex;
   flex-flow: column nowrap;
   position: relative;
   width: 100%;
-  height: 100%;
   gap: 5px;
+  position: sticky;
+  top: calc(var(--header-height) + 20px);
 
   span {
     margin-left: 10px;

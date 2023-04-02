@@ -6,9 +6,10 @@ export default createGlobalStyle`
     --max-content-width: 1280px;
     --heading-font-family: 'Poppins', sans-serif;
     --primary-background-color: rgba(242, 132, 130, 1);
+    --header-height: 85px;
   }
 
-  html, body, div, span, applet, object, iframe,
+  html, body, main, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
   del, dfn, em, img, ins, kbd, q, s, samp,
@@ -33,6 +34,12 @@ export default createGlobalStyle`
   article, aside, details, figcaption, figure,
   footer, header, hgroup, menu, nav, section {
     display: block;
+  }
+
+  header, footer {
+    background-color: var(--primary-background-color);
+    width: 100%;
+    height: var(--header-height);
   }
 
   body {
