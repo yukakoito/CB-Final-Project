@@ -9,12 +9,16 @@ import edamamBadge from "../assets/Edamam_Badge_Transparent.svg";
 
 const Recipes = ({ recipes, notes, isSavedRecipe }) => {
   const { isRecipeLoading } = useContext(DataContext);
-  const { isErr, errMsg } = useContext(UserContext);
+  const { isErr, errMsg, isDataLoading } = useContext(UserContext);
+
+  console.log({ isDataLoading });
 
   if (isErr || errMsg) return <ErrorMsg errMsg={errMsg} />;
   return (
     <Wrapper>
-      {!isRecipeLoading ? (
+      {isRecipeLoading || isDataLoading ? (
+        <LoadingCircle />
+      ) : (
         <>
           {recipes && (
             <>
@@ -30,8 +34,6 @@ const Recipes = ({ recipes, notes, isSavedRecipe }) => {
             </>
           )}
         </>
-      ) : (
-        <LoadingCircle />
       )}
     </Wrapper>
   );
