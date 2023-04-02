@@ -2,8 +2,8 @@ const db = require("../handlers/createClient");
 const users = db.collection("users");
 const ingredients = db.collection("ingredients");
 
-let updatedUserData;
-let updateResult = {};
+// let updatedUserData;
+// let updateResult = {};
 
 const updateFoodList = async (req, res) => {
   const { _id } = req.body;
@@ -11,13 +11,12 @@ const updateFoodList = async (req, res) => {
   const itemValue = req.body[listName];
   const item = { [listName]: itemValue };
 
-  // When adding an item to a list, update an .
+  // Update the category value before adding to pantry or shopping list.
   const updatedItemValue = {
     ...itemValue,
     category: await updateItemCategory(itemValue),
   };
 
-  // When adding an item to a list, sort the array by category and then name.
   const itemToAdd = {
     [listName]: {
       $each: [updatedItemValue],
@@ -29,7 +28,7 @@ const updateFoodList = async (req, res) => {
   updateResult = await users.updateOne({ _id }, { $pull: item });
 
   if (updateResult.modifiedCount === 1) {
-    updatedUserData = await users.findOne({ _id });
+    const updatedUserData = await users.findOne({ _id });
     return res.status(200).json({
       status: 200,
       [listName]: updatedUserData[listName],
@@ -57,7 +56,8 @@ const updateItemCategory = async (itemValue) => {
   const { category, name } = itemValue;
   const uncategorized = " others";
 
-  if (category && category !== uncategorized) return category;
+  if (category && category !== uncategorized)
+    return category.trim().toLowerCase();
 
   try {
     const ingredient = await ingredients.findOne({ name: name });
