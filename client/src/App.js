@@ -8,6 +8,7 @@ import { UserContext } from "./contexts/UserContext";
 import Sidebar from "./Sidebar";
 import MyFavorites from "./routes/MyFavorites";
 import MyMealPlan from "./routes/MyMealPlan";
+import APIBadge from "./components/APIBadge";
 
 const App = () => {
   const { userId } = useContext(UserContext);
@@ -34,6 +35,7 @@ const App = () => {
               element={userId ? <MyMealPlan /> : <Navigate replace to={"/"} />}
             />
           </Routes>
+          <APIBadge />
         </div>
       </Wrapper>
       <footer />
@@ -52,6 +54,7 @@ const Wrapper = styled.main`
   gap: 10px;
   display: flex;
   flex-flow: row nowrap;
+  position: relative;
 
   .sidebar {
     width: 185px;

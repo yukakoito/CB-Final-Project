@@ -69,7 +69,7 @@ export default Notes;
 const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
-  max-width: 375px;
+  max-width: 400px;
 `;
 
 const TextDisplay = styled.div`
