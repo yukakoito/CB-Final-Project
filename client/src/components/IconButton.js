@@ -42,15 +42,4 @@ const Button = styled.button`
   border: 1px solid lightgray;
   opacity: ${(p) => (p.disabled ? 0.5 : 1)};
   margin: 0 5px;
-
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 15%;
-    padding: 0;
-  }
 `;
