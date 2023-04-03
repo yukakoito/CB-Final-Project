@@ -1,58 +1,65 @@
 import styled from "styled-components";
 import { useState, useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import IconButton from "../IconButton";
+import { RiEdit2Fill } from "react-icons/ri";
 
 const Notes = ({ recipe }) => {
+  const { _id, notes } = recipe;
   const { updateUser } = useContext(UserContext);
-  const [input, setInput] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
+  const [input, setInput] = useState(notes);
+  const [isEditing, setIsEditing] = useState(notes ? false : true);
 
-  // Edit notes
-  const editNotes = () => {
-    if (!input) return setIsEditing(true);
-    updateUser({ notes: { _id: recipe._id, notes: input } });
-    setIsEditing(false);
-    setInput("");
+  const iconSize = 30;
+
+  const handleIsEditing = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSaveInput = () => {
+    updateUser({ notes: { _id: _id, notes: input } });
+    input && handleIsEditing();
+  };
+
+  const handleCancelInput = () => {
+    setInput(notes);
+    handleIsEditing();
   };
 
   return (
     <Wrapper>
-      {!recipe.notes || isEditing ? (
-        <Textarea
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-          placeholder={recipe.notes ? recipe.notes : "Add notes..."}
-          rows="5"
-        />
-      ) : (
-        <>
-          <p>
-            <b>Notes:</b>
-          </p>
-          <p> {recipe.notes}</p>
-        </>
+      <h3>Notes:</h3>
+      {notes && !isEditing && (
+        <TextDisplay>
+          <p>{notes}</p>
+          <IconButton onClickFunc={handleIsEditing}>
+            <RiEdit2Fill size={iconSize} />
+          </IconButton>
+        </TextDisplay>
       )}
-      <Buttons>
-        {!recipe.notes && !isEditing ? (
-          <button
-            onClick={() =>
-              updateUser({ notes: { _id: recipe._id, notes: input } })
-            }
-          >
-            Add
-          </button>
-        ) : (
-          <button onClick={() => editNotes()}>Edit</button>
-        )}
-        <button
-          onClick={() => {
-            updateUser({ notes: { _id: recipe._id, notes: "" } });
-            setInput("");
-          }}
-        >
-          Delete
-        </button>
-      </Buttons>
+      {isEditing && (
+        <TextEdit>
+          <textarea
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+            placeholder={notes ? input : "Add a note..."}
+            rows="5"
+          />
+          <Buttons>
+            {notes && (
+              <IconButton onClickFunc={handleCancelInput}>
+                <span>Cancel</span>
+              </IconButton>
+            )}
+            <IconButton
+              onClickFunc={handleSaveInput}
+              disabled={notes === input ? true : false}
+            >
+              <span>Save</span>
+            </IconButton>
+          </Buttons>
+        </TextEdit>
+      )}
     </Wrapper>
   );
 };
@@ -62,26 +69,36 @@ export default Notes;
 const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
-
-  p {
-    margin: 3px 5px;
-  }
+  max-width: 375px;
 `;
-const Textarea = styled.textarea`
-  height: fit-content;
-  resize: none;
-  outline-color: gray;
-  margin: 5px;
-  padding: 5px;
+
+const TextDisplay = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow-wrap: anywhere;
+  gap: 10px;
+`;
+
+const TextEdit = styled.div`
+  flex-direction: column;
+  textarea {
+    height: fit-content;
+    resize: none;
+    outline-color: gray;
+    margin: 0 5px;
+    padding: 5px;
+  }
 `;
 
 const Buttons = styled.div`
-  display: inline-flex;
+  flex-flow: row nowrap;
   justify-content: flex-end;
-  gap: 10px;
-  margin-right: 5px;
+
   button {
-    padding: 5px 10px;
-    font-size: 14px;
+    width: 65px;
+    font-size: 12px;
   }
 `;
