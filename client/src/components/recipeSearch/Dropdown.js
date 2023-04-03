@@ -9,8 +9,7 @@ const Dropdown = ({ name, array }) => {
     setSearchOptions({ ...searchOptions, [key]: value.replaceAll(" ", "%20") });
   };
 
-  // Format the label for search options
-  const formatLabel = (data) => {
+  const capitalizeText = (data) => {
     if (!data.includes("Type")) {
       return data.replace(data[0], data[0].toUpperCase());
     } else {
@@ -26,17 +25,17 @@ const Dropdown = ({ name, array }) => {
       value={
         searchOptions[name]
           ? searchOptions[name].replaceAll("%20", " ")
-          : formatLabel(name)
+          : capitalizeText(name)
       }
       onChange={(e) => {
         handleSearchOptions(e.target.name, e.target.value);
       }}
     >
-      <option value="">{formatLabel(name)}</option>
+      <option value="">{capitalizeText(name)}</option>
       {array &&
         array.map((ele) => (
           <option key={ele} value={ele}>
-            {ele}
+            {capitalizeText(ele)}
           </option>
         ))}
     </select>
