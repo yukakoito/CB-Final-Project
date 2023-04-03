@@ -9,7 +9,7 @@ import Notes from "./Notes";
 
 const RecipeActionBar = ({ notes, recipe, setAddRecipe }) => {
   const { updateUser, userId, setRecipeToAdd } = useContext(UserContext);
-  const [editNotes, setEditNotes] = useState(false);
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
   const iconSize = 30;
 
   // View details of recipe. It opens a new tab and direct to the source
@@ -67,16 +67,16 @@ const RecipeActionBar = ({ notes, recipe, setAddRecipe }) => {
         </IconButton>
         {notes && (
           <IconButton
-            onClickFunc={setEditNotes}
-            data={!editNotes}
+            onClickFunc={setIsNotesOpen}
+            data={!isNotesOpen}
             color={recipe.notes ? "#e63946" : null}
-            title={recipe.notes ? "Edit Notes" : "Add Notes"}
+            title={isNotesOpen ? "Close Notes" : "Open Notes"}
           >
             <GiNotebook size={iconSize} />
           </IconButton>
         )}
       </div>
-      {editNotes && <Notes recipe={recipe} />}
+      {isNotesOpen && <Notes recipe={recipe} />}
     </Wrapper>
   );
 };
