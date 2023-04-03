@@ -33,7 +33,7 @@ const Button = styled.button`
   &:hover {
     background-color: white;
     outline: none;
-    box-shadow: 1px 2px 3px 3px var(--primary-color);
+    box-shadow: var(--button-box-shadow);
     font-weight: bold;
     scale: 1.1;
   }

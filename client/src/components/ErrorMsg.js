@@ -21,11 +21,13 @@ export default ErrorMsg;
 
 const Wrapper = styled.div`
   text-align: center;
-  box-shadow: 1px 2px 3px 3px var(--primary-color);
-  padding: 35px;
-  width: fit-content;
+  box-shadow: var(--container-box-shadow);
+  width: 100%;
+  max-width: 450px;
+  padding: 20px 10px;
   align-self: center;
-  margin: 5% auto 0;
+  border-radius: 5px;
+  margin: 10px auto 25px;
 
   p {
     display: flex;

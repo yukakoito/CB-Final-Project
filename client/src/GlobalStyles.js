@@ -7,6 +7,10 @@ export default createGlobalStyle`
     --heading-font-family: 'Poppins', sans-serif;
     --primary-background-color: rgba(242, 132, 130, 1);
     --header-height: 85px;
+    --min-container-width: 270px;
+    --min-container-height: 200px;
+    --container-box-shadow: 1px 2px 3px 3px lightgray;
+    --button-box-shadow: 1px 2px 3px 3px var(--primary-color);
   }
 
   html, body, main, div, span, applet, object, iframe,
