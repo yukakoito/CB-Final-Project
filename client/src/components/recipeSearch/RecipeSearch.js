@@ -58,6 +58,7 @@ export default RecipeSearch;
 
 const Wrapper = styled.div`
   width: 100%;
+  max-width: 700px;
   display: flex;
   flex-flow: column;
   justify-content: center;

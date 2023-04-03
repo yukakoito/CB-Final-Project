@@ -24,7 +24,7 @@ export default Header;
 
 const Wrapper = styled.div`
   background-color: var(--primary-background-color);
-  width: calc(100vw - 10px);
+  width: 100%;
   height: 85px;
 
   position: fixed;

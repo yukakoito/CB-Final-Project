@@ -24,10 +24,6 @@ const Homepage = () => {
     updatedRecipe && updateRecipeStatus();
   }, [updatedRecipe]);
 
-  if (dataErr || dataErrMsg) {
-    return <ErrorMsg errMsg={dataErrMsg} />;
-  }
-
   return (
     <Wrapper>
       <SearchField>

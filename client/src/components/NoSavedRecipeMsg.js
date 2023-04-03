@@ -5,7 +5,7 @@ const NoSavedRecipeMsg = () => {
   return (
     <Wrapper>
       <img src={logo} alt="logo" />
-      <h3>You have no saved recipes...</h3>
+      <p>You have no saved recipes...</p>
     </Wrapper>
   );
 };
@@ -16,14 +16,14 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 30px;
+  gap: 10px;
   align-self: center;
-  width: 60%;
-  min-width: 300px;
-  min-height: 200px;
+  min-width: var(--min-container-width);
+  height: var(--min-container-height);
   padding: 10px;
-  box-shadow: 1px 2px 3px 3px lightgray;
+  box-shadow: var(--container-box-shadow);
   border-radius: 5px;
+  margin-top: 10px;
 
   img {
     opacity: 0.6;

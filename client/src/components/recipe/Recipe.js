@@ -82,13 +82,14 @@ export default Recipe;
 
 const Wrapper = styled.div`
   width: 100%;
-  min-width: 300px;
-  min-height: 200px;
+  min-width: var(--min-container-width);
+  min-height: var(--min-container-height);
   padding: 5px;
-  box-shadow: 1px 2px 3px 3px lightgray;
+  box-shadow: var(--container-box-shadow);
   display: flex;
   flex-direction: column;
   border-radius: 5px;
+  gap: 5px;
 
   @media screen and (min-width: 700px) {
     flex: 1 1 45%;
@@ -96,11 +97,11 @@ const Wrapper = styled.div`
 `;
 const RecipeBody = styled.section`
   display: inline-flex;
+  gap: 5px;
 
   .recipe-details {
     display: flex;
     flex-direction: column;
-    padding: 0 5px;
 
     h2 {
       margin: 5px 0;
@@ -128,4 +129,5 @@ const RecipeFooter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-between;
+  gap: 5px;
 `;

@@ -9,8 +9,12 @@ const MyMealPlan = () => {
   return (
     <Wrapper>
       <h1>My Meal Plan For This Week</h1>
-      <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} />
-      {mealPlans.length === 0 && <NoSavedRecipeMsg />}
+
+      {mealPlans.length === 0 ? (
+        <NoSavedRecipeMsg />
+      ) : (
+        <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} />
+      )}
     </Wrapper>
   );
 };

@@ -9,8 +9,12 @@ const MyFavorites = () => {
   return (
     <Wrapper>
       <h1>My Favorite Recipes</h1>
-      <Recipes recipes={favoriteRecipes} notes={true} isSavedRecipe={true} />
-      {favoriteRecipes.length === 0 && <NoSavedRecipeMsg />}
+
+      {favoriteRecipes.length === 0 ? (
+        <NoSavedRecipeMsg />
+      ) : (
+        <Recipes recipes={favoriteRecipes} notes={true} isSavedRecipe={true} />
+      )}
     </Wrapper>
   );
 };
