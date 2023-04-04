@@ -6,7 +6,7 @@ import ErrorMsg from "./ErrorMsg";
 import LoadingCircle from "./LoadingCircle";
 import Recipe from "./recipe/Recipe";
 
-const Recipes = ({ recipes, notes, isSavedRecipe }) => {
+const Recipes = ({ recipes, isSavedRecipe }) => {
   const { isRecipeLoading } = useContext(DataContext);
   const { isErr, errMsg, isDataLoading } = useContext(UserContext);
 
@@ -23,7 +23,6 @@ const Recipes = ({ recipes, notes, isSavedRecipe }) => {
                 <Recipe
                   key={`${recipe.label}-${i}`}
                   recipe={recipe}
-                  notes={notes}
                   isSavedRecipe={isSavedRecipe}
                 />
               ))}

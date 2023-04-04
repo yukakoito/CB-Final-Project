@@ -2,12 +2,12 @@ import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { DataContext } from "../contexts/DataContext";
 import RecipeSearch from "../components/recipeSearch/RecipeSearch";
-import ErrorMsg from "../components/ErrorMsg";
 import Recipes from "../components/Recipes";
 import { UserContext } from "../contexts/UserContext";
+import Login from "../components/authentication/login";
 
 const Homepage = () => {
-  const { recipes, dataErr, dataErrMsg, setRecipes } = useContext(DataContext);
+  const { recipes, setRecipes } = useContext(DataContext);
   const { userId, updatedRecipe } = useContext(UserContext);
 
   const updateRecipeStatus = () => {
@@ -21,23 +21,24 @@ const Homepage = () => {
   };
 
   useEffect(() => {
-    updatedRecipe && updateRecipeStatus();
+    if (updatedRecipe && recipes) {
+      updateRecipeStatus();
+    }
   }, [updatedRecipe]);
 
   return (
     <Wrapper>
-      <SearchField>
-        {userId ? (
-          <h1>Search New Recipes</h1>
-        ) : (
-          <>
-            <h1>Welcome to ZeroWasteCooking</h1>
-            <p>Sign in to save recipes and plan your meals.</p>
-          </>
-        )}
-        <RecipeSearch />
-      </SearchField>
-      <Recipes recipes={recipes} />
+      {userId ? (
+        <>
+          <SearchField>
+            <h1>Search New Recipes</h1>
+            <RecipeSearch />
+          </SearchField>
+          <Recipes recipes={recipes} />
+        </>
+      ) : (
+        <Login />
+      )}
     </Wrapper>
   );
 };

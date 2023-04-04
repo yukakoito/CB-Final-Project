@@ -13,7 +13,7 @@ const MyMealPlan = () => {
       {mealPlans.length === 0 ? (
         <NoSavedRecipeMsg />
       ) : (
-        <Recipes recipes={mealPlans} notes={true} isSavedRecipe={true} />
+        <Recipes recipes={mealPlans} isSavedRecipe={true} />
       )}
     </Wrapper>
   );

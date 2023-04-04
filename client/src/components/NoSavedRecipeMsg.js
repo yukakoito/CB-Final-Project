@@ -24,8 +24,4 @@ const Wrapper = styled.div`
   box-shadow: var(--container-box-shadow);
   border-radius: 5px;
   margin-top: 10px;
-
-  img {
-    opacity: 0.6;
-  }
 `;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import LoginButton from "./components/authentication/login";
 import LogoutButton from "./components/authentication/logout";
 import { useAuth0 } from "@auth0/auth0-react";
 import logo from "./assets/logo.png";
@@ -14,7 +13,7 @@ const Header = () => {
           <img src={logo} alt="logo" />
           <h1>Cooking</h1>
         </div>
-        {!isAuthenticated ? <LoginButton /> : <LogoutButton />}
+        {isAuthenticated && <LogoutButton />}
       </div>
     </Wrapper>
   );

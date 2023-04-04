@@ -1,5 +1,4 @@
 import { createContext, useState, useContext } from "react";
-import usePersistedState from "../components/usePersistedState";
 import { UserContext } from "../contexts/UserContext";
 
 export const DataContext = createContext(null);
@@ -8,7 +7,7 @@ export const DataContext = createContext(null);
 const DataProvider = ({ children }) => {
   const [dataErr, setDataErr] = useState(false);
   const [dataErrMsg, setDataErrMsg] = useState("");
-  const [recipes, setRecipes] = usePersistedState(null, "recipes");
+  const [recipes, setRecipes] = useState(null);
   const [searchOptions, setSearchOptions] = useState({});
   const [isRecipeLoading, setIsRecipeLoading] = useState(false);
   const { userId } = useContext(UserContext);
@@ -32,7 +31,6 @@ const DataProvider = ({ children }) => {
     try {
       setDataErrMsg(null);
       setIsRecipeLoading(true);
-      setRecipes(null);
       const res = await fetch(`/api/get-recipes/${query}`);
       const data = await res.json();
       setIsRecipeLoading(false);

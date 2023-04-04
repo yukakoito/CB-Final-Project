@@ -13,7 +13,7 @@ const MyFavorites = () => {
       {favoriteRecipes.length === 0 ? (
         <NoSavedRecipeMsg />
       ) : (
-        <Recipes recipes={favoriteRecipes} notes={true} isSavedRecipe={true} />
+        <Recipes recipes={favoriteRecipes} isSavedRecipe={true} />
       )}
     </Wrapper>
   );
