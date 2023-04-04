@@ -7,7 +7,6 @@ export const UserContext = createContext(null);
 export const UserProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth0();
   const [userId, setUserId] = usePersistedState(null, "user-id");
-  const [recipeToAdd, setRecipeToAdd] = usePersistedState(null, "recipeToAdd");
   const [pantry, setPantry] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
@@ -31,12 +30,10 @@ export const UserProvider = ({ children }) => {
 
   // Retrieve user data or create a new user upon sign in/sign up with Auth0
   const setupUser = async () => {
-    // const recipe =
     const userData = {
       firstName: user.given_name,
       lastName: user.family_name,
       email: user.email,
-      recipe: recipeToAdd && Object.values(recipeToAdd)[0],
     };
 
     setIsDataLoading(true);
@@ -56,8 +53,6 @@ export const UserProvider = ({ children }) => {
         setPantry(data.data.pantry);
         setShoppingList(data.data.shoppingList);
         filterRecipes(data.data.savedRecipes);
-        recipeToAdd && setUpdatedRecipe(Object.values(recipeToAdd)[0]);
-        setRecipeToAdd(null);
       } else {
         setErrMsg(data.message);
       }
@@ -122,7 +117,6 @@ export const UserProvider = ({ children }) => {
         setFavoriteRecipes,
         mealPlans,
         setMealPlans,
-        setRecipeToAdd,
         isDataLoading,
         updatedRecipe,
       }}

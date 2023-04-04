@@ -7,9 +7,10 @@ import { GiMeal, GiNotebook } from "react-icons/gi";
 import IconButton from "../IconButton";
 import Notes from "./Notes";
 
-const RecipeActionBar = ({ notes, recipe, setAddRecipe }) => {
-  const { updateUser, userId, setRecipeToAdd } = useContext(UserContext);
+const RecipeActionBar = ({ recipe }) => {
+  const { updateUser } = useContext(UserContext);
   const [isNotesOpen, setIsNotesOpen] = useState(false);
+  const { url, isLiked, isPlanned, notes } = recipe;
   const iconSize = 30;
 
   // View details of recipe. It opens a new tab and direct to the source
@@ -17,59 +18,43 @@ const RecipeActionBar = ({ notes, recipe, setAddRecipe }) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  // Save a recipe when user click on favorites or meals before logging in
-  const saveRecipe = (data) => {
-    setAddRecipe(true);
-    setRecipeToAdd(data);
-  };
-
   return (
     <Wrapper>
       <div>
-        <IconButton
-          onClickFunc={openInNewTab}
-          data={recipe.url}
-          title={`${recipe.url}`}
-        >
+        <IconButton onClickFunc={openInNewTab} data={url} title={`${url}`}>
           <MdOpenInNew size={iconSize} />
         </IconButton>
         <IconButton
-          onClickFunc={userId ? updateUser : saveRecipe}
+          onClickFunc={updateUser}
           data={{
             savedRecipes: {
               ...recipe,
-              isLiked: recipe.isLiked ? false : true,
+              isLiked: isLiked ? false : true,
             },
           }}
-          color={recipe.isLiked ? "#e63946" : null}
-          title={
-            recipe.isLiked ? "Remove from My Favorites" : "Add to My Favorites"
-          }
+          color={isLiked ? "#e63946" : null}
+          title={isLiked ? "Remove from My Favorites" : "Add to My Favorites"}
         >
           <BsSuitHeartFill size={iconSize} />
         </IconButton>
         <IconButton
-          onClickFunc={userId ? updateUser : saveRecipe}
+          onClickFunc={updateUser}
           data={{
             savedRecipes: {
               ...recipe,
-              isPlanned: recipe.isPlanned ? false : true,
+              isPlanned: isPlanned ? false : true,
             },
           }}
-          color={recipe.isPlanned ? "#e63946" : null}
-          title={
-            recipe.isPlanned
-              ? "Remove from My Meal Plan"
-              : "Add to My Meal Plan"
-          }
+          color={isPlanned ? "#e63946" : null}
+          title={isPlanned ? "Remove from My Meal Plan" : "Add to My Meal Plan"}
         >
           <GiMeal size={iconSize} />
         </IconButton>
-        {notes && (
+        {(isLiked || isPlanned) && (
           <IconButton
             onClickFunc={setIsNotesOpen}
             data={!isNotesOpen}
-            color={recipe.notes ? "#e63946" : null}
+            color={notes ? "#e63946" : null}
             title={isNotesOpen ? "Close Notes" : "Open Notes"}
           >
             <GiNotebook size={iconSize} />

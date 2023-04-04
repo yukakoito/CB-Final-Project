@@ -2,15 +2,14 @@ import { useContext, useState, useRef } from "react";
 import styled from "styled-components";
 import { UserContext } from "../../contexts/UserContext";
 import backupImage from "../../assets/noImage.png";
-import Modal from "./Modal";
 import RecipeActionBar from "./RecipeActionBar";
 import AllIngredients from "./AllIngredients";
 
-const Recipe = ({ recipe, notes, isSavedRecipe }) => {
-  const { userId, setRecipeToAdd } = useContext(UserContext);
+const Recipe = ({ recipe, isSavedRecipe }) => {
+  const { userId } = useContext(UserContext);
   const [isImgErr, setIsImgErr] = useState(false);
   const imageRef = useRef();
-  const [addRecipe, setAddRecipe] = useState(false);
+  const { image, source, label, cuisineType } = recipe;
 
   // Capitalise every first letter of each word of cuisineType
   const formatCuisineType = (data) => {
@@ -38,21 +37,14 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
       .finally(setIsImgErr(true));
   };
 
-  // To closeModal and delete the recipe saved in local storage
-  const closeModal = () => {
-    setAddRecipe(false);
-    setRecipeToAdd(null);
-  };
-
   return (
     recipe && (
       <Wrapper>
-        <Modal closeModal={closeModal} open={addRecipe} />
         <RecipeBody>
           <img
             ref={imageRef}
-            src={recipe.image}
-            alt={recipe.label}
+            src={image}
+            alt={label}
             onError={({ currentTarget }) => {
               isSavedRecipe && !isImgErr
                 ? updateImageSource()
@@ -60,17 +52,13 @@ const Recipe = ({ recipe, notes, isSavedRecipe }) => {
             }}
           />
           <div className="recipe-details">
-            <h2>{recipe.label}</h2>
-            <p>{recipe.source}</p>
-            <p>{formatCuisineType(recipe.cuisineType[0])}</p>
+            <h2>{label}</h2>
+            <p>{source}</p>
+            <p>{formatCuisineType(cuisineType[0])}</p>
           </div>
         </RecipeBody>
         <RecipeFooter>
-          <RecipeActionBar
-            notes={notes}
-            recipe={recipe}
-            setAddRecipe={setAddRecipe}
-          />
+          <RecipeActionBar recipe={recipe} />
           <AllIngredients recipe={recipe} />
         </RecipeFooter>
       </Wrapper>

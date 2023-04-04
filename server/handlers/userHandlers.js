@@ -12,7 +12,7 @@ const setupUser = async (req, res) => {
   // Collection used for this function
   const users = db.collection("users");
 
-  const { email, recipe } = req.body;
+  const { email, firstName, lastName } = req.body;
 
   // If email doesn't contain "@", respond with an error message
   if (!email.includes("@")) {
@@ -21,42 +21,31 @@ const setupUser = async (req, res) => {
       .json({ status: 400, message: "Please provide user's email." });
   }
 
-  // Reformat the data received from FE to add to new user's document
-  const data = Object.fromEntries(
-    Object.entries(req.body).filter(([key, value]) => key !== "recipe")
-  );
   // Data to add when creating a new user
   const newUserData = {
-    ...data,
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    ...req.body,
     _id: uuidv4(),
     pantry: [],
     shoppingList: [],
-    savedRecipes: recipe ? [recipe] : [],
+    savedRecipes: [],
   };
 
   try {
     const existingUser = await users.findOne({ email });
 
     // If user is found and no recipe is provided, respond with the user data
-    if (existingUser && !recipe) {
+    if (existingUser) {
       return res.status(200).json({ status: 200, data: existingUser });
-
-      // If user is found and there's a recipe to save, add the recipe to user's savedRecipes
-      // and then respond with the updated user data
-    } else if (existingUser && recipe) {
-      await users.updateOne(
-        { _id: existingUser._id },
-        { $addToSet: { savedRecipes: recipe } }
-      );
-      const updatedUserData = await users.findOne({ _id: existingUser._id });
-      updatedUserData &&
-        res.status(200).json({ status: 200, data: updatedUserData });
 
       // If not, create a new user to the database and respond with a newly created user data
     } else {
       const newUser = await users.insertOne(newUserData);
-      newUser.insertedId &&
-        res.status(200).json({ status: 200, data: newUserData });
+      if (newUser.insertedId) {
+        return res.status(200).json({ status: 200, data: newUserData });
+      }
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
